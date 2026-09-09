@@ -135,7 +135,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'خطا در ذخیره‌سازی');
       setConfig(data.config);
-      setSaveSuccessMessage('تنظیمات رفتار بات، سند کالچر و پایپ‌لاین‌ها با موفقیت ذخیره و در هوش مصنوعی اعمال شد.');
+      setSaveSuccessMessage('تنظیمات دستیار هوش مصنوعی و معیارهای ارزیابی ذخیره شد.');
       setTimeout(() => setSaveSuccessMessage(null), 5000);
     } catch (err: any) {
       setErrorMessage(err?.message || 'خطا در ذخیره پیکربندی');
@@ -330,13 +330,13 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
           <div className="space-y-2 max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-semibold">
               <Sparkles className="w-3.5 h-3.5 animate-pulse" />
-              <span>مرکز حاکمیت، آموزش و رفتار هوش مصنوعی (Gemini AI Governance)</span>
+              <span>تنظیمات دستیار هوش مصنوعی</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-              مدیریت رفتار بات و پایپ‌لاین‌های ارزیابی رزومه
+              تنظیمات رفتار دستیار و مراحل ارزیابی کارجویان
             </h1>
             <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-              این داشبورد فرماندهی کامل رفتار، دانش، ارزش‌های سازمانی، و گام‌های موشکافانه ارزیابی کارجویان توسط هوش مصنوعی هلدینگ سیلانه سبز را در اختیار شما قرار می‌دهد. ربات دقیقاً بر اساس دستورالعمل‌های این پنل عمل می‌کند.
+              تعیین رفتار، فرهنگ سازمانی و معیارهای بررسی رزومه کارجویان در دپارتمان‌های مختلف سیلانه سبز.
             </p>
           </div>
 
@@ -347,7 +347,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-800/80 hover:bg-slate-700 border border-slate-600/60 rounded-xl text-xs sm:text-sm font-medium text-slate-200 shadow-sm transition-all"
             >
               <Cpu className={`w-4 h-4 text-emerald-400 ${testingConnection ? 'animate-spin' : ''}`} />
-              <span>{testingConnection ? 'در حال پینگ...' : 'تست زنده اتصال به جمینای'}</span>
+              <span>{testingConnection ? 'در حال بررسی...' : 'بررسی اتصال به Gemini'}</span>
             </button>
 
             <button
@@ -356,7 +356,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white rounded-xl text-sm font-semibold shadow-lg shadow-emerald-950/40 transition-all"
             >
               <Save className={`w-4 h-4 ${saving ? 'animate-spin' : ''}`} />
-              <span>{saving ? 'در حال اعمال...' : 'ذخیره و اعمال در کل سامانه'}</span>
+              <span>{saving ? 'در حال ذخیره...' : 'ذخیره تنظیمات'}</span>
             </button>
           </div>
         </div>
@@ -371,13 +371,13 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
             </div>
           </div>
           <div>
-            <p className="text-slate-400 font-medium">پایپ‌لاین‌های فعال</p>
-            <p className="text-white font-bold">{toPersianDigits(config.departmentPipelines.length)} دپارتمان صنعتی</p>
+            <p className="text-slate-400 font-medium">دپارتمان‌های فعال</p>
+            <p className="text-white font-bold">{toPersianDigits(config.departmentPipelines.length)} دپارتمان</p>
           </div>
           <div>
-            <p className="text-slate-400 font-medium">سطح سخت‌گیری پیش‌فرض</p>
+            <p className="text-slate-400 font-medium">سطح سخت‌گیری</p>
             <p className="text-emerald-300 font-bold">
-              {config.strictnessLevel === 'STRICT' ? 'سخت‌گیرانه (Strict)' : config.strictnessLevel === 'BALANCED' ? 'متعادل (Balanced)' : 'منعطف (Lenient)'}
+              {config.strictnessLevel === 'STRICT' ? 'سخت‌گیرانه' : config.strictnessLevel === 'BALANCED' ? 'متعادل' : 'منعطف'}
             </p>
           </div>
           <div>
@@ -453,7 +453,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
           }`}
         >
           <Bot className="w-4 h-4" />
-          <span>۱. هویت، مدل و تنظیمات عمومی بات</span>
+          <span>۱. هویت و تنظیمات عمومی دستیار</span>
         </button>
 
         <button
@@ -465,7 +465,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
           }`}
         >
           <BookOpen className="w-4 h-4" />
-          <span>۲. فرهنگ سازمانی، ارزش‌ها و خطوط قرمز</span>
+          <span>۲. ارزش‌های سازمانی و معیارها</span>
         </button>
 
         <button
@@ -477,7 +477,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
           }`}
         >
           <Layers className="w-4 h-4" />
-          <span>۳. پایپ‌لاین و مسیر ارزیابی دپارتمان‌ها</span>
+          <span>۳. مراحل ارزیابی دپارتمان‌ها</span>
         </button>
 
         <button
@@ -489,7 +489,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
           }`}
         >
           <Sliders className="w-4 h-4" />
-          <span>۴. ماتریس اوزان و متدولوژی ارزیابی</span>
+          <span>۴. ضرایب و معیارهای ارزیابی</span>
         </button>
 
         <button
@@ -501,7 +501,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
           }`}
         >
           <Play className="w-4 h-4" />
-          <span>۵. شبیه‌ساز و تست زنده ارزیابی رزومه</span>
+          <span>۵. شبیه‌ساز بررسی رزومه</span>
         </button>
       </div>
 
@@ -515,15 +515,15 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                   <Bot className="w-5 h-5" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-slate-900">هویت، نقش و تنظیمات بنیادین بات</h2>
-                  <p className="text-xs text-slate-500">پیکربندی لحن، مدل استنتاجی، و نام مستعار دستیار هوش مصنوعی</p>
+                  <h2 className="text-lg font-bold text-slate-900">هویت و نقش دستیار</h2>
+                  <p className="text-xs text-slate-500">تنظیم لحن، مدل و مشخصات دستیار هوش مصنوعی</p>
                 </div>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">نام رسمی بات در سامانه</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">نام رسمی دستیار</label>
                 <input
                   type="text"
                   value={config.botName}
@@ -533,7 +533,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">نقش سازمانی و تخصصی بات</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">نقش سازمانی دستیار</label>
                 <input
                   type="text"
                   value={config.botRole}
@@ -543,26 +543,26 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">مدل هوش مصنوعی فعال (Google Gemini Engine)</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">مدل هوش مصنوعی (Google Gemini)</label>
                 <div className="flex items-center gap-2">
                   <select
                     value={config.modelName || 'gemini-3.8-flash'}
                     onChange={(e) => setConfig({ ...config, modelName: e.target.value })}
                     className="flex-1 px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-800 font-mono focus:bg-white focus:border-emerald-600 font-semibold"
                   >
-                    <option value="gemini-3.8-flash">gemini-3.8-flash (پیش‌فرض هلدینگ - تعادل استدلال و سرعت)</option>
-                    <option value="gemini-3.6-flash">gemini-3.6-flash (نسخه فوق‌سریع و پایدار)</option>
-                    <option value="gemini-flash-latest">gemini-flash-latest (جدیدترین نگارش فلش)</option>
+                    <option value="gemini-3.8-flash">gemini-3.8-flash (پیش‌فرض)</option>
+                    <option value="gemini-3.6-flash">gemini-3.6-flash (سریع)</option>
+                    <option value="gemini-flash-latest">gemini-flash-latest (جدیدترین نسخه)</option>
                   </select>
                   <span className="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-2.5 rounded-lg font-semibold whitespace-nowrap">
                     نسخه فعال
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-500 mt-1">مدل باکیفیت جهت استدلال چندبعدی، استخراج نقل‌قول‌های رزومه و خروجی ساختاریافته</p>
+                <p className="text-[11px] text-slate-500 mt-1">مدل مناسب جهت تحلیل دقیق، استخراج شواهد رزومه و خروجی ساختاریافته</p>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">لحن و سبک پاسخ‌دهی (Tone of Voice)</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">لحن پاسخ‌دهی</label>
                 <select
                   value={config.culture.toneOfVoice}
                   onChange={(e) =>
@@ -573,17 +573,17 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                   }
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-800 focus:bg-white focus:border-emerald-600"
                 >
-                  <option value="PROFESSIONAL">حرفه‌ای، مستند، منطقی و تحلیلی (پیشنهادی هلدینگ)</option>
-                  <option value="FORMAL">فوق‌العاده رسمی، دقیق و فاخر سازمانی</option>
-                  <option value="STRICT">سخت‌گیرانه، صریح و بدون اغماض در استانداردهای کیفی</option>
-                  <option value="EMPATHETIC">همدلانه، مشوق و توسعه‌محور</option>
+                  <option value="PROFESSIONAL">حرفه‌ای و تحلیلی (پیشنهادی)</option>
+                  <option value="FORMAL">کاملاً رسمی و اداری</option>
+                  <option value="STRICT">سخت‌گیرانه و صریح</option>
+                  <option value="EMPATHETIC">همدلانه و توسعه‌محور</option>
                 </select>
               </div>
             </div>
 
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                پرامپت پایه و راهبردی سیستم (System Instruction Template)
+                دستورالعمل پایه سیستم
               </label>
               <textarea
                 rows={5}
@@ -592,13 +592,13 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-800 font-sans leading-relaxed focus:bg-white focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
               />
               <p className="text-[11px] text-slate-500 mt-1">
-                این دستورالعمل به عنوان هویت ریشه‌ای بات در تمام چت‌ها، ارزیابی‌های رزومه و تعاملات صوتی تزریق می‌گردد.
+                این دستورالعمل به عنوان چارچوب رفتاری دستیار در بررسی‌ها به کار می‌رود.
               </p>
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-bold text-slate-700">قوانین و استانداردهای رفتاری مصوب ربات</label>
+                <label className="text-xs font-bold text-slate-700">قوانین رفتاری دستیار</label>
                 <button
                   type="button"
                   onClick={() =>
@@ -669,7 +669,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-slate-900">چشم‌انداز و برندهای هلدینگ سیلانه سبز</h2>
-                  <p className="text-xs text-slate-500">جهت‌دهی به درک بنیادین هوش مصنوعی از موقعیت و هویت کارفرما</p>
+                  <p className="text-xs text-slate-500">تنظیم شناخت دستیار از موقعیت و هویت کارفرما</p>
                 </div>
               </div>
             </div>
@@ -711,21 +711,21 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-slate-900">کتابچه فرهنگ سازمانی و اصول راهبردی</h2>
-                  <p className="text-xs text-slate-500">سند جامع دانشی جهت تحلیل تطابق کارجویان با روح سازمانی سیلانه سبز</p>
+                  <p className="text-xs text-slate-500">سند راهنما برای بررسی تطابق کارجویان با ارزش‌های سازمانی</p>
                 </div>
               </div>
 
               {/* Upload Culture File */}
               <label className="inline-flex items-center gap-2 px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-xl text-xs font-semibold cursor-pointer transition-all">
                 <Upload className="w-3.5 h-3.5" />
-                <span>بارگذاری فایل سند کالچر (TXT / MD)</span>
+                <span>بارگذاری سند فرهنگ سازمانی (TXT / MD)</span>
                 <input type="file" accept=".txt,.md,.markdown" onChange={handleFileUpload} className="hidden" />
               </label>
             </div>
 
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                متن کامل سند فرهنگ سازمانی (پایگاه دانش ارزیابی AI)
+                متن کامل سند فرهنگ سازمانی
               </label>
               <textarea
                 rows={10}
@@ -737,10 +737,10 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                   })
                 }
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-800 font-mono leading-relaxed focus:bg-white focus:border-emerald-600"
-                placeholder="متن کامل یا مارک‌داون کتابچه فرهنگ سازمانی هلدینگ..."
+                placeholder="متن سند فرهنگ سازمانی..."
               />
               <p className="text-[11px] text-slate-500 mt-1">
-                این سند در پرامپت ارزیابی تمامی کارجویان قرار می‌گیرد تا تطابق رفتاری و نگرشی کارجو استخراج شود.
+                این سند در ارزیابی برای بررسی تطابق رفتاری کارجو به کار می‌رود.
               </p>
             </div>
           </div>
@@ -753,8 +753,8 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                   <Award className="w-5 h-5" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-slate-900">ارزش‌های بنیادین و اوزان ارزیابی</h2>
-                  <p className="text-xs text-slate-500">شاخص‌های فرهنگی که کارجو باید با آن‌ها هم‌راستا باشد</p>
+                  <h2 className="text-lg font-bold text-slate-900">ارزش‌های سازمانی و اوزان ارزیابی</h2>
+                  <p className="text-xs text-slate-500">شاخص‌های فرهنگی مورد انتظار از کارجو</p>
                 </div>
               </div>
 
@@ -778,7 +778,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                 className="text-xs text-blue-700 font-semibold hover:text-blue-800 flex items-center gap-1"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>افزودن ارزش بنیادین</span>
+                <span>افزودن ارزش سازمانی</span>
               </button>
             </div>
 
@@ -927,7 +927,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
           <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <Layers className="w-5 h-5 text-emerald-600" />
-              <span className="text-sm font-bold text-slate-800">انتخاب دپارتمان و صنعت جهت ویرایش پایپ‌لاین:</span>
+              <span className="text-sm font-bold text-slate-800">انتخاب دپارتمان برای ویرایش مراحل ارزیابی:</span>
             </div>
 
             <div className="flex flex-wrap gap-2">
@@ -955,7 +955,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                   صنعت: {currentPipeline.industrySector}
                 </span>
                 <h2 className="text-xl font-bold text-slate-900 mt-2">
-                  مسیر و زنجیره ارزیابی {currentPipeline.departmentName}
+                  مراحل ارزیابی {currentPipeline.departmentName}
                 </h2>
                 <p className="text-xs text-slate-500 mt-1">{currentPipeline.description}</p>
               </div>
@@ -986,7 +986,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">سطح سخت‌گیری ارزیابی (Rigor)</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">سطح سخت‌گیری ارزیابی</label>
                 <select
                   value={currentPipeline.airigor}
                   onChange={(e) => {
@@ -999,9 +999,9 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                   }}
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm text-slate-800"
                 >
-                  <option value="STRICT">سخت‌گیرانه (Strict) - استانداردهای بالا</option>
-                  <option value="BALANCED">متعادل (Balanced) - منصفانه و عینی</option>
-                  <option value="LENIENT">منعطف (Lenient) - تمرکز بر پتانسیل رشد</option>
+                  <option value="STRICT">سخت‌گیرانه - استانداردهای بالا</option>
+                  <option value="BALANCED">متعادل - منصفانه و عینی</option>
+                  <option value="LENIENT">منعطف - تمرکز بر پتانسیل رشد</option>
                 </select>
               </div>
 
@@ -1019,9 +1019,9 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                   }}
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm text-slate-800"
                 >
-                  <option value="THRESHOLD_VETO">ماتریس وتو و میانگین وزنی (Threshold Veto)</option>
-                  <option value="WEIGHTED_AVG">میانگین وزنی خطی استاندارد (Weighted Avg)</option>
-                  <option value="GEOMETRIC_MEAN">میانگین هندسی اوزان (Geometric Mean)</option>
+                  <option value="THRESHOLD_VETO">ماتریس وتو و میانگین وزنی</option>
+                  <option value="WEIGHTED_AVG">میانگین وزنی خطی استاندارد</option>
+                  <option value="GEOMETRIC_MEAN">میانگین هندسی اوزان</option>
                 </select>
               </div>
             </div>
@@ -1055,8 +1055,8 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                   <ArrowRight className="w-5 h-5 rotate-180" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900">گام‌های متوالی پایپ‌لاین ارزیابی</h3>
-                  <p className="text-xs text-slate-500">مراحلی که هوش مصنوعی برای هر رزومه به ترتیب طی می‌کند</p>
+                  <h3 className="text-lg font-bold text-slate-900">مراحل ارزیابی رزومه</h3>
+                  <p className="text-xs text-slate-500">مراحلی که دستیار هوش مصنوعی برای هر رزومه طی می‌کند</p>
                 </div>
               </div>
 
@@ -1066,7 +1066,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                   const newStep: PipelineStep = {
                     id: `s-custom-${Date.now()}`,
                     stepNumber: (currentPipeline.steps?.length || 0) + 1,
-                    name: 'گام ارزیابی جدید',
+                    name: 'مرحله جدید',
                     description: 'شرح جزئیات بررسی در این مرحله',
                     evaluationType: 'SKILL_MATCH',
                     isAutomated: true,
@@ -1082,7 +1082,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                 className="text-xs text-emerald-700 font-semibold hover:text-emerald-800 flex items-center gap-1"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>افزودن گام ارزیابی</span>
+                <span>افزودن مرحله</span>
               </button>
             </div>
 
@@ -1127,7 +1127,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                           }}
                           className="px-2 py-1 bg-white border border-slate-300 rounded-lg text-xs text-slate-800"
                         >
-                          <option value="KNOCKOUT">حذفی / وتو (Knockout)</option>
+                          <option value="KNOCKOUT">حذفی و وتو</option>
                           <option value="EXPERIENCE_VERIFY">راستی‌آزمایی سوابق</option>
                           <option value="SKILL_MATCH">سنجش مهارت تخصصی</option>
                           <option value="CULTURE_FIT">تناسب فرهنگی هلدینگ</option>
@@ -1150,9 +1150,9 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                           }}
                           className="px-2 py-1 bg-white border border-slate-300 rounded-lg text-xs text-slate-800"
                         >
-                          <option value="REJECT">رد اولیه (Reject)</option>
-                          <option value="FLAG_FOR_MANAGER">هشدار به مدیر (Flag)</option>
-                          <option value="DOWNGRADE_SCORE">کاهش نمره (Downgrade)</option>
+                          <option value="REJECT">رد اولیه</option>
+                          <option value="FLAG_FOR_MANAGER">هشدار به مدیر</option>
+                          <option value="DOWNGRADE_SCORE">کاهش نمره</option>
                         </select>
                       </div>
 
@@ -1277,7 +1277,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
           <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <Sliders className="w-5 h-5 text-emerald-600" />
-              <span className="text-sm font-bold text-slate-800">انتخاب دپارتمان جهت تنظیم اوزان ارزیابی:</span>
+              <span className="text-sm font-bold text-slate-800">انتخاب دپارتمان برای تنظیم اوزان ارزیابی:</span>
             </div>
 
             <div className="flex flex-wrap gap-2">
@@ -1457,9 +1457,9 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                   <Play className="w-5 h-5" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-slate-900">شبیه‌ساز و زمین آزمایش زنده بات با هوش مصنوعی</h2>
+                  <h2 className="text-xl font-bold text-slate-900">شبیه‌ساز ارزیابی رزومه با هوش مصنوعی</h2>
                   <p className="text-xs text-slate-500">
-                    آزمودن مستقیم نحوه رفتار، تصمیم‌گیری، استخراج شواهد و وتوی ربات طبق تنظیمات مصوب
+                    بررسی نحوه تصمیم‌گیری و ارزیابی دستیار هوش مصنوعی بر اساس تنظیمات فعال
                   </p>
                 </div>
               </div>
@@ -1468,7 +1468,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
             {/* Quick Sample Selector */}
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-2">
-                انتخاب سریع نمونه رزومه‌های واقعی صنایع هلدینگ:
+                انتخاب نمونه رزومه:
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
                 {sampleResumes.map((sample, idx) => (
@@ -1501,7 +1501,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">دپارتمان و پایپ‌لاین مورد سنجش</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">دپارتمان و مراحل ارزیابی</label>
                 <select
                   value={sandboxDeptId}
                   onChange={(e) => setSandboxDeptId(e.target.value)}
@@ -1518,14 +1518,14 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
 
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                متن رزومه جهت ارزیابی توسط هوش مصنوعی
+                متن رزومه برای ارزیابی
               </label>
               <textarea
                 rows={8}
                 value={sandboxResumeText}
                 onChange={(e) => setSandboxResumeText(e.target.value)}
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-800 font-sans leading-relaxed focus:bg-white focus:border-emerald-600"
-                placeholder="متن کامل رزومه کارجو را اینجا قرار دهید..."
+                placeholder="متن رزومه کارجو را وارد کنید..."
               />
             </div>
 
@@ -1537,7 +1537,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                 className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-sm font-bold shadow-lg shadow-emerald-950/20 transition-all"
               >
                 <Zap className={`w-4 h-4 ${runningEvaluation ? 'animate-spin' : ''}`} />
-                <span>{runningEvaluation ? 'در حال تحلیل با Gemini 3.8...' : 'اجرای ارزیابی زنده با هوش مصنوعی (Run Evaluation)'}</span>
+                <span>{runningEvaluation ? 'در حال ارزیابی...' : 'اجرای ارزیابی رزومه'}</span>
               </button>
             </div>
           </div>
@@ -1566,7 +1566,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                 {/* Score Big Badge */}
                 <div className="flex items-center gap-4">
                   <div className="text-center bg-slate-900 text-white px-5 py-3 rounded-2xl shadow">
-                    <p className="text-[11px] text-slate-400">نمره نهایی پایپ‌لاین</p>
+                    <p className="text-[11px] text-slate-400">نمره نهایی ارزیابی</p>
                     <p className="text-3xl font-extrabold text-emerald-400">
                       {toPersianDigits(evaluationResult.totalScore.toFixed(1))}
                       <span className="text-xs font-normal text-slate-400 mr-1">/۱۰</span>
@@ -1581,7 +1581,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                           : 'bg-rose-100 text-rose-800'
                       }`}
                     >
-                      {evaluationResult.passed ? 'احراز قبولی پایپ‌لاین' : 'عدم احراز قبولی'}
+                      {evaluationResult.passed ? 'تایید اولیه' : 'عدم احراز شرایط'}
                     </span>
                     <p className="text-xs text-slate-600 font-medium">
                       دسته‌بندی:{' '}
@@ -1595,13 +1595,19 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                 </div>
               </div>
 
+              {/* AI Advisory Note */}
+              <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-amber-900 text-xs flex items-center gap-2">
+                <Info className="w-4 h-4 text-amber-600 shrink-0" />
+                <span>تحلیل دستیار هوش مصنوعی جنبه مشورتی دارد و تصمیم نهایی با مدیر استخدام است.</span>
+              </div>
+
               {/* Veto Alert */}
               {evaluationResult.vetoTriggered && (
                 <div className="p-4 bg-rose-50 border border-rose-300 rounded-xl text-rose-900 text-xs sm:text-sm flex items-start gap-3">
                   <AlertTriangle className="w-5 h-5 text-rose-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-bold">هشدار فعال‌سازی شرط وتو (Auto-Reject Triggered)</p>
-                    <p className="mt-1">{evaluationResult.vetoReason || 'کارجو حداقل یکی از خطوط قرمز یا الزامات پایه این دپارتمان را نقض نموده است.'}</p>
+                    <p className="font-bold">هشدار شرط وتو</p>
+                    <p className="mt-1">{evaluationResult.vetoReason || 'کارجو حداقل یکی از خطوط قرمز یا الزامات پایه این دپارتمان را نقض کرده است.'}</p>
                   </div>
                 </div>
               )}
@@ -1611,7 +1617,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-amber-900 flex items-center gap-1.5">
                     <Award className="w-4 h-4 text-amber-600" />
-                    <span>سنجش تناسب با فرهنگ سازمانی و ارزش‌های سیلانه سبز</span>
+                    <span>تناسب با فرهنگ سازمانی و ارزش‌های سیلانه سبز</span>
                   </span>
                   <span className="text-sm font-extrabold text-amber-800">
                     نمره تطابق: {toPersianDigits(evaluationResult.culturalFitScore)} از ۱۰
@@ -1627,7 +1633,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                 <div className="space-y-3">
                   <h4 className="text-sm font-bold text-slate-800 flex items-center gap-2">
                     <Layers className="w-4 h-4 text-emerald-600" />
-                    <span>نتیجه اجرای گام‌به‌گام پایپ‌لاین دپارتمان</span>
+                    <span>نتیجه مراحل ارزیابی دپارتمان</span>
                   </h4>
                   <div className="space-y-2">
                     {evaluationResult.stepResults.map((st, i) => (
@@ -1664,7 +1670,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
               <div>
                 <h4 className="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
                   <Sliders className="w-4 h-4 text-emerald-600" />
-                  <span>نمرات تفکیکی شاخصه‌های دپارتمان و استدلال مستند</span>
+                  <span>نمرات تفکیکی شاخص‌های ارزیابی</span>
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {Object.entries(evaluationResult.criteriaScores || {}).map(([cName, score]) => (
@@ -1688,7 +1694,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                 <div className="p-4 bg-emerald-50/60 border border-emerald-200 rounded-xl space-y-2">
                   <p className="text-xs font-bold text-emerald-900 flex items-center gap-1.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                    <span>نقاط قوت کلیدی شناسایی‌شده در رزومه</span>
+                    <span>نقاط قوت شناسایی‌شده در رزومه</span>
                   </p>
                   <ul className="space-y-1 text-xs text-emerald-950 list-disc list-inside">
                     {(evaluationResult.strengths || []).map((s, i) => (
@@ -1700,7 +1706,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
                 <div className="p-4 bg-rose-50/60 border border-rose-200 rounded-xl space-y-2">
                   <p className="text-xs font-bold text-rose-900 flex items-center gap-1.5">
                     <AlertTriangle className="w-4 h-4 text-rose-600" />
-                    <span>نقاط نیازمند سنجش و ریسک‌های استخدامی</span>
+                    <span>نقاط نیازمند بررسی و ریسک‌ها</span>
                   </p>
                   <ul className="space-y-1 text-xs text-rose-950 list-disc list-inside">
                     {(evaluationResult.weaknesses || []).map((w, i) => (
@@ -1713,7 +1719,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
               {/* Executive Summary */}
               {evaluationResult.executiveSummary && (
                 <div className="p-4 bg-slate-900 text-white rounded-xl space-y-2">
-                  <p className="text-xs font-bold text-emerald-400">جمع‌بندی تحلیلی دستیار هوشمند برای مدیر استخدام:</p>
+                  <p className="text-xs font-bold text-emerald-400">جمع‌بندی دستیار هوش مصنوعی:</p>
                   <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
                     {evaluationResult.executiveSummary}
                   </p>
@@ -1723,7 +1729,7 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
               {/* Raw Model Reasoning Log */}
               {evaluationResult.rawModelReasoning && (
                 <div className="p-3 bg-slate-100 rounded-xl border border-slate-200 text-xs text-slate-600 space-y-1">
-                  <p className="font-bold text-slate-700">لاگ استدلال منطقی هوش مصنوعی (Reasoning Trace):</p>
+                  <p className="font-bold text-slate-700">شرح استدلال هوش مصنوعی:</p>
                   <p className="font-mono text-[11px] leading-relaxed text-slate-600">
                     {evaluationResult.rawModelReasoning}
                   </p>

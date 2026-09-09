@@ -74,14 +74,14 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
     },
     {
       key: CandidateStage.IN_PERSON_INTERVIEW,
-      title: 'مصاحبه حضوری/فنی',
+      title: 'مصاحبه حضوری',
       topAccent: 'border-t-purple-500',
       badgeBg: 'bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-500/20',
       icon: Calendar,
     },
     {
       key: CandidateStage.OFFER,
-      title: 'پیشنهاد همکاری (آفر)',
+      title: 'پیشنهاد همکاری',
       topAccent: 'border-t-teal-500',
       badgeBg: 'bg-teal-500/10 text-teal-700 dark:text-teal-300 border-teal-500/20',
       icon: Award,
@@ -115,7 +115,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
         return (
           <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-success-soft text-success border border-success/30 flex items-center gap-1">
             <Sparkles className="w-2.5 h-2.5" />
-            اولویت مصاحبه (+۷)
+            اولویت مصاحبه (بالای ۷)
           </span>
         );
       case CandidateCategory.NEEDS_REVIEW:
@@ -127,7 +127,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
       case CandidateCategory.INITIAL_REJECTION:
         return (
           <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-danger-soft text-danger border border-danger/30">
-            رد اولیه (&lt;۵)
+            رد اولیه (زیر ۵)
           </span>
         );
       default:
@@ -154,7 +154,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
         </div>
         {isLocal && (
           <span className="text-[8.5px] font-semibold text-amber-800 dark:text-amber-300 bg-amber-500/10 px-1 py-0.2 rounded border border-amber-500/20 whitespace-nowrap">
-            موتور محلی (بدون Gemini)
+            ارزیابی محلی
           </span>
         )}
       </div>
@@ -179,7 +179,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
       if (targetStage === CandidateStage.INITIAL_SCREENING) {
         return { valid: true };
       }
-      return { valid: false, reason: 'پرونده رد شده تنها می‌تواند جهت بررسی مجدد به مرحله بررسی اولیه بازگردد.' };
+      return { valid: false, reason: 'پرونده رد شده فقط می‌تواند به بررسی اولیه بازگردد.' };
     }
 
     // Progression pipeline order
@@ -200,12 +200,12 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
 
     // Cannot move backwards
     if (targetIdx < currentIdx) {
-      return { valid: false, reason: 'انتقال پرونده به مراحل پیشین مجاز نیست.' };
+      return { valid: false, reason: 'بازگشت به مراحل قبلی امکان‌پذیر نیست.' };
     }
 
     // Cannot skip stages forward
     if (targetIdx > currentIdx + 1) {
-      return { valid: false, reason: 'پرش از مراحل فرآیند استخدام مجاز نیست؛ پایپ‌لاین باید گام‌به‌گام طی شود.' };
+      return { valid: false, reason: 'پرش از مراحل استخدام مجاز نیست؛ مراحل باید به ترتیب طی شوند.' };
     }
 
     // Moving to HIRED requires completed evaluation
@@ -215,7 +215,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
         !!cand.criteriaScores &&
         Object.keys(cand.criteriaScores).length > 0;
       if (!evaluated) {
-        return { valid: false, reason: 'استخدام فقط پس از ارزیابی کامل شایستگی‌ها و ثبت نمرات شاخص‌ها مجاز است.' };
+        return { valid: false, reason: 'استخدام فقط پس از تکمیل ارزیابی و ثبت نمرات مجاز است.' };
       }
     }
 
@@ -403,7 +403,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                             onClick={() => setSelectedCandidateForDetails(cand)}
                             className="text-[11px] text-brand hover:underline font-bold"
                           >
-                            مشاهده شواهد
+                            مشاهده جزئیات
                           </button>
 
                           <div className="flex items-center gap-1">
@@ -413,10 +413,10 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                               onClick={() => onSelectCompare(cand)}
                               className={`p-1 rounded-[8px] transition-colors ${
                                 isSelectedForCompare
-                                  ? 'bg-brand text-white shadow-2xs'
-                                  : 'text-text-3 hover:text-text-1 hover:bg-surface-2'
+                                    ? 'bg-brand text-white shadow-2xs'
+                                    : 'text-text-3 hover:text-text-1 hover:bg-surface-2'
                               }`}
-                              title="انتخاب جهت مقایسه رادار"
+                              title="انتخاب برای مقایسه"
                             >
                               <Sparkles className="w-3.5 h-3.5" />
                             </button>
@@ -488,7 +488,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                                 disabled={hireBlocked}
                                 title={
                                   hireBlocked
-                                    ? 'استخدام فقط پس از تکمیل ارزیابی (نمره و امتیاز شاخص‌ها) ممکن است'
+                                    ? 'استخدام فقط پس از تکمیل ارزیابی ممکن است'
                                     : undefined
                                 }
                                 onClick={() => onMoveStage(cand.id, nextStage)}
@@ -548,13 +548,13 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
             {/* AI Score and Category */}
             <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-surface-2 rounded-[12px] border border-border-default">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold text-text-2">دسته‌بندی ارزیابی:</span>
+                <span className="text-xs font-semibold text-text-2">وضعیت ارزیابی:</span>
                 {getCategoryBadge(selectedCandidateForDetails.category)}
               </div>
 
               {selectedCandidateForDetails.overallScore !== undefined && (
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-text-2 font-medium">امتیاز هوش مصنوعی:</span>
+                  <span className="text-xs text-text-2 font-medium">امتیاز ارزیابی:</span>
                   <span className="px-2.5 py-1 rounded-[10px] bg-brand-soft text-brand font-extrabold text-xs border border-brand/20">
                     {toPersianDigits(selectedCandidateForDetails.overallScore)} از ۱۰
                   </span>
@@ -567,7 +567,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
               <div className="bg-success-soft/30 rounded-[12px] p-3.5 border border-success/30">
                 <div className="text-xs font-bold text-success mb-2 flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-success" />
-                  <span>نقاط قوت اصلی (ارزیابی Gemini):</span>
+                  <span>نقاط قوت (ارزیابی هوشمند):</span>
                 </div>
                 <ul className="space-y-1.5 text-xs text-text-2">
                   {selectedCandidateForDetails.strengths.map((s, idx) => (
@@ -585,7 +585,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
               <div className="bg-warning-soft/30 rounded-[12px] p-3.5 border border-warning/30">
                 <div className="text-xs font-bold text-warning mb-2 flex items-center gap-1.5">
                   <Clock className="w-4 h-4 text-warning" />
-                  <span>زمینه‌های نیازمند بررسی و نقاط بهبود:</span>
+                  <span>زمینه‌های نیازمند بهبود:</span>
                 </div>
                 <ul className="space-y-1.5 text-xs text-text-2">
                   {selectedCandidateForDetails.weaknesses.map((w, idx) => (
@@ -603,7 +603,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
               <div className="bg-surface-2 rounded-[12px] p-3.5 border border-border-default">
                 <div className="text-xs font-bold text-text-1 mb-2 flex items-center gap-1.5">
                   <Quote className="w-4 h-4 text-brand" />
-                  <span>شواهد متنی مستند استخراج‌شده از رزومه:</span>
+                  <span>شواهد استخراج‌شده از رزومه:</span>
                 </div>
                 <div className="space-y-2 text-xs text-text-2">
                   {selectedCandidateForDetails.resumeQuotes.map((q, idx) => (
@@ -622,7 +622,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
             <div className="bg-surface-2 rounded-[12px] p-3.5 border border-border-default">
               <div className="text-xs font-bold text-text-1 mb-1.5 flex items-center gap-1.5">
                 <FileText className="w-4 h-4 text-text-3" />
-                <span>متن استخراج‌شده رزومه ({selectedCandidateForDetails.resumeFileName}):</span>
+                <span>متن رزومه ({selectedCandidateForDetails.resumeFileName}):</span>
               </div>
               <p className="text-xs text-text-2 leading-relaxed whitespace-pre-wrap font-sans max-h-36 overflow-y-auto pr-1">
                 {selectedCandidateForDetails.resumeText}
@@ -652,8 +652,8 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                 <Award className="w-4 h-4" />
                 <span>
                   {selectedCandidateForDetails.inTalentPool
-                    ? 'ذخیره شده در استخر استعدادها'
-                    : 'انتقال به استخر استعدادهای آینده'}
+                    ? 'ذخیره شده در بانک استعدادها'
+                    : 'افزودن به بانک استعدادها'}
                 </span>
               </button>
 

@@ -58,14 +58,14 @@ export const PerformanceModule: React.FC<PerformanceModuleProps> = ({
         <div>
           <h2 className="text-sm font-bold text-slate-900">مدیریت عملکرد و اهداف کلیدی (OKR / KPI)</h2>
           <p className="text-xs text-slate-500">
-            ردیابی اهداف فصلی، شاخص‌های وزنی عملکرد و ارزیابی شایستگی کارکنان
+            پیگیری اهداف دوره‌ای، سنجه‌های کلیدی و درصد تحقق عملکرد کارکنان
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <div className="px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-800 flex items-center gap-1.5">
             <Target className="w-4 h-4 text-emerald-600" />
-            <span>میانگین تحقق اهداف: {toPersianDigits(avgProgress)}٪</span>
+            <span>میانگین تحقق: {toPersianDigits(avgProgress)}٪</span>
           </div>
 
           <button
@@ -74,76 +74,84 @@ export const PerformanceModule: React.FC<PerformanceModuleProps> = ({
             className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 shadow-2xs cursor-pointer"
           >
             <Plus className="w-4 h-4" />
-            <span>تعریف هدف جدید</span>
+            <span>ثبت هدف جدید</span>
           </button>
         </div>
       </div>
 
       {/* Goals Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {goals.map((goal) => (
-          <div
-            key={goal.id}
-            className="bg-white rounded-2xl p-4 border border-slate-200 shadow-2xs space-y-3"
-          >
-            <div className="flex items-start justify-between gap-2 pb-2 border-b border-slate-100">
-              <div>
-                <h3 className="font-bold text-sm text-slate-900 line-clamp-1">{goal.title}</h3>
-                <div className="text-[11px] text-slate-500 font-medium">{goal.employeeName}</div>
-              </div>
+      {goals.length === 0 ? (
+        <div className="bg-white rounded-2xl p-12 border border-slate-200 text-center text-slate-400">
+          <Target className="w-10 h-10 mx-auto text-slate-300 mb-2" />
+          <p className="text-xs font-bold text-slate-600">هنوز هدفی برای این دوره تعریف نشده است.</p>
+          <p className="text-[11px] text-slate-400 mt-1">با کلیک بر روی «ثبت هدف جدید»، اولین هدف یا شاخص کلیدی را اضافه کنید.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {goals.map((goal) => (
+            <div
+              key={goal.id}
+              className="bg-white rounded-2xl p-4 border border-slate-200 shadow-2xs space-y-3"
+            >
+              <div className="flex items-start justify-between gap-2 pb-2 border-b border-slate-100">
+                <div>
+                  <h3 className="font-bold text-sm text-slate-900 line-clamp-1">{goal.title}</h3>
+                  <div className="text-[11px] text-slate-500 font-medium">{goal.employeeName}</div>
+                </div>
 
-              <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 border border-purple-200">
-                وزن: {toPersianDigits(goal.weight)}٪
-              </span>
-            </div>
-
-            <div className="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-              <span className="font-bold text-slate-700">سنجه کلیدی: </span>
-              <span>{goal.targetMetric}</span>
-            </div>
-
-            {/* Progress Slider */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-slate-500 font-medium">پیشرفت فعلی:</span>
-                <span className="font-extrabold text-emerald-800">
-                  {toPersianDigits(goal.currentProgress)}٪
+                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 border border-purple-200">
+                  وزن: {toPersianDigits(goal.weight)}٪
                 </span>
               </div>
 
-              <input
-                type="range"
-                min={0}
-                max={100}
-                value={goal.currentProgress}
-                onChange={(e) => onUpdateProgress(goal.id, Number(e.target.value))}
-                className="w-full accent-emerald-600 cursor-pointer"
-              />
-            </div>
-
-            <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-              <div className="flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                <span>مهلت تا: {toPersianDigits(goal.deadlineJalali)}</span>
+              <div className="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                <span className="font-bold text-slate-700">نتیجه کلیدی: </span>
+                <span>{goal.targetMetric}</span>
               </div>
 
-              {goal.currentProgress >= 100 && (
-                <span className="text-emerald-700 font-bold flex items-center gap-1 text-[11px]">
-                  <CheckCircle className="w-3.5 h-3.5" />
-                  <span>محقق شد</span>
-                </span>
-              )}
+              {/* Progress Slider */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-slate-500 font-medium">میزان پیشرفت:</span>
+                  <span className="font-extrabold text-emerald-800">
+                    {toPersianDigits(goal.currentProgress)}٪
+                  </span>
+                </div>
+
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  value={goal.currentProgress}
+                  onChange={(e) => onUpdateProgress(goal.id, Number(e.target.value))}
+                  className="w-full accent-emerald-600 cursor-pointer"
+                />
+              </div>
+
+              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                <div className="flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                  <span>مهلت: {toPersianDigits(goal.deadlineJalali)}</span>
+                </div>
+
+                {goal.currentProgress >= 100 && (
+                  <span className="text-emerald-700 font-bold flex items-center gap-1 text-[11px]">
+                    <CheckCircle className="w-3.5 h-3.5" />
+                    <span>تکمیل شد</span>
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* Create Goal Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4">
           <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
             <h3 className="text-base font-bold text-slate-900 pb-3 border-b border-slate-200 mb-4">
-              تعریف سنجه و هدف عملکردی (OKR)
+              ثبت هدف عملکردی (OKR)
             </h3>
 
             <form onSubmit={handleSubmit} className="space-y-3.5">
@@ -156,13 +164,13 @@ export const PerformanceModule: React.FC<PerformanceModuleProps> = ({
                   required
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="مثلاً: ارتقای سرعت پاسخگویی پشتیبانی"
+                  placeholder="مثال: کاهش زمان پاسخگویی به درخواست‌ها"
                   className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">همکار مسئول</label>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">مسئول هدف</label>
                 <input
                   type="text"
                   value={employeeName}
@@ -173,20 +181,20 @@ export const PerformanceModule: React.FC<PerformanceModuleProps> = ({
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  سنجه کلیدی اندازه گیری (Key Result)
+                  نتیجه کلیدی
                 </label>
                 <input
                   type="text"
                   value={targetMetric}
                   onChange={(e) => setTargetMetric(e.target.value)}
-                  placeholder="مثلاً: کاهش زمان تیکت به زیر ۱۵ دقیقه"
+                  placeholder="مثال: رساندن زمان پاسخگویی به کمتر از ۱۵ دقیقه"
                   className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  وزن هدف در ارزیابی فصلی (٪)
+                  وزن ارزیابی (٪)
                 </label>
                 <input
                   type="number"
@@ -211,7 +219,7 @@ export const PerformanceModule: React.FC<PerformanceModuleProps> = ({
                   type="submit"
                   className="px-5 py-2 text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-xs"
                 >
-                  ثبت سنجه
+                  ثبت هدف
                 </button>
               </div>
             </form>

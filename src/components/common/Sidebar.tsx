@@ -98,20 +98,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const moduleGroups: ModuleGroup[] = [
     {
       id: 'core',
-      title: 'پیشخوان و پایش',
+      title: 'پیشخوان',
       items: [
         {
           key: 'dashboard',
           label: 'داشبورد اجرایی',
-          description: 'پایش ۳۶۰ درجه و وضعیت لحظه‌ای هلدینگ',
+          description: 'وضعیت کلی هلدینگ و شاخص‌ها',
           icon: LayoutDashboard,
         },
         {
           key: 'analytics',
-          label: 'هوش تجاری و گزارشات',
-          description: 'تحلیل هزینه پرسنلی و شاخص‌های HR KPI',
+          label: 'گزارش‌ها و تحلیل‌ها',
+          description: 'تحلیل هزینه‌ها و شاخص‌های KPI',
           icon: BarChart3,
-          badge: 'مدیر ارشد',
+          badge: 'مدیر منابع انسانی',
         },
       ],
     },
@@ -122,37 +122,37 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {
           key: 'employees',
           label: 'پرونده پرسنلی',
-          description: 'احکام کارگزینی، سوابق و چارت سازمانی',
+          description: 'اطلاعات کارکنان و چارت سازمانی',
           icon: Users,
         },
         {
           key: 'recruitment',
           label: 'جذب و استخدام',
-          description: 'کانبان، غربالگری هوشمند و مصاحبه‌ها',
+          description: 'فرآیند جذب، غربالگری و مصاحبه‌ها',
           icon: UserPlus,
         },
         {
           key: 'checklists',
-          label: 'ورود و خروج همکاران',
-          description: 'چک‌لیست ان‌بوردینگ و تسویه حساب مرحله‌ای',
+          label: 'چک‌لیست استخدام و تسویه',
+          description: 'مراحل ورود، تحویل اقلام و تسویه حساب',
           icon: CheckSquare,
         },
       ],
     },
     {
       id: 'factory_ops',
-      title: 'عملیات و کارخانجات',
+      title: 'کارخانجات و تردد',
       items: [
         {
           key: 'attendance',
-          label: 'تردد، شیفت و مرخصی',
-          description: 'ثبت تردد کارخانجات اشتهارد و سقف مرخصی',
+          label: 'تردد و مرخصی',
+          description: 'ثبت تردد کارخانه و سهمیه مرخصی',
           icon: Clock,
         },
         {
           key: 'payroll',
           label: 'حقوق و دستمزد',
-          description: 'فرمول اداره کار ۱۴۰۳، بیمه ۷٪ و فیش‌ها',
+          description: 'محاسبه حقوق، بیمه ۷٪ و فیش حقوق',
           icon: Wallet,
           badge: 'محرمانه',
         },
@@ -160,30 +160,30 @@ export const Sidebar: React.FC<SidebarProps> = ({
     },
     {
       id: 'learning_perf',
-      title: 'ارزیابی و یادگیری',
+      title: 'ارزیابی و آموزش',
       items: [
         {
           key: 'performance',
-          label: 'ارزیابی عملکرد (OKRs)',
-          description: 'اهداف فصلی، شایستگی‌ها و بازخورد ۳۶۰',
+          label: 'ارزیابی عملکرد',
+          description: 'اهداف فصلی، شایستگی‌ها و ارزیابی دوره‌ای',
           icon: TrendingUp,
         },
         {
           key: 'training',
-          label: 'آموزش و آکادمی',
-          description: 'دوره‌های سازمانی، استانداردهای GMP و مهارت‌ها',
+          label: 'آموزش کارکنان',
+          description: 'دوره‌های آموزشی، استانداردهای GMP و مهارت‌ها',
           icon: GraduationCap,
         },
       ],
     },
     {
       id: 'ai_governance',
-      title: 'هوش مصنوعی سازمانی',
+      title: 'دستیار هوش مصنوعی',
       items: [
         {
           key: 'ai-governance',
-          label: 'دیده‌بان و حاکمیت AI',
-          description: 'پیکربندی رفتار بات، سند فرهنگ و توکن‌ها',
+          label: 'مدیریت دستیار',
+          description: 'تنظیم رفتار دستیار و سند فرهنگ سازمانی',
           icon: Sparkles,
           badge: 'Gemini',
         },
@@ -233,7 +233,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </div>
               <div className="text-right">
                 <span className="text-xs font-black text-text-1 block">
-                  ماژول‌های سامانه
+                  بخش‌های سامانه
                 </span>
                 <span className="text-[10px] text-text-3 font-medium">
                   هلدینگ سیلانه سبز
@@ -244,7 +244,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               type="button"
               onClick={onCloseMobile}
               className="p-1.5 rounded-[10px] text-text-3 hover:text-text-1 hover:bg-surface-2 cursor-pointer transition-colors"
-              aria-label="بستن منوی کناری"
+              aria-label="بستن منو"
             >
               <X className="w-5 h-5" aria-hidden="true" />
             </button>
@@ -254,7 +254,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="hidden lg:flex items-center justify-between px-1 mb-1">
             {!isCollapsed && (
               <span className="text-[10px] font-extrabold text-text-3 uppercase tracking-wider select-none">
-                ناوبری سازمانی
+                منوی اصلی
               </span>
             )}
             <button
@@ -264,8 +264,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
               className={`p-1.5 rounded-[10px] text-text-3 hover:text-text-1 hover:bg-surface-2 transition-colors cursor-pointer ${
                 isCollapsed ? 'mx-auto' : ''
               }`}
-              title={isCollapsed ? 'باز کردن منو (۲۶۴ پیکسل)' : 'جمع کردن منو (۷۲ پیکسل)'}
-              aria-label={isCollapsed ? 'باز کردن نوار کناری' : 'جمع کردن نوار کناری'}
+              title={isCollapsed ? 'باز کردن منو' : 'بستن منو'}
+              aria-label={isCollapsed ? 'باز کردن نوار کناری' : 'بستن نوار کناری'}
             >
               {isCollapsed ? (
                 <ChevronLeft className="w-4 h-4" aria-hidden="true" />
@@ -299,7 +299,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                           <button
                             type="button"
                             disabled={!allowed}
-                            aria-label={`${item.label}${!allowed ? ' (غیرفعال، دسترسی محدود بر اساس نقش)' : ''}`}
+                            aria-label={`${item.label}${!allowed ? ' (دسترسی محدود)' : ''}`}
                             onClick={() => {
                               if (!allowed) return;
                               onSelectModule(item.key);
@@ -389,7 +389,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                 )}
                               </div>
                               <p className="text-[10px] text-text-3 leading-relaxed">
-                                {!allowed ? 'دسترسی محدود به مدیر ارشد منابع انسانی' : item.description}
+                                {!allowed ? 'دسترسی محدود به مدیر منابع انسانی' : item.description}
                               </p>
                             </div>
                           )}

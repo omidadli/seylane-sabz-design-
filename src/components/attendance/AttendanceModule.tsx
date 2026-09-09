@@ -289,15 +289,15 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
                 <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
                   <Clock className="w-4 h-4" />
                 </div>
-                <span>دستگاه ثبت تردد هوشمند</span>
+                <span>ثبت تردد</span>
               </div>
               <span className="text-[11px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-200">
-                شیفت عادی (۸:۰۰ الی ۱۷:۰۰)
+                شیفت عادی (۰۸:۰۰ تا ۱۷:۰۰)
               </span>
             </div>
 
             <p className="text-xs text-slate-500 leading-relaxed">
-              ثبت ورود و خروج روزانه همکاران با ثبت دقیق ساعت تهران و محاسبه خودکار تاخیر و اضافه‌کاری.
+              ثبت ورود و خروج روزانه با محاسبه خودکار تاخیر و اضافه‌کاری.
             </p>
           </div>
 
@@ -330,7 +330,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
                 <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs">
                   <ShieldCheck className="w-4 h-4" />
                 </div>
-                <span>مانده مرخصی استحقاقی (ماده ۶۴ و ۶۶ قانون کار جمهوری اسلامی ایران)</span>
+                <span>مانده مرخصی استحقاقی (ماده ۶۴ و ۶۶ قانون کار)</span>
               </div>
               <span className="text-xs font-extrabold text-emerald-800 bg-emerald-100/80 px-3 py-1 rounded-full border border-emerald-300">
                 سال کاری {myBalance ? toPersianDigits(myBalance.currentYear) : '—'}
@@ -340,7 +340,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
             {/* Visual Balance Meter Progress Bar */}
             <div className="space-y-1.5 pt-1">
               <div className="flex items-center justify-between text-xs font-bold">
-                <span className="text-slate-700">میزان مصرف مرخصی سالانه</span>
+                <span className="text-slate-700">مصرف مرخصی سالانه</span>
                 <span className="text-emerald-800">
                   {toPersianDigits(usedDays + pendingDays)} از {toPersianDigits(totalEntitled)} روز کاری ({toPersianDigits(usedPercentage)}٪)
                 </span>
@@ -412,7 +412,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
           <div className="flex items-start gap-2 text-[11px] text-slate-600 bg-white/70 p-2.5 rounded-xl border border-emerald-100">
             <Info className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
             <p className="leading-relaxed">
-              <strong className="text-slate-800 font-bold">قانون مرخصی و ذخیره سنوات:</strong> طبق ماده ۶۴ قانون کار، مرخصی استحقاقی سالانه ۲۶ روز کاری است. بر اساس ماده ۶۶، کارگر نمی‌تواند بیش از ۹ روز از مرخصی سالانه خود را ذخیره نماید؛ ذخیره بیش از ۹ روز به سال بعد منتقل نمی‌شود و باید بازخرید یا تسویه گردد.
+              <strong className="text-slate-800 font-bold">قانون مرخصی و ذخیره سالانه:</strong> طبق ماده ۶۴ قانون کار، مرخصی سالانه ۲۶ روز کاری است. بر اساس ماده ۶۶، حداکثر ۹ روز مرخصی قابل انتقال به سال بعد است و مازاد آن باید تسویه شود.
             </p>
           </div>
         </div>
@@ -431,7 +431,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
             }`}
           >
             <Clock className="w-4 h-4" />
-            <span>گزارش و شبکه هفتگی تردد</span>
+            <span>گزارش هفتگی تردد</span>
           </button>
 
           <button
@@ -444,7 +444,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
             }`}
           >
             <Calendar className="w-4 h-4" />
-            <span>کارتابل درخواست‌های مرخصی</span>
+            <span>درخواست‌های مرخصی</span>
             <span
               className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${
                 activeSubTab === 'leaves' ? 'bg-white text-emerald-800' : 'bg-slate-100 text-slate-700'
@@ -461,7 +461,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
           className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-2xs self-start sm:self-auto cursor-pointer"
         >
           <Plus className="w-4 h-4" />
-          <span>ثبت درخواست مرخصی جدید</span>
+          <span>ثبت مرخصی</span>
         </button>
       </div>
 
@@ -472,7 +472,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
               <div>
-                <div className="text-xs text-slate-500 font-medium">حاضرین به‌موقع</div>
+                <div className="text-xs text-slate-500 font-medium">حضور به‌موقع</div>
                 <div className="text-xl font-extrabold text-emerald-700 mt-1">
                   {toPersianDigits(totalOnTime)} نفر
                 </div>
@@ -484,7 +484,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
 
             <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
               <div>
-                <div className="text-xs text-slate-500 font-medium">تاخیر در ورود</div>
+                <div className="text-xs text-slate-500 font-medium">تاخیر ورود</div>
                 <div className="text-xl font-extrabold text-amber-700 mt-1">
                   {toPersianDigits(totalLate)} نفر
                 </div>
@@ -496,7 +496,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
 
             <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
               <div>
-                <div className="text-xs text-slate-500 font-medium">غایبین / ثبت‌نشده</div>
+                <div className="text-xs text-slate-500 font-medium">غیبت / ثبت‌نشده</div>
                 <div className="text-xl font-extrabold text-rose-700 mt-1">
                   {toPersianDigits(totalAbsent)} نفر
                 </div>
@@ -508,7 +508,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
 
             <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
               <div>
-                <div className="text-xs text-slate-500 font-medium">مجموع اضافه‌کاری</div>
+                <div className="text-xs text-slate-500 font-medium">اضافه‌کاری</div>
                 <div className="text-xl font-extrabold text-sky-700 mt-1">
                   {toPersianDigits(totalOvertimeHours)} ساعت
                 </div>
@@ -534,7 +534,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
                   }`}
                 >
                   <LayoutGrid className="w-3.5 h-3.5" />
-                  <span>شبکه حرارتی هفتگی</span>
+                  <span>نمای هفتگی</span>
                 </button>
 
                 <button
@@ -547,7 +547,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
                   }`}
                 >
                   <ListFilter className="w-3.5 h-3.5" />
-                  <span>جدول تفصیلی تردد</span>
+                  <span>جدول تردد</span>
                 </button>
               </div>
 
@@ -618,7 +618,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
                   <thead>
                     <tr className="bg-slate-50 text-slate-700 font-bold border-b border-slate-200">
                       <th className="p-3 w-48 sticky right-0 bg-slate-50 z-10 border-l border-slate-200">
-                        همکاران هلدینگ ({toPersianDigits(filteredEmployees.length)})
+                        همکاران ({toPersianDigits(filteredEmployees.length)})
                       </th>
                       {weekDays.map((d) => (
                         <th
@@ -760,33 +760,33 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
               <div className="p-3.5 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs">
                 <div className="font-bold text-slate-700 flex items-center gap-1.5">
                   <Info className="w-4 h-4 text-emerald-600" />
-                  <span>راهنمای رنگ‌بندی تردد:</span>
+                  <span>راهنما:</span>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3">
                   <div className="flex items-center gap-1.5">
                     <span className="w-3 h-3 rounded-md bg-emerald-50 border border-emerald-300 inline-block" />
-                    <span className="text-slate-600 font-medium">حضور به‌موقع (تا ساعت ۸:۰۰)</span>
+                    <span className="text-slate-600 font-medium">حضور به‌موقع</span>
                   </div>
 
                   <div className="flex items-center gap-1.5">
                     <span className="w-3 h-3 rounded-md bg-amber-50 border border-amber-300 inline-block" />
-                    <span className="text-slate-600 font-medium">ورود با تاخیر (رنگ هشدار)</span>
+                    <span className="text-slate-600 font-medium">تاخیر ورود</span>
                   </div>
 
                   <div className="flex items-center gap-1.5">
                     <span className="w-3 h-3 rounded-md bg-rose-50 border border-rose-300 inline-block" />
-                    <span className="text-slate-600 font-medium">غیبت / بدون تردد (رنگ بحرانی)</span>
+                    <span className="text-slate-600 font-medium">غیبت</span>
                   </div>
 
                   <div className="flex items-center gap-1.5">
                     <span className="w-3 h-3 rounded-md bg-sky-50 border border-sky-300 inline-block" />
-                    <span className="text-slate-600 font-medium">مرخصی مصوب / ماموریت</span>
+                    <span className="text-slate-600 font-medium">مرخصی / ماموریت</span>
                   </div>
 
                   <div className="flex items-center gap-1.5">
                     <span className="w-3 h-3 rounded-md bg-rose-50/60 border border-rose-100 inline-block" />
-                    <span className="text-slate-600 font-medium">تعطیلات رسمی (جمعه)</span>
+                    <span className="text-slate-600 font-medium">تعطیل رسمی</span>
                   </div>
                 </div>
               </div>
@@ -874,10 +874,10 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
           {/* Leave Cartable Filter Bar */}
           <div className="flex flex-wrap items-center justify-between gap-2 bg-white p-3 rounded-2xl border border-slate-200 shadow-2xs">
             <div className="flex items-center gap-1.5">
-              <span className="text-xs font-bold text-slate-700 ml-1">فیلتر وضعیت:</span>
+              <span className="text-xs font-bold text-slate-700 ml-1">وضعیت:</span>
               {[
-                { key: 'ALL', label: 'همه درخواست‌ها' },
-                { key: 'PENDING', label: 'در انتظار بررسی' },
+                { key: 'ALL', label: 'همه' },
+                { key: 'PENDING', label: 'در انتظار تأیید' },
                 { key: LeaveStatus.APPROVED, label: 'تأییدشده' },
                 { key: LeaveStatus.REJECTED, label: 'ردشده' },
               ].map((tab) => (
@@ -897,7 +897,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
             </div>
 
             <div className="text-xs text-slate-500 font-medium">
-              تعداد موارد: {toPersianDigits(filteredLeaveRequests.length)} درخواست
+              {toPersianDigits(filteredLeaveRequests.length)} مورد
             </div>
           </div>
 
@@ -907,13 +907,13 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
               <table className="w-full min-w-[700px] text-right text-xs">
                 <thead className="bg-slate-50 text-slate-700 font-bold border-b border-slate-200">
                   <tr>
-                    <th className="p-3.5">متقاضی</th>
+                    <th className="p-3.5">نام کارمند</th>
                     <th className="p-3.5">نوع مرخصی</th>
-                    <th className="p-3.5">بازه زمانی (شمسی)</th>
+                    <th className="p-3.5">بازه زمانی</th>
                     <th className="p-3.5">مدت</th>
-                    <th className="p-3.5">علت</th>
-                    <th className="p-3.5">وضعیت گردش‌کار</th>
-                    <th className="p-3.5 text-center">عملیات تأیید (RBAC)</th>
+                    <th className="p-3.5">دلیل</th>
+                    <th className="p-3.5">وضعیت</th>
+                    <th className="p-3.5 text-center">عملیات</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-slate-700">
@@ -929,7 +929,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
                             : req.leaveType === LeaveType.HOURLY
                             ? 'ساعتی'
                             : req.leaveType === LeaveType.MARRIAGE
-                            ? 'ازدواج (ماده ۷۳)'
+                            ? 'ازدواج'
                             : req.leaveType === LeaveType.MATERNITY
                             ? 'زایمان'
                             : 'بدون حقوق'}
@@ -961,7 +961,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
                               <button
                                 type="button"
                                 onClick={() =>
-                                  onApproveLeave(req.id, false, 'عدم موافقت به دلیل ترافیک کاری')
+                                   onApproveLeave(req.id, false, 'عدم موافقت به دلیل ترافیک کاری')
                                 }
                                 className="px-3 py-1.5 bg-rose-50 text-rose-700 hover:bg-rose-100 active:bg-rose-200 border border-rose-200 rounded-xl text-[11px] font-bold transition-all cursor-pointer"
                               >
@@ -981,7 +981,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
                                 }
                                 className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white rounded-xl text-[11px] font-bold transition-all shadow-2xs cursor-pointer"
                               >
-                                تأیید نهایی HR
+                                تأیید منابع انسانی
                               </button>
                               <button
                                 type="button"
@@ -999,12 +999,12 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
                         {req.status === LeaveStatus.APPROVED && (
                           <span className="text-[11px] text-emerald-700 font-bold inline-flex items-center gap-1">
                             <Check className="w-3.5 h-3.5" />
-                            <span>گردش‌کار تکمیل شده</span>
+                            <span>تأیید شده</span>
                           </span>
                         )}
 
                         {req.status === LeaveStatus.REJECTED && (
-                          <span className="text-[11px] text-rose-600 font-bold">بایگانی شده</span>
+                          <span className="text-[11px] text-rose-600 font-bold">رد شده</span>
                         )}
 
                         {/* For employee role who cannot approve */}
@@ -1012,7 +1012,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
                           (req.status === LeaveStatus.PENDING_MANAGER ||
                             req.status === LeaveStatus.PENDING_HR) && (
                             <span className="text-[11px] text-slate-400 font-medium">
-                              در نوبت بررسی مسئول
+                              در انتظار بررسی
                             </span>
                           )}
                       </td>
@@ -1039,7 +1039,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
                   <Calendar className="w-4 h-4" />
                 </div>
                 <h3 className="text-base font-extrabold text-slate-900">
-                  ثبت درخواست مرخصی با تقویم جلالی
+                  ثبت درخواست مرخصی
                 </h3>
               </div>
               <button
@@ -1061,19 +1061,19 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
                   onChange={(e) => setLeaveType(e.target.value as LeaveType)}
                   className="w-full px-3.5 py-2.5 text-xs bg-slate-50 hover:bg-slate-100 border border-slate-300 rounded-xl focus:border-emerald-600 focus:outline-hidden font-medium text-slate-800 cursor-pointer"
                 >
-                  <option value={LeaveType.ANNUAL}>استحقاقی (کسر از مانده ۲۶ روزه ماده ۶۴)</option>
-                  <option value={LeaveType.SICK}>استعلاجی (نیازمند گواهی پزشک معتمد تامین اجتماعی)</option>
-                  <option value={LeaveType.HOURLY}>ساعتی (کسری از روز کاری)</option>
-                  <option value={LeaveType.MARRIAGE}>ازدواج (۳ روز کاری با حقوق — ماده ۷۳)</option>
-                  <option value={LeaveType.MATERNITY}>زایمان (مشمول حمایت تامین اجتماعی)</option>
-                  <option value={LeaveType.UNPAID}>بدون حقوق (کسر از حقوق دوره ماهانه)</option>
+                  <option value={LeaveType.ANNUAL}>استحقاقی (کسر از مانده سالانه)</option>
+                  <option value={LeaveType.SICK}>استعلاجی (نیازمند گواهی پزشک)</option>
+                  <option value={LeaveType.HOURLY}>ساعتی</option>
+                  <option value={LeaveType.MARRIAGE}>ازدواج (۳ روز با حقوق)</option>
+                  <option value={LeaveType.MATERNITY}>زایمان</option>
+                  <option value={LeaveType.UNPAID}>بدون حقوق</option>
                 </select>
               </div>
 
               {/* Date Range Picker using JalaliDatePicker with rangeStart and rangeEnd props */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <JalaliDatePicker
-                  label="از تاریخ (شروع)"
+                  label="از تاریخ"
                   value={startDate}
                   rangeStart={startDate}
                   rangeEnd={endDate}
@@ -1081,7 +1081,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
                   required
                 />
                 <JalaliDatePicker
-                  label="تا تاریخ (پایان)"
+                  label="تا تاریخ"
                   value={endDate}
                   rangeStart={startDate}
                   rangeEnd={endDate}
@@ -1095,12 +1095,12 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
                 <div className="flex items-center justify-between text-xs font-bold">
                   <span className="text-slate-700">
                     {leaveType === LeaveType.HOURLY
-                      ? 'مدت به کسری از روز کاری (مثلاً ۰.۵)'
-                      : 'روزهای کاری بازه (جمعه‌ها محاسبه نمی‌شود)'}
+                      ? 'مدت (کسری از روز، مثلاً ۰.۵)'
+                      : 'تعداد روز کاری (بدون احتساب جمعه)'}
                   </span>
                   {currentYearBalance && leaveType === LeaveType.ANNUAL && (
                     <span className="text-emerald-700 text-[11px]">
-                      مانده فعلی شما: {toPersianDigits(currentYearBalance.remainingDays)} روز کاری
+                      مانده مرخصی: {toPersianDigits(currentYearBalance.remainingDays)} روز
                     </span>
                   )}
                 </div>
@@ -1129,11 +1129,11 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
                       {previewDays === null
                         ? '—'
                         : previewDays < 0
-                        ? 'بازه نامعتبر (پایان پیش از شروع است)'
+                        ? 'تاریخ پایان پیش از تاریخ شروع است'
                         : `${toPersianDigits(previewDays)} روز کاری`}
                     </span>
                     <span className="text-[11px] font-medium opacity-80">
-                      {previewDays !== null && previewDays > 0 ? 'محاسبه زنده بر اساس تقویم' : ''}
+                      {previewDays !== null && previewDays > 0 ? 'محاسبه خودکار' : ''}
                     </span>
                   </div>
                 )}
@@ -1143,13 +1143,11 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
                   <div className="p-3 bg-amber-50 border border-amber-300 rounded-xl text-amber-900 text-xs space-y-1">
                     <div className="font-bold flex items-center gap-1.5">
                       <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0" />
-                      <span>هشدار سقف مرخصی استحقاقی (ماده ۶۴)</span>
+                      <span>کسری مانده مرخصی</span>
                     </div>
                     <p className="text-[11px] leading-relaxed">
-                      این درخواست ({toPersianDigits(previewDays)} روز) از مانده مرخصی مجاز شما (
-                      {toPersianDigits(currentYearBalance?.remainingDays ?? 0)} روز) بیشتر است. سامانه
-                      اجازه ثبت نخواهد داد. لطفاً بازه را کوتاه‌تر نموده یا نوع مرخصی را به «بدون حقوق»
-                      تغییر دهید.
+                      مدت درخواست ({toPersianDigits(previewDays)} روز) بیشتر از مانده مرخصی شما (
+                      {toPersianDigits(currentYearBalance?.remainingDays ?? 0)} روز) است. لطفاً بازه را تغییر دهید یا مرخصی بدون حقوق ثبت کنید.
                     </p>
                   </div>
                 )}
@@ -1159,10 +1157,10 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
                   <div className="p-3 bg-rose-50 border border-rose-300 rounded-xl text-rose-900 text-xs">
                     <div className="font-bold flex items-center gap-1.5">
                       <AlertTriangle className="w-4 h-4 text-rose-700 shrink-0" />
-                      <span>سقف قانونی مرخصی ازدواج (ماده ۷۳)</span>
+                      <span>محدودیت مرخصی ازدواج</span>
                     </div>
                     <p className="text-[11px] mt-1">
-                      مرخصی ازدواج مطابق ماده ۷۳ قانون کار حداکثر ۳ روز با استفاده از مزد است.
+                      مرخصی ازدواج حداکثر ۳ روز کاری با حقوق است.
                     </p>
                   </div>
                 )}
@@ -1179,13 +1177,13 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
               {/* Reason Input */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  علت درخواست مرخصی
+                  دلیل مرخصی
                 </label>
                 <textarea
                   rows={2}
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  placeholder="توضیحات و امور مربوطه..."
+                  placeholder="توضیحات اختیاری..."
                   className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:border-emerald-600 focus:outline-hidden"
                 />
               </div>
@@ -1209,7 +1207,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
                       : 'bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white'
                   }`}
                 >
-                  ارسال جهت بررسی و تأیید
+                  ثبت درخواست
                 </button>
               </div>
             </form>

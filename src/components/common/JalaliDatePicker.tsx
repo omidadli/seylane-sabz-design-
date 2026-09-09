@@ -38,7 +38,7 @@ export const JalaliDatePicker: React.FC<JalaliDatePickerProps> = ({
   value,
   onChange,
   label,
-  placeholder = 'انتخاب تاریخ شمسی...',
+  placeholder = 'انتخاب تاریخ...',
   required = false,
   disabled = false,
   className = '',

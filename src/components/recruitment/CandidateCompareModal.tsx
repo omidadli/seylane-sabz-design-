@@ -76,10 +76,10 @@ export const CandidateCompareModal: React.FC<CandidateCompareModalProps> = ({
           </div>
           <div>
             <h3 className="text-base font-extrabold text-text-1">
-              مقایسه تطبیقی چندمحوره کارجویان (Radar Chart & Matrix)
+              مقایسه تطبیقی کارجویان
             </h3>
             <p className="text-xs text-text-3">
-              تحلیل هم‌زمان شاخص‌های شایستگی، شواهد مستند رزومه‌ها و مقایسه راداری
+              مقایسه شاخص‌های شایستگی، شواهد رزومه و نمرات تطابق
             </p>
           </div>
         </div>
@@ -133,7 +133,7 @@ export const CandidateCompareModal: React.FC<CandidateCompareModalProps> = ({
           <table className="w-full text-right text-xs">
             <thead className="bg-surface-2 text-text-1 font-bold border-b border-border-default">
               <tr>
-                <th className="p-3">معیار ارزیابی / شایستگی</th>
+                <th className="p-3">شاخص ارزیابی</th>
                 {candidates.map((c) => (
                   <th key={c.id} className="p-3 text-center">
                     <div className="font-extrabold text-text-1">{c.fullName}</div>
@@ -175,7 +175,7 @@ export const CandidateCompareModal: React.FC<CandidateCompareModalProps> = ({
 
               {/* Textual Quote evidence comparison */}
               <tr className="bg-surface-2/30">
-                <td className="p-3 font-semibold text-text-1">شاهد متنی مستند رزومه</td>
+                <td className="p-3 font-semibold text-text-1">نقل‌قول از رزومه</td>
                 {candidates.map((c) => (
                   <td key={c.id} className="p-3 text-xs italic text-text-2 leading-relaxed">
                     «{c.resumeQuotes?.[0] || 'سابقه فعالیت در موقعیت مشابه'}»
@@ -185,7 +185,7 @@ export const CandidateCompareModal: React.FC<CandidateCompareModalProps> = ({
 
               {/* Actions row */}
               <tr>
-                <td className="p-3 font-semibold text-text-1">عملیات پیشنهادی</td>
+                <td className="p-3 font-semibold text-text-1">اقدام</td>
                 {candidates.map((c) => (
                   <td key={c.id} className="p-3 text-center">
                     <button
@@ -207,7 +207,7 @@ export const CandidateCompareModal: React.FC<CandidateCompareModalProps> = ({
         <div className="space-y-3 pt-2">
           <div className="text-xs font-bold text-text-1 flex items-center gap-1.5">
             <User className="w-4 h-4 text-brand" />
-            <span>خلاصه ارزیابی و شایستگی‌های کاندیداها:</span>
+            <span>خلاصه ارزیابی کارجویان:</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -253,7 +253,7 @@ export const CandidateCompareModal: React.FC<CandidateCompareModalProps> = ({
                   {/* Strengths preview */}
                   {c.strengths && c.strengths.length > 0 && (
                     <div className="space-y-1">
-                      <div className="text-[10px] font-semibold text-text-2">نقاط قوت کلیدی:</div>
+                      <div className="text-[10px] font-semibold text-text-2">نقاط قوت:</div>
                       <ul className="text-[10px] text-text-2 space-y-0.5 pr-2">
                         {c.strengths.slice(0, 2).map((s, sIdx) => (
                           <li key={sIdx} className="flex items-start gap-1">
@@ -298,7 +298,7 @@ export const CandidateCompareModal: React.FC<CandidateCompareModalProps> = ({
             onClick={onClose}
             className="px-5 py-2 text-xs font-bold bg-surface-2 hover:bg-surface-0 text-text-1 border border-border-default rounded-[10px] transition-colors cursor-pointer"
           >
-            بستن پنجره مقایسه
+            بستن
           </button>
         </div>
       </div>

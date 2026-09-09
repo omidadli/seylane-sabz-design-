@@ -16,16 +16,16 @@ interface BreadcrumbsProps {
 }
 
 const moduleTitles: Record<ModuleKey, { title: string; subtitle: string }> = {
-  dashboard: { title: 'پیشخوان هوشمند', subtitle: 'پایش لحظه‌ای و نمای ۳۶۰ درجه هلدینگ' },
-  'ai-governance': { title: 'مدیریت و حاکمیت هوش مصنوعی', subtitle: 'پیکربندی رفتار بات، فرهنگ سازمانی، پایپ‌لاین دپارتمان‌ها و اتصال Gemini' },
-  recruitment: { title: 'جذب و استخدام', subtitle: 'کانبان، رزومه‌ها، ارزیابی هوش مصنوعی و مصاحبه‌ها' },
-  employees: { title: 'پرونده پرسنلی', subtitle: 'احکام کارگزینی، مشخصات همکاران و چارت سازمانی' },
-  attendance: { title: 'تردد و مرخصی‌ها', subtitle: 'ثبت ورود/خروج کارخانجات اشتهارد و سقف ۲۶ روزه' },
-  payroll: { title: 'حقوق و دستمزد', subtitle: 'صدور فیش بر مبنای بخشنامه سال، بیمه ۷٪ و مالیات پله‌ای' },
-  performance: { title: 'مدیریت عملکرد', subtitle: 'اهداف فصلی OKR، ارزیابی شایستگی و بازخورد' },
-  training: { title: 'آموزش و مهارت‌ها', subtitle: 'دوره‌های سازمانی، استانداردهای GMP و ماتریس مهارت' },
-  checklists: { title: 'ورود و خروج همکاران', subtitle: 'چک‌لیست‌های ان‌بوردینگ و تسویه‌حساب مرحله‌ای' },
-  analytics: { title: 'داشبورد و گزارشات', subtitle: 'شاخص‌های کلیدی منابع انسانی (HR KPI)' },
+  dashboard: { title: 'داشبورد اجرایی', subtitle: 'وضعیت کلی هلدینگ و شاخص‌های منابع انسانی' },
+  'ai-governance': { title: 'مدیریت دستیار', subtitle: 'تنظیم رفتار دستیار، سند فرهنگ سازمانی و اتصال Gemini' },
+  recruitment: { title: 'جذب و استخدام', subtitle: 'فرآیند جذب، رزومه‌ها، ارزیابی و مصاحبه‌ها' },
+  employees: { title: 'پرونده پرسنلی', subtitle: 'اطلاعات کارکنان، احکام و چارت سازمانی' },
+  attendance: { title: 'تردد و مرخصی', subtitle: 'ثبت تردد کارخانه و مانده مرخصی' },
+  payroll: { title: 'حقوق و دستمزد', subtitle: 'صدور فیش حقوق بر اساس قانون کار، بیمه و مالیات' },
+  performance: { title: 'ارزیابی عملکرد', subtitle: 'اهداف فصلی، شایستگی‌ها و ارزیابی دوره‌ای' },
+  training: { title: 'آموزش کارکنان', subtitle: 'دوره‌های آموزشی، استانداردهای GMP و ماتریس مهارت' },
+  checklists: { title: 'چک‌لیست استخدام و تسویه', subtitle: 'مراحل ورود، تحویل اقلام و تسویه حساب' },
+  analytics: { title: 'گزارش‌ها و تحلیل‌ها', subtitle: 'شاخص‌های کلیدی منابع انسانی' },
 };
 
 export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
@@ -69,10 +69,10 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
             type="button"
             onClick={onTogglePwaPortalMode}
             className="flex items-center gap-1.5 px-3 py-2 rounded-[10px] bg-surface-1 hover:bg-surface-2 text-text-2 hover:text-brand border border-border-default text-xs font-bold transition-all cursor-pointer shadow-2xs select-none active:scale-95"
-            title="نمای اختصاصی اپلیکیشن پرسنل و موبایل هلدینگ"
+            title="نمای همراه"
           >
             <Smartphone className="w-4 h-4 text-brand" />
-            <span>{isPwaPortalMode ? 'بازگشت به نمای دسکتاپ' : 'نمای همراه پرسنل (موبایل)'}</span>
+            <span>{isPwaPortalMode ? 'بازگشت به پیشخوان' : 'نمای همراه'}</span>
           </button>
         </div>
       )}

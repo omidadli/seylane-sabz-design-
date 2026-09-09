@@ -96,7 +96,7 @@ export const MobileAppShell: React.FC<MobileAppShellProps> = ({
                 id="btn-exit-to-desktop"
                 onClick={onExitToDesktop}
                 className="min-h-[44px] px-2.5 rounded-[10px] bg-surface-2 hover:bg-surface-3 text-text-2 hover:text-text-1 text-[11px] font-bold flex items-center gap-1 border border-border-default transition-all cursor-pointer select-none"
-                title="مشاهده نسخه جامع دسکتاپ هلدینگ"
+                title="مشاهده نسخه دسکتاپ"
               >
                 <Laptop className="w-3.5 h-3.5 text-text-3" />
                 <span className="hidden xs:inline">نسخه دسکتاپ</span>
@@ -109,7 +109,7 @@ export const MobileAppShell: React.FC<MobileAppShellProps> = ({
               id="btn-header-voice-call"
               onClick={() => setActiveTab('voice')}
               className="min-h-[44px] min-w-[44px] rounded-[10px] bg-brand-soft hover:bg-brand/20 text-brand flex items-center justify-center cursor-pointer transition-all relative border border-brand/25"
-              title="دستیار هوشمند صوتی"
+              title="دستیار صوتی"
             >
               <PhoneCall className="w-4 h-4 text-brand" />
               <span className="absolute top-2 left-2 w-2 h-2 rounded-full bg-brand animate-ping" />
@@ -121,7 +121,7 @@ export const MobileAppShell: React.FC<MobileAppShellProps> = ({
               id="btn-header-automations-bell"
               onClick={() => setActiveTab('automations')}
               className="min-h-[44px] min-w-[44px] rounded-[10px] bg-surface-2 hover:bg-surface-3 text-text-2 flex items-center justify-center cursor-pointer transition-all relative border border-border-default"
-              title="اتوماسیون‌ها و هشدارها"
+              title="وظایف خودکار و اعلان‌ها"
             >
               <Bell className="w-4 h-4" />
               {notificationCount > 0 && (

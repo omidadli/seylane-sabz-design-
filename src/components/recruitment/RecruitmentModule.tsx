@@ -164,7 +164,7 @@ export const RecruitmentModule: React.FC<RecruitmentModuleProps> = ({
       setSelectedCompareIds(selectedCompareIds.filter((id) => id !== candidate.id));
     } else {
       if (selectedCompareIds.length >= 4) {
-        alert('امکان مقایسه همزمان حداکثر ۴ کارجو در نمودار رادار وجود دارد.');
+        alert('امکان مقایسه همزمان حداکثر ۴ کارجو وجود دارد.');
         return;
       }
       setSelectedCompareIds([...selectedCompareIds, candidate.id]);
@@ -187,7 +187,7 @@ export const RecruitmentModule: React.FC<RecruitmentModuleProps> = ({
       {/* Top Banner & KPI Stat Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="bg-surface-1 p-4 rounded-[14px] border border-border-default shadow-2xs">
-          <div className="text-xs text-text-3 font-medium mb-1">موقعیت‌های فعال</div>
+          <div className="text-xs text-text-3 font-medium mb-1">آگهی‌های فعال</div>
           <div className="flex items-baseline justify-between">
             <span className="text-xl font-extrabold text-text-1">
               {toPersianDigits(jobs.filter((j) => j.status === 'ACTIVE').length)}
@@ -199,19 +199,19 @@ export const RecruitmentModule: React.FC<RecruitmentModuleProps> = ({
         </div>
 
         <div className="bg-surface-1 p-4 rounded-[14px] border border-border-default shadow-2xs">
-          <div className="text-xs text-text-3 font-medium mb-1">کل رزومه‌های پردازش‌شده</div>
+          <div className="text-xs text-text-3 font-medium mb-1">رزومه‌های بررسی‌شده</div>
           <div className="flex items-baseline justify-between">
             <span className="text-xl font-extrabold text-text-1">
               {toPersianDigits(totalResumes)}
             </span>
             <span className="text-[11px] text-brand font-bold bg-brand-soft px-2 py-0.5 rounded-md border border-brand/20">
-              امتیازدهی هوشمند
+              ارزیابی هوشمند
             </span>
           </div>
         </div>
 
         <div className="bg-surface-1 p-4 rounded-[14px] border border-border-default shadow-2xs">
-          <div className="text-xs text-text-3 font-medium mb-1">در جریان مصاحبه‌ها</div>
+          <div className="text-xs text-text-3 font-medium mb-1">مصاحبه‌های فعال</div>
           <div className="flex items-baseline justify-between">
             <span className="text-xl font-extrabold text-text-1">
               {toPersianDigits(inInterviewCount)}
@@ -223,13 +223,13 @@ export const RecruitmentModule: React.FC<RecruitmentModuleProps> = ({
         </div>
 
         <div className="bg-surface-1 p-4 rounded-[14px] border border-border-default shadow-2xs">
-          <div className="text-xs text-text-3 font-medium mb-1">استخر استعدادها</div>
+          <div className="text-xs text-text-3 font-medium mb-1">بانک استعدادها</div>
           <div className="flex items-baseline justify-between">
             <span className="text-xl font-extrabold text-text-1">
               {toPersianDigits(talentPoolCount)}
             </span>
             <span className="text-[11px] text-warning font-bold bg-warning-soft px-2 py-0.5 rounded-md border border-warning/20">
-              ذخیره آتی
+              ذخیره برای آینده
             </span>
           </div>
         </div>
@@ -248,7 +248,7 @@ export const RecruitmentModule: React.FC<RecruitmentModuleProps> = ({
             }`}
           >
             <LayoutDashboard className="w-4 h-4" />
-            <span>پایپ‌لاین استخدامی (کانبان)</span>
+            <span>مراحل جذب</span>
           </button>
 
           <button
@@ -261,7 +261,7 @@ export const RecruitmentModule: React.FC<RecruitmentModuleProps> = ({
             }`}
           >
             <Sparkles className="w-4 h-4 text-amber-400" />
-            <span>استودیوی غربالگری (Screening Studio)</span>
+            <span>غربالگری رزومه‌ها</span>
             <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-400 text-slate-900 font-black">
               ارزیابی هوشمند
             </span>
@@ -277,10 +277,7 @@ export const RecruitmentModule: React.FC<RecruitmentModuleProps> = ({
             }`}
           >
             <Video className="w-4 h-4 text-brand" />
-            <span>مصاحبه ویدیویی هوشمند (HireVue)</span>
-            <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-brand-soft text-brand font-black">
-              AI
-            </span>
+            <span>مصاحبه ویدیویی</span>
           </button>
 
           <button
@@ -293,10 +290,7 @@ export const RecruitmentModule: React.FC<RecruitmentModuleProps> = ({
             }`}
           >
             <Network className="w-4 h-4 text-brand" />
-            <span>گراف مهارت‌ها (Eightfold)</span>
-            <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-brand-soft text-brand font-black">
-              استعداد
-            </span>
+            <span>تطبیق مهارت‌ها</span>
           </button>
 
           <button
@@ -309,10 +303,7 @@ export const RecruitmentModule: React.FC<RecruitmentModuleProps> = ({
             }`}
           >
             <Zap className="w-4 h-4 text-amber-500 fill-amber-500" />
-            <span>سورسینگ هوشمند (ZipRecruiter)</span>
-            <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 font-black">
-              انتشار
-            </span>
+            <span>انتشار و جذب</span>
           </button>
 
           <button
@@ -325,10 +316,7 @@ export const RecruitmentModule: React.FC<RecruitmentModuleProps> = ({
             }`}
           >
             <Bot className="w-4 h-4 text-brand" />
-            <span>دستیار هوشمند استخدام (Gemini)</span>
-            <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-400 text-slate-900 font-black">
-              AI
-            </span>
+            <span>دستیار استخدام (Gemini)</span>
           </button>
 
           <button
@@ -341,7 +329,7 @@ export const RecruitmentModule: React.FC<RecruitmentModuleProps> = ({
             }`}
           >
             <SlidersHorizontal className="w-4 h-4 text-brand" />
-            <span>ماتریس شاخص‌ها و وزن‌دهی AI</span>
+            <span>معیارهای ارزیابی</span>
           </button>
 
           <button
@@ -354,7 +342,7 @@ export const RecruitmentModule: React.FC<RecruitmentModuleProps> = ({
             }`}
           >
             <Briefcase className="w-4 h-4" />
-            <span>موقعیت‌های شغلی ({toPersianDigits(jobs.length)})</span>
+            <span>آگهی‌های شغلی ({toPersianDigits(jobs.length)})</span>
           </button>
 
           <button
@@ -380,7 +368,7 @@ export const RecruitmentModule: React.FC<RecruitmentModuleProps> = ({
             }`}
           >
             <Award className="w-4 h-4" />
-            <span>استخر استعدادها</span>
+            <span>بانک استعدادها</span>
           </button>
         </div>
       </div>
@@ -397,7 +385,7 @@ export const RecruitmentModule: React.FC<RecruitmentModuleProps> = ({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="جستجوی نام کارجو، عنوان نقش، شماره تماس..."
+                placeholder="جستجوی نام، عنوان شغل، شماره تماس..."
                 className="w-full bg-surface-2 border border-border-default rounded-[10px] pr-9 pl-8 py-2 text-xs text-text-1 placeholder:text-text-3 focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand"
               />
               {searchQuery && (
@@ -450,7 +438,7 @@ export const RecruitmentModule: React.FC<RecruitmentModuleProps> = ({
                 className="px-3.5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-[10px] text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs"
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>مقایسه رادار ({toPersianDigits(selectedCompareIds.length)} کارجو)</span>
+                <span>مقایسه ({toPersianDigits(selectedCompareIds.length)} کارجو)</span>
               </button>
             )}
 
@@ -496,7 +484,7 @@ export const RecruitmentModule: React.FC<RecruitmentModuleProps> = ({
             {selectedCategoryFilters.includes(CandidateCategory.INTERVIEW_PRIORITY) && (
               <Check className="w-3 h-3" />
             )}
-            <span>اولویت مصاحبه (+۷)</span>
+            <span>اولویت مصاحبه (بالای ۷)</span>
           </button>
 
           <button
@@ -526,7 +514,7 @@ export const RecruitmentModule: React.FC<RecruitmentModuleProps> = ({
             {selectedCategoryFilters.includes(CandidateCategory.INITIAL_REJECTION) && (
               <Check className="w-3 h-3" />
             )}
-            <span>رد اولیه (&lt;۵)</span>
+            <span>رد اولیه (زیر ۵)</span>
           </button>
 
           <span className="h-3 w-px bg-border-default mx-1" />
@@ -617,7 +605,7 @@ export const RecruitmentModule: React.FC<RecruitmentModuleProps> = ({
             }`}
           >
             {onlyTalentPool && <Check className="w-3 h-3" />}
-            <span>استخر استعدادها</span>
+            <span>بانک استعدادها</span>
           </button>
 
           {/* Results counter badge */}

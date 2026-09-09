@@ -35,10 +35,10 @@ export const MobileAutomations: React.FC<MobileAutomationsProps> = ({
 
     try {
       await onRunTask(taskId);
-      setRecentNotification(`اتوماسیون «${title}» با موفقیت اجرا شد و تغییرات در پایگاه داده ثبت گردید.`);
+      setRecentNotification(`وظیفه «${title}» با موفقیت اجرا شد.`);
     } catch (err) {
       console.error(err);
-      setRecentNotification(`خطا در اجرای اتوماسیون.`);
+      setRecentNotification(`خطا در اجرای وظیفه خودکار.`);
     } finally {
       setRunningTaskId(null);
       setTimeout(() => setRecentNotification(null), 4000);
@@ -63,11 +63,11 @@ export const MobileAutomations: React.FC<MobileAutomationsProps> = ({
               <div className="flex items-center gap-1.5">
                 <Zap className="w-4 h-4 text-amber-300" />
                 <h1 className="text-sm sm:text-base font-black">
-                  مرکز اتوماسیون‌های هوشمند منابع انسانی
+                  وظایف خودکار منابع انسانی
                 </h1>
               </div>
               <p className="text-[11px] text-emerald-200 mt-0.5">
-                خودکارسازی فرایندهای تکراری هلدینگ سیلانه سبز با یک لمس
+                اجرای سریع فرایندهای پرتکرار منابع انسانی
               </p>
             </div>
           </div>
@@ -81,13 +81,13 @@ export const MobileAutomations: React.FC<MobileAutomationsProps> = ({
             <Clock className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-[11px] text-slate-500 block">صرفه‌جویی ماهیانه تیم HR:</span>
-            <span className="text-sm font-black text-emerald-800 font-mono">۱۲۸ ساعت کار دستی</span>
+            <span className="text-[11px] text-slate-500 block">صرفه‌جویی ماهانه:</span>
+            <span className="text-sm font-black text-emerald-800 font-mono">۱۲۸ ساعت</span>
           </div>
         </div>
         <div className="text-left bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200">
           <span className="text-[10px] text-emerald-700 font-bold block">دقت عملیاتی:</span>
-          <span className="text-xs font-black text-emerald-800 font-mono">۹۹.۸٪ بدون خطا</span>
+          <span className="text-xs font-black text-emerald-800 font-mono">۹۹.۸٪</span>
         </div>
       </div>
 
@@ -132,7 +132,7 @@ export const MobileAutomations: React.FC<MobileAutomationsProps> = ({
                   ) : (
                     <>
                       <Play className="w-3.5 h-3.5 fill-white" />
-                      <span>اجرای فوری</span>
+                      <span>اجرا</span>
                     </>
                   )}
                 </button>
@@ -145,7 +145,7 @@ export const MobileAutomations: React.FC<MobileAutomationsProps> = ({
               <div className="flex items-center justify-between pt-1 text-[11px] text-slate-500 border-t border-slate-100">
                 <span className="flex items-center gap-1">
                   <Clock className="w-3 h-3 text-emerald-600" />
-                  <span>زمان ذخیره‌شده: </span>
+                  <span>صرفه‌جویی در زمان: </span>
                   <strong className="text-slate-700">{task.estimatedTimeSaved}</strong>
                 </span>
 

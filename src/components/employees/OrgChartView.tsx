@@ -184,10 +184,10 @@ export const OrgChartView: React.FC<OrgChartViewProps> = ({
           <div className="mt-3 pt-2 border-t border-border-default flex items-center justify-between text-[10px] text-text-3 font-semibold">
             <span className="flex items-center gap-1 text-brand">
               <Users className="w-3 h-3" />
-              <span>{toPersianDigits(subs.length)} زیرمجموعه مستقیم</span>
+              <span>{toPersianDigits(subs.length)} زیرمجموعه</span>
             </span>
             <span className="text-text-3 group-hover:translate-x-0.5 transition-transform">
-              نمایش پرونده ←
+              مشاهده ←
             </span>
           </div>
         )}
@@ -204,9 +204,9 @@ export const OrgChartView: React.FC<OrgChartViewProps> = ({
             <Network className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-xs font-bold text-text-1">ساختار سلسله‌مراتبی سازمان</h3>
+            <h3 className="text-xs font-bold text-text-1">چارت سازمانی</h3>
             <p className="text-[11px] text-text-3">
-              نمایش درختی مدیران، کارشناسان و سطوح گزارش‌دهی با کلیک جهت مشاهده جزئیات پرونده
+              ساختار تیم‌ها و سطوح گزارش‌دهی سازمانی
             </p>
           </div>
         </div>
@@ -219,7 +219,7 @@ export const OrgChartView: React.FC<OrgChartViewProps> = ({
               type="text"
               value={filterQuery}
               onChange={(e) => setFilterQuery(e.target.value)}
-              placeholder="جستجوی همکار در چارت..."
+              placeholder="جستجوی همکار..."
               className="pr-8 pl-3 py-1.5 text-xs bg-surface-2 border border-border-default rounded-[8px] text-text-1 focus:outline-none focus:ring-1 focus:ring-brand w-44"
             />
           </div>
@@ -230,7 +230,7 @@ export const OrgChartView: React.FC<OrgChartViewProps> = ({
               type="button"
               onClick={handleZoomIn}
               className="p-1.5 rounded-[6px] text-text-2 hover:text-text-1 hover:bg-surface-1 transition-colors cursor-pointer"
-              title="بزرگ‌نمایی (+)"
+              title="بزرگ‌نمایی"
             >
               <ZoomIn className="w-3.5 h-3.5" />
             </button>
@@ -238,7 +238,7 @@ export const OrgChartView: React.FC<OrgChartViewProps> = ({
               type="button"
               onClick={handleZoomOut}
               className="p-1.5 rounded-[6px] text-text-2 hover:text-text-1 hover:bg-surface-1 transition-colors cursor-pointer"
-              title="کوچک‌نمایی (-)"
+              title="کوچک‌نمایی"
             >
               <ZoomOut className="w-3.5 h-3.5" />
             </button>
@@ -246,7 +246,7 @@ export const OrgChartView: React.FC<OrgChartViewProps> = ({
               type="button"
               onClick={handleResetZoom}
               className="px-2 py-1 rounded-[6px] text-[10px] font-bold text-text-2 hover:text-text-1 hover:bg-surface-1 transition-colors cursor-pointer font-mono"
-              title="اندازه طبیعی ۱۰۰٪"
+              title="اندازه پیش‌فرض"
             >
               {toPersianDigits(Math.round(zoomLevel * 100))}٪
             </button>
@@ -254,7 +254,7 @@ export const OrgChartView: React.FC<OrgChartViewProps> = ({
               type="button"
               onClick={handleZoomFit}
               className="p-1.5 rounded-[6px] text-text-2 hover:text-text-1 hover:bg-surface-1 transition-colors cursor-pointer"
-              title="تطبیق با صفحه (Zoom to Fit)"
+              title="تطبیق با صفحه"
             >
               <Maximize2 className="w-3.5 h-3.5" />
             </button>

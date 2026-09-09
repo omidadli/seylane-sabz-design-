@@ -58,7 +58,7 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
     {
       id: 'msg-init',
       sender: 'assistant',
-      text: 'سلام و وقت‌بخیر مهندس عزیز! دستیار صوتی منابع انسانی هلدینگ سیلانه سبز (دافی، کامان، میس‌ویک) آماده دریافت دستورات شماست. بفرمایید چه کمکی از من ساخته است؟',
+      text: 'سلام و وقت‌بخیر! دستیار صوتی منابع انسانی هلدینگ سیلانه سبز آماده دریافت دستورات شماست. چه کمکی از من ساخته است؟',
       timestamp: 'هم‌اکنون',
     },
   ]);
@@ -369,7 +369,7 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
 
       if (!res.ok) {
         const errBody = await res.json().catch(() => null);
-        throw new Error(errBody?.error || 'دستور صوتی پردازش نشد');
+        throw new Error(errBody?.error || 'خطا در پردازش دستور صوتی');
       }
 
       const data = await res.json();
@@ -380,17 +380,17 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
       if (needsConfirm || data.actionType === 'RUN_AUTOMATION_PAYROLL' || data.actionType === 'RUN_AUTOMATION_SCREENING') {
         const actionTitle =
           data.actionType === 'RUN_AUTOMATION_PAYROLL'
-            ? 'صدور قطعی و بستن فیش‌های حقوقی ماه'
+            ? 'صدور قطعی فیش‌های حقوقی ماه'
             : data.actionType === 'RUN_AUTOMATION_SCREENING'
-            ? 'غربالگری هوشمند و رتبه‌بندی رزومه‌ها'
-            : 'اجرای اتوماسیون سازمانی';
+            ? 'غربالگری و بررسی رزومه‌ها'
+            : 'اجرای عملیات سازمانی';
 
         const actionDesc =
           data.actionType === 'RUN_AUTOMATION_PAYROLL'
-            ? 'این عملیات محاسبات مالی و بیمه ۷٪ تامین اجتماعی را قطعی کرده و نیازمند تایید صریح شماست.'
+            ? 'این عملیات محاسبات مالی و بیمه تامین اجتماعی را قطعی می‌کند و نیازمند تأیید شماست.'
             : data.actionType === 'RUN_AUTOMATION_SCREENING'
-            ? 'رزومه‌های جدید متقاضیان دپارتمان بر اساس شاخص‌های شایستگی بازبینی و ثبت خواهند شد.'
-            : 'این عملیات داده‌های واقعی هلدینگ را بروزرسانی می‌کند.';
+            ? 'رزومه‌های جدید متقاضیان بر اساس شاخص‌های شایستگی بررسی خواهند شد.'
+            : 'این عملیات داده‌های سامانه را به‌روزرسانی می‌کند.';
 
         setPendingAction({
           id: `act-${Date.now()}`,
@@ -432,7 +432,7 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
       const fallbackMsg: VoiceCallMessage = {
         id: `bot-${Date.now()}`,
         sender: 'assistant',
-        text: `پردازش دستور ناموفق بود: ${(err as Error)?.message || 'خطای سرور'}. داده‌ها دست‌نخورده باقی ماندند.`,
+        text: 'پردازش دستور با خطا مواجه شد. هیچ تغییری در داده‌ها اعمال نشد.',
         timestamp: 'هم‌اکنون',
       };
       setTranscript((prev) => [...prev, fallbackMsg]);
@@ -455,13 +455,13 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
     const confirmResultMsg: VoiceCallMessage = {
       id: `bot-approved-${Date.now()}`,
       sender: 'assistant',
-      text: `عملیات «${pendingAction.title}» با تایید صریح شما با موفقیت به اجرا درآمد.`,
+      text: `عملیات «${pendingAction.title}» با تأیید شما انجام شد.`,
       timestamp: 'هم‌اکنون',
       actionTaken: pendingAction.actionType,
     };
 
     setTranscript((prev) => [...prev, confirmResultMsg]);
-    speakText(`عملیات با تایید شما اجرا شد.`);
+    speakText(`عملیات با تأیید شما اجرا شد.`);
     setPendingAction(null);
   };
 
@@ -473,7 +473,7 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
     const cancelMsg: VoiceCallMessage = {
       id: `bot-rejected-${Date.now()}`,
       sender: 'assistant',
-      text: `اجرای عملیات «${pendingAction.title}» به دستور شما متوقف و لغو گردید. هیچ تغییری روی داده‌ها اعمال نشد.`,
+      text: `عملیات «${pendingAction.title}» لغو شد. تغییری در داده‌ها اعمال نشد.`,
       timestamp: 'هم‌اکنون',
     };
 
@@ -489,11 +489,11 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
   };
 
   const quickVoiceChips = [
-    { label: '✍️ آگهی مدیر برند دافی', command: 'برای دپارتمان مارکتینگ یک آگهی شغلی برای مدیر برند دافی تنظیم کن' },
-    { label: '🏭 وضعیت کارخانه اشتهارد', command: 'وضعیت پرسنل و شیفت‌های تولید کارخانه اشتهارد چطوره؟' },
-    { label: '⚡ غربالگری رزومه‌ها', command: 'رزومه‌های ورودی هفته اخیر را غربالگری و اولویت‌بندی کن' },
-    { label: '💰 صدور فیش‌های حقوقی', command: 'فیش‌های حقوقی این ماه پرسنل سیلانه سبز را صادر کن' },
-    { label: '🏢 دپارتمان‌های هلدینگ', command: 'دپارتمان‌های هلدینگ سیلانه سبز را معرفی کن' },
+    { label: 'آگهی مدیر برند', command: 'برای دپارتمان مارکتینگ یک آگهی شغلی برای مدیر برند دافی تنظیم کن' },
+    { label: 'وضعیت کارخانه اشتهارد', command: 'وضعیت پرسنل و شیفت‌های تولید کارخانه اشتهارد چطوره؟' },
+    { label: 'غربالگری رزومه‌ها', command: 'رزومه‌های ورودی هفته اخیر را غربالگری و اولویت‌بندی کن' },
+    { label: 'صدور فیش‌های حقوق', command: 'فیش‌های حقوقی این ماه پرسنل سیلانه سبز را صادر کن' },
+    { label: 'دپارتمان‌های هلدینگ', command: 'دپارتمان‌های هلدینگ سیلانه سبز را معرفی کن' },
   ];
 
   return (
@@ -524,8 +524,8 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-brand animate-ping" />
             <div>
-              <span className="text-xs font-black text-text-1 block">دستیار هوشمند صوتی سیلانه سبز</span>
-              <span className="text-[10px] text-text-3 block">مجهز به مدل هوش مصنوعی Gemini</span>
+              <span className="text-xs font-black text-text-1 block">دستیار صوتی منابع انسانی</span>
+              <span className="text-[10px] text-text-3 block">دستیار تعاملی سیلانه سبز</span>
             </div>
           </div>
         </div>
@@ -645,12 +645,12 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
         <div className="text-center px-4">
           <p className="text-xs font-bold text-text-2 mt-0.5">
             {callStatus === 'LISTENING'
-              ? '🎤 در حال گوش دادن به کلام شما... (پس از اتمام صحبت، دکمه ارسال را بزنید)'
+              ? 'در حال شنیدن صدای شما... (پس از اتمام صحبت، ارسال را بزنید)'
               : callStatus === 'THINKING'
-              ? '⚡ در حال پردازش با هوش مصنوعی و واکاوی پایگاه داده...'
+              ? 'در حال پردازش و استخراج اطلاعات...'
               : callStatus === 'SPEAKING'
-              ? '🔊 در حال قرائت پاسخ با صدای صوتی...'
-              : '🟢 برای شروع صحبت، دکمه میکروفون زیر را لمس کنید'}
+              ? 'در حال خواندن پاسخ...'
+              : 'برای شروع صحبت، دکمه میکروفون را لمس کنید'}
           </p>
         </div>
 
@@ -660,9 +660,9 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
             <div className="flex items-center justify-between text-xs text-warning mb-1 font-black">
               <span className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-warning animate-ping" />
-                کلمات شما در حال دریافت است:
+                متن گفتار دریافت شده:
               </span>
-              <span className="text-[10px] text-text-2 font-medium">تشخیص زنده فارسی</span>
+              <span className="text-[10px] text-text-2 font-medium">تشخیص گفتار</span>
             </div>
 
             <p className="text-xs text-text-1 font-medium min-h-[36px] leading-relaxed bg-surface-1 p-2.5 rounded-[10px] border border-border-default">
@@ -675,7 +675,7 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
                 onClick={cancelListening}
                 className="min-h-[44px] px-3 rounded-[10px] bg-surface-2 hover:bg-surface-3 text-xs text-text-2 font-bold cursor-pointer transition-all active:scale-95"
               >
-                لغو صحبت
+                لغو
               </button>
               <button
                 type="button"
@@ -683,7 +683,7 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
                 className="min-h-[44px] flex items-center gap-1.5 px-4 rounded-[10px] bg-brand hover:bg-brand-hover text-white font-black text-xs shadow-sm cursor-pointer transition-all active:scale-95"
               >
                 <Send className="w-3.5 h-3.5" />
-                <span>پایان صحبت و ارسال</span>
+                <span>ارسال</span>
               </button>
             </div>
           </div>
@@ -702,10 +702,10 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
               <div className="flex-1">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-black text-text-1">
-                    درخواست تایید اجرای عملیات در سامانه
+                    درخواست تأیید اجرای عملیات
                   </h3>
                   <span className="text-[9px] font-black px-1.5 py-0.5 rounded-[6px] bg-warning-soft text-warning">
-                    نیازمند تایید صریح
+                    نیازمند تأیید
                   </span>
                 </div>
                 <div className="text-xs font-bold text-brand mt-0.5">
@@ -727,7 +727,7 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
                 className="min-h-[44px] flex items-center justify-center gap-1.5 px-3 py-2 rounded-[10px] bg-surface-2 hover:bg-surface-3 text-danger font-black text-xs border border-border-default cursor-pointer transition-all active:scale-95 shadow-2xs"
               >
                 <X className="w-4 h-4" />
-                <span>انصراف و لغو</span>
+                <span>انصراف</span>
               </button>
 
               {/* Approve Button */}
@@ -738,7 +738,7 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
                 className="min-h-[44px] flex items-center justify-center gap-1.5 px-3 py-2 rounded-[10px] bg-brand hover:bg-brand-hover text-white font-black text-xs cursor-pointer transition-all active:scale-95 shadow-xs"
               >
                 <Check className="w-4 h-4" />
-                <span>تایید و اجرای قطعی</span>
+                <span>تأیید و اجرا</span>
               </button>
             </div>
           </div>
@@ -784,7 +784,7 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
                       className="flex items-center gap-1 text-[10px] text-brand hover:underline font-bold cursor-pointer"
                     >
                       <Volume2 className="w-3 h-3 text-brand" />
-                      <span>پخش صوتی</span>
+                      <span>پخش صدا</span>
                     </button>
                     <span className="text-[10px] text-text-3 font-mono">{msg.timestamp}</span>
                   </div>
@@ -793,7 +793,7 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
                 {msg.actionTaken && (
                   <div className="mt-1 pt-1 border-t border-border-default flex items-center gap-1 text-[10px] text-brand font-bold">
                     <CheckCircle2 className="w-3 h-3 text-brand" />
-                    <span>اقدام ثبت‌شده: {msg.actionTaken}</span>
+                    <span>اقدام: {msg.actionTaken}</span>
                   </div>
                 )}
               </div>
@@ -837,7 +837,7 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
           type="text"
           value={typedMessage}
           onChange={(e) => setTypedMessage(e.target.value)}
-          placeholder="یا دستور خود را اینجا بنویسید..."
+          placeholder="دستور خود را بنویسید..."
           className="flex-1 bg-transparent px-2.5 py-1 text-xs text-text-1 placeholder-text-3 focus:outline-none"
         />
         <button

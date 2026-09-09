@@ -184,10 +184,10 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
 
   const roleTitle =
     currentRole === UserRole.HR_DIRECTOR
-      ? 'مدیریت ارشد منابع انسانی'
+      ? 'مدیر منابع انسانی'
       : currentRole === UserRole.DEPT_MANAGER
-      ? 'مدیریت دپارتمان'
-      : 'همکار گرامی';
+      ? 'مدیر دپارتمان'
+      : 'کارمند';
 
   // 1. Headcount & Workforce metrics
   const activeEmployees = employees.filter((e) => e.status === 'ACTIVE');
@@ -286,8 +286,8 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
       const delayed = Math.round(activeHeadcount * (0.015 + (i % 3) * 0.008));
       return {
         day,
-        'پرسنل حاضر': present,
-        'تأخیر مجاز': delayed,
+        'حاضر': present,
+        'تأخیر': delayed,
       };
     });
   }, [activeHeadcount]);
@@ -354,7 +354,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
             </h1>
 
             <p className="text-[13px] text-text-2 leading-relaxed font-medium">
-              پیشخوان اجرایی پایش ۳۶۰ درجه سرمایه‌های انسانی، کارخانجات اشتهارد و برندهای دافی، کامان، میس‌ویک و کاپوت.
+              داشبورد وضعیت منابع انسانی کارخانجات اشتهارد و برندهای دافی، کامان، میس‌ویک و کاپوت.
             </p>
           </div>
 
@@ -366,7 +366,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
               className="flex items-center gap-2 px-3.5 py-2 rounded-[10px] bg-brand-soft hover:bg-brand/20 text-brand font-bold text-xs border border-brand/25 transition-all cursor-pointer shadow-2xs"
             >
               <Bot className="w-4 h-4" />
-              <span>هوش مصنوعی (Gemini)</span>
+              <span>مدیریت دستیار</span>
             </button>
 
             <button
@@ -375,7 +375,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
               className="flex items-center gap-2 px-3.5 py-2 rounded-[10px] bg-brand hover:bg-brand-hover text-white font-bold text-xs shadow-xs transition-all cursor-pointer"
             >
               <Mic className="w-4 h-4" />
-              <span>دستیار صوتی AI</span>
+              <span>دستیار صوتی</span>
             </button>
 
             <button
@@ -384,14 +384,14 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
               className="flex items-center gap-2 px-3.5 py-2 rounded-[10px] bg-surface-2 hover:bg-surface-3 text-text-1 font-bold text-xs border border-border-default transition-all cursor-pointer"
             >
               <Sparkles className="w-4 h-4 text-brand" />
-              <span>تولید شرح شغل</span>
+              <span>ایجاد آگهی شغلی</span>
             </button>
 
             <button
               type="button"
               onClick={onOpenCommandPalette}
               className="flex items-center gap-2 px-3 py-2 rounded-[10px] bg-surface-2 hover:bg-surface-3 text-text-2 hover:text-text-1 font-bold text-xs border border-border-default transition-all cursor-pointer"
-              title="کلید میانبر Ctrl + K"
+              title="جستجو در سامانه"
             >
               <span>جستجو</span>
               <kbd className="text-[10px] px-1.5 py-0.5 rounded-[4px] bg-surface-1 border border-border-default text-text-2 font-mono">
@@ -412,7 +412,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
         >
           <div>
             <div className="flex items-start justify-between gap-3 mb-2">
-              <span className="text-xs font-bold text-text-2">پرسنل فعال سازمان</span>
+              <span className="text-xs font-bold text-text-2">کارکنان فعال</span>
               <div className="w-10 h-10 rounded-[10px] bg-brand-soft text-brand flex items-center justify-center border border-brand/20 shrink-0">
                 <Users className="w-5 h-5" />
               </div>
@@ -422,11 +422,11 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
               <span className="text-2xl sm:text-3xl font-black text-text-1 tracking-tight">
                 {toPersianDigits(activeHeadcount)}
               </span>
-              <span className="text-xs font-bold text-text-3">همکار</span>
+              <span className="text-xs font-bold text-text-3">نفر</span>
             </div>
 
             <p className="text-[13px] text-text-3 font-medium mt-1.5 leading-relaxed">
-              {toPersianDigits(eshtehardStaffCount)} کارخانجات اشتهارد • {toPersianDigits(hqStaffCount)} دفتر مرکزی
+              {toPersianDigits(eshtehardStaffCount)} نفر کارخانجات اشتهارد • {toPersianDigits(hqStaffCount)} نفر دفتر مرکزی
             </p>
           </div>
 
@@ -447,7 +447,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
         >
           <div>
             <div className="flex items-start justify-between gap-3 mb-2">
-              <span className="text-xs font-bold text-text-2">فرصت‌های شغلی فعال</span>
+              <span className="text-xs font-bold text-text-2">آگهی‌های شغلی فعال</span>
               <div className="w-10 h-10 rounded-[10px] bg-info-soft text-info flex items-center justify-center border border-info/20 shrink-0">
                 <Briefcase className="w-5 h-5" />
               </div>
@@ -457,7 +457,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
               <span className="text-2xl sm:text-3xl font-black text-text-1 tracking-tight">
                 {toPersianDigits(activeJobsCount)}
               </span>
-              <span className="text-xs font-bold text-text-3">ردیف شغلی</span>
+              <span className="text-xs font-bold text-text-3">موقعیت</span>
             </div>
 
             <p className="text-[13px] text-text-3 font-medium mt-1.5 leading-relaxed">
@@ -468,7 +468,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
           <div className="pt-3 mt-3 border-t border-border-default flex items-center justify-between">
             <span className="text-[11px] font-extrabold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 border border-blue-500/20 flex items-center gap-1">
               <span>▲</span>
-              <span>۲ ردیف جدید</span>
+              <span>۲ موقعیت جدید</span>
             </span>
             <MiniSparkline data={[3, 4, 4, 5, 5, 6, activeJobsCount]} color="#0284c7" />
           </div>
@@ -482,7 +482,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
         >
           <div>
             <div className="flex items-start justify-between gap-3 mb-2">
-              <span className="text-xs font-bold text-text-2">مرخصی‌های در انتظار بررسی</span>
+              <span className="text-xs font-bold text-text-2">درخواست‌های مرخصی</span>
               <div className="w-10 h-10 rounded-[10px] bg-warning-soft text-warning flex items-center justify-center border border-warning/20 shrink-0">
                 <Clock className="w-5 h-5" />
               </div>
@@ -492,11 +492,11 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
               <span className="text-2xl sm:text-3xl font-black text-text-1 tracking-tight">
                 {toPersianDigits(pendingLeavesCount)}
               </span>
-              <span className="text-xs font-bold text-text-3">درخواست باز</span>
+              <span className="text-xs font-bold text-text-3">درخواست</span>
             </div>
 
             <p className="text-[13px] text-text-3 font-medium mt-1.5 leading-relaxed">
-              {toPersianDigits(onLeaveTodayCount)} نفر در مرخصی امروز هلدینگ
+              {toPersianDigits(onLeaveTodayCount)} نفر در مرخصی امروز
             </p>
           </div>
 
@@ -518,7 +518,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
           <div>
             <div className="flex items-start justify-between gap-3 mb-2">
               <span className="text-xs font-bold text-text-2">
-                {isHR ? 'حقوق و دستمزد ماه (تومان)' : 'نرخ گردش پرسنل (Turnover)'}
+                {isHR ? 'حقوق و دستمزد ماهانه (تومان)' : 'نرخ خروج کارکنان'}
               </span>
               <div className="w-10 h-10 rounded-[10px] bg-brand-soft text-brand flex items-center justify-center border border-brand/20 shrink-0">
                 {isHR ? <Wallet className="w-5 h-5" /> : <TrendingDown className="w-5 h-5" />}
@@ -557,7 +557,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
           <div className="pt-3 mt-3 border-t border-border-default flex items-center justify-between">
             <span className="text-[11px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 flex items-center gap-1">
               <span>▼</span>
-              <span>۰.۳٪ بهبود پایداری</span>
+              <span>۰.۳٪ کاهش خروج</span>
             </span>
             <MiniSparkline
               data={[2.4, 2.3, 2.1, 2.0, 1.9, 1.8, metrics.turnoverRatePct || 1.8]}
@@ -574,10 +574,10 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
             <div>
               <h3 className="text-sm font-black text-text-1">
-                ترکیب نیروی انسانی در دپارتمان‌ها و برندها
+                توزیع کارکنان در دپارتمان‌ها و برندها
               </h3>
               <p className="text-[13px] text-text-3 font-medium">
-                توزیع پرسنل در سایت‌های تولیدی اشتهارد و ستاد مرکزی
+                تعداد کارکنان در سایت‌های تولیدی و دفتر مرکزی
               </p>
             </div>
             <button
@@ -607,7 +607,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
                   tickFormatter={(v) => toPersianDigits(v)}
                 />
                 <Tooltip content={<CustomChartTooltip />} />
-                <Bar dataKey="count" name="پرسنل فعال" fill="#059669" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="count" name="کارکنان فعال" fill="#059669" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -618,10 +618,10 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
             <div>
               <h3 className="text-sm font-black text-text-1">
-                روند حضور و غیاب و شیفت‌های هفتگی
+                روند تردد و شیفت‌های هفتگی
               </h3>
               <p className="text-[13px] text-text-3 font-medium">
-                پایش تردد خطوط دافی و کامان (راندمان میانگین {toPersianDigits(attendanceRatePct)}٪)
+                تردد خطوط تولید دافی و کامان (میانگین حضور {toPersianDigits(attendanceRatePct)}٪)
               </p>
             </div>
             <button
@@ -629,7 +629,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
               onClick={() => onNavigate('attendance')}
               className="text-xs font-bold text-brand hover:underline flex items-center gap-1 self-start sm:self-auto cursor-pointer"
             >
-              <span>گزارشات تردد</span>
+              <span>گزارش‌های تردد</span>
               <ChevronLeft className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -663,7 +663,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
                 <Tooltip content={<CustomChartTooltip />} />
                 <Area
                   type="monotone"
-                  dataKey="پرسنل حاضر"
+                  dataKey="حاضر"
                   stroke="#059669"
                   strokeWidth={2.5}
                   fillOpacity={1}
@@ -671,7 +671,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
                 />
                 <Area
                   type="monotone"
-                  dataKey="تأخیر مجاز"
+                  dataKey="تأخیر"
                   stroke="#d97706"
                   strokeWidth={2}
                   fillOpacity={1}
@@ -692,10 +692,10 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
             </div>
             <div>
               <h3 className="text-sm font-black text-text-1">
-                نیازمند توجه و اقدام فوری (Needs Attention)
+                اقدامات نیازمند بررسی
               </h3>
               <p className="text-[13px] text-text-3 font-medium">
-                تأیید درخواست‌های مرخصی، پیش‌نویس‌های حقوق و چک‌لیست‌های ان‌بوردینگ
+                تأیید درخواست‌های مرخصی، فیش‌های حقوق و چک‌لیست‌ها
               </p>
             </div>
           </div>
@@ -709,9 +709,9 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
 
         {totalActionItems === 0 ? (
           <EmptyState
-            title="موردی نیازمند بررسی فوری نیست"
-            description="تمامی درخواست‌ها، ترددها و فرآیندهای پرسنلی در وضعیت تأیید و به‌روز قرار دارند."
-            actionLabel="مشاهده کارتابل تردد"
+            title="موردی برای بررسی وجود ندارد"
+            description="تمام درخواست‌ها، ترددها و امور پرسنلی تأیید شده‌اند."
+            actionLabel="مشاهده ترددها"
             onAction={() => onNavigate('attendance')}
             className="py-8"
           />
@@ -729,7 +729,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
                   </div>
                   <div>
                     <div className="text-xs font-black text-text-1 flex items-center gap-2">
-                      <span>{leave.employeeName || 'همکار گرامی'}</span>
+                      <span>{leave.employeeName || 'کارمند'}</span>
                       <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-[4px] bg-surface-2 text-text-3 border border-border-default">
                         {leave.leaveType === 'ANNUAL'
                           ? 'استحقاقی'
@@ -751,7 +751,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
                   onClick={() => onNavigate('attendance')}
                   className="px-3 py-1.5 rounded-[8px] bg-brand text-white hover:bg-brand-hover text-xs font-bold flex items-center gap-1 self-end sm:self-auto cursor-pointer shadow-2xs"
                 >
-                  <span>بررسی و تایید</span>
+                  <span>بررسی درخواست</span>
                   <ChevronLeft className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -766,13 +766,13 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
                   </div>
                   <div>
                     <div className="text-xs font-black text-text-1 flex items-center gap-2">
-                      <span>دوره حقوق و دستمزد ماه جاری در وضعیت پیش‌نویس</span>
+                      <span>دوره حقوق ماه جاری در وضعیت پیش‌نویس</span>
                       <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-[4px] bg-brand-soft text-brand border border-brand/20">
                         {toPersianDigits(draftSlips.length)} فیش پیش‌نویس
                       </span>
                     </div>
                     <div className="text-[11px] text-text-3 font-medium mt-0.5">
-                      محاسبات حق بیمه تأمین اجتماعی، مالیات حقوق و بن خواروبار نیازمند نهایی‌سازی و قفل دوره است.
+                      محاسبات بیمه، مالیات و مزایا نیازمند بررسی و تایید نهایی است.
                     </div>
                   </div>
                 </div>
@@ -782,7 +782,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
                   onClick={() => onNavigate('payroll')}
                   className="px-3 py-1.5 rounded-[8px] bg-brand text-white hover:bg-brand-hover text-xs font-bold flex items-center gap-1 self-end sm:self-auto cursor-pointer shadow-2xs"
                 >
-                  <span>صدور و نهایی‌سازی</span>
+                  <span>بررسی فیش حقوق</span>
                   <ChevronLeft className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -802,11 +802,11 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
                     <div className="text-xs font-black text-text-1 flex items-center gap-2">
                       <span>{item.title}</span>
                       <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-[4px] bg-surface-2 text-text-3 border border-border-default">
-                        {item.type === 'ONBOARDING' ? 'ورود همکار' : 'تسویه‌حساب'}
+                        {item.type === 'ONBOARDING' ? 'ورود نیرو' : 'تسویه حساب'}
                       </span>
                     </div>
                     <div className="text-[11px] text-text-3 font-medium mt-0.5">
-                      پرسنل: {item.employeeName || 'همکار جدید'} • دپارتمان: {item.department} • موعد: {toPersianDigits(item.dueDateJalali)}
+                      کارمند: {item.employeeName || 'نیروی جدید'} • دپارتمان: {item.department} • مهلت: {toPersianDigits(item.dueDateJalali)}
                     </div>
                   </div>
                 </div>
@@ -816,7 +816,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
                   onClick={() => onNavigate('checklists')}
                   className="px-3 py-1.5 rounded-[8px] bg-surface-2 hover:bg-surface-3 text-text-1 border border-border-default text-xs font-bold flex items-center gap-1 self-end sm:self-auto cursor-pointer"
                 >
-                  <span>تکمیل فرآیند</span>
+                  <span>مشاهده چک‌لیست</span>
                   <ChevronLeft className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -829,10 +829,10 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-black text-text-1">
-            دسترسی مستقیم و ۳-کلیکی به ماژول‌های سامانه
+            دسترسی سریع به بخش‌های سامانه
           </h3>
           <span className="text-xs font-medium text-text-3">
-            انتخاب ماژول مورد نظر جهت انتقال فوری
+            انتخاب بخش برای ورود مستقیم
           </span>
         </div>
 
@@ -841,49 +841,49 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
             {
               key: 'recruitment' as ModuleKey,
               title: 'جذب و استخدام',
-              desc: 'کانبان و هوش مصنوعی',
+              desc: 'رزومه‌ها و مصاحبه‌ها',
               icon: UserPlus,
             },
             {
               key: 'employees' as ModuleKey,
               title: 'پرونده پرسنلی',
-              desc: 'احکام و ساختار برندها',
+              desc: 'احکام و ساختار سازمانی',
               icon: Users,
             },
             {
               key: 'attendance' as ModuleKey,
               title: 'تردد و مرخصی',
-              desc: 'ثبت ورود و شیفت‌ها',
+              desc: 'ثبت تردد و شیفت‌ها',
               icon: Clock,
             },
             {
               key: 'payroll' as ModuleKey,
               title: 'حقوق و دستمزد',
-              desc: 'فیش‌ها، بیمه و مالیات',
+              desc: 'فیش حقوق، بیمه و مالیات',
               icon: Wallet,
             },
             {
               key: 'performance' as ModuleKey,
               title: 'مدیریت عملکرد',
-              desc: 'اهداف OKR و ارزیابی',
+              desc: 'اهداف فصلی و ارزیابی',
               icon: TrendingUp,
             },
             {
               key: 'training' as ModuleKey,
               title: 'آموزش سازمانی',
-              desc: 'ماتریس شایستگی',
+              desc: 'دوره‌ها و مهارت‌ها',
               icon: GraduationCap,
             },
             {
               key: 'checklists' as ModuleKey,
               title: 'ورود و خروج',
-              desc: 'ان‌بوردینگ و تسویه',
+              desc: 'مراحل ورود و تسویه',
               icon: CheckSquare,
             },
             {
               key: 'analytics' as ModuleKey,
-              title: 'گزارشات و KPI',
-              desc: 'تحلیل داده‌های ۳۶۰',
+              title: 'گزارش‌ها و تحلیل‌ها',
+              desc: 'شاخص‌های کلیدی',
               icon: BarChart3,
             },
           ].map((item) => {

@@ -6,7 +6,7 @@ interface GlobalLoaderProps {
 }
 
 export const GlobalLoader: React.FC<GlobalLoaderProps> = ({
-  message = 'در حال همگام‌سازی و بارگذاری داده‌های سازمانی سامانه کارا...',
+  message = 'در حال بارگذاری اطلاعات سامانه کارا...',
 }) => {
   return (
     <div
@@ -41,7 +41,7 @@ export const GlobalLoader: React.FC<GlobalLoaderProps> = ({
           </h2>
           <div className="flex items-center justify-center gap-1 text-[11px] text-text-3 font-medium">
             <Building2 className="w-3.5 h-3.5 text-text-3" />
-            <span>پایش و مدیریت کارخانجات اشتهارد و برندهای هلدینگ</span>
+            <span>مدیریت کارخانجات اشتهارد و برندهای هلدینگ</span>
           </div>
         </div>
 

@@ -125,14 +125,14 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           <ShieldAlert className="w-7 h-7" />
         </div>
         <div className="space-y-2">
-          <h2 className="text-base font-black text-text-1">دسترسی محدود به مدیر ارشد منابع انسانی</h2>
+          <h2 className="text-base font-black text-text-1">دسترسی محدود</h2>
           <p className="text-xs text-text-2 leading-relaxed">
-            داشبورد تحلیلی و شاخص‌های استراتژیک سرمایه‌های انسانی (HR KPI & Analytics) بر اساس ماتریس دسترسی سامانه، منحصراً در اختیار مدیر ارشد منابع انسانی (HR_DIRECTOR) قرار دارد.
+            مشاهده شاخص‌ها و تحلیل‌های منابع انسانی فقط برای مدیر منابع انسانی مجاز است.
           </p>
         </div>
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-2 text-text-3 text-xs font-semibold">
           <Lock className="w-3.5 h-3.5" />
-          <span>نقش جاری شما: {currentRole === UserRole.DEPT_MANAGER ? 'مدیر دپارتمان' : 'همکار'}</span>
+          <span>نقش شما: {currentRole === UserRole.DEPT_MANAGER ? 'مدیر دپارتمان' : 'کارمند'}</span>
         </div>
       </div>
     );
@@ -150,25 +150,25 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
 
   const funnelChartData = [
     {
-      stage: '۱. ورودی قیف (کل رزومه‌ها)',
+      stage: '۱. کل رزومه‌ها',
       count: funnelTotal,
       percentage: 100,
       fill: '#2563eb',
     },
     {
-      stage: '۲. امتیاز شاخص‌ها ≥۷',
+      stage: '۲. رزومه‌های برتر',
       count: funnelPriority,
       percentage: pct(funnelPriority),
       fill: '#059669',
     },
     {
-      stage: '۳. مصاحبه تخصصی و آفر',
+      stage: '۳. مصاحبه و پیشنهاد کار',
       count: funnelInterviewed,
       percentage: pct(funnelInterviewed),
       fill: '#7c3aed',
     },
     {
-      stage: '۴. استخدام نهایی (Hired)',
+      stage: '۴. استخدام نهایی',
       count: funnelHired,
       percentage: pct(funnelHired),
       fill: '#0d9488',
@@ -196,7 +196,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
       { period: 'پاییز ۱۴۰۲', companyRate: 3.9, benchmark: 4.5 },
       { period: 'زمستان ۱۴۰۲', companyRate: 3.6, benchmark: 4.3 },
       { period: 'بهار ۱۴۰۳', companyRate: 3.4, benchmark: 4.2 },
-      { period: 'تابستان ۱۴۰۳ (جاری)', companyRate: currentRate, benchmark: 4.1 },
+      { period: 'تابستان ۱۴۰۳', companyRate: currentRate, benchmark: 4.1 },
     ];
   }, [metrics?.turnoverRatePct]);
 
@@ -281,17 +281,17 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
         <div>
           <div className="flex items-center gap-2">
             <h2 className="text-sm sm:text-base font-black text-text-1">
-              داشبورد مدیریتی شاخص‌های کلیدی منابع انسانی (HR KPI Analytics)
+              شاخص‌های کلیدی منابع انسانی
             </h2>
             <span className="text-[11px] font-extrabold px-2 py-0.5 rounded-full bg-brand-soft text-brand border border-brand/20">
-              ویژه مدیر ارشد
+              مدیریت منابع انسانی
             </span>
           </div>
           <p className="text-xs text-text-2 mt-1 font-medium leading-relaxed">
-            پایش هوشمند نرخ خروج، هزینه جذب، سرعت پر کردن ردیف‌های شغلی و بازدهی سرمایه‌های انسانی هلدینگ سیلانه سبز
+            پایش نرخ خروج، هزینه جذب و روند استخدامی کارکنان
             {(metrics as any)?.computedAtJalali ? (
               <span className="text-brand font-bold mr-1">
-                — محاسبه برخط در {toPersianDigits((metrics as any).computedAtJalali)}
+                — بروزرسانی: {toPersianDigits((metrics as any).computedAtJalali)}
               </span>
             ) : null}
           </p>
@@ -307,7 +307,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                 activePeriod === '6m' ? 'bg-surface-1 text-text-1 shadow-xs' : 'text-text-3 hover:text-text-2'
               }`}
             >
-              ۶ ماهه ۱۴۰۳
+              ۶ ماه اخیر
             </button>
             <button
               type="button"
@@ -316,7 +316,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                 activePeriod === 'quarter' ? 'bg-surface-1 text-text-1 shadow-xs' : 'text-text-3 hover:text-text-2'
               }`}
             >
-              تابستان (جاری)
+              فصل جاری
             </button>
             <button
               type="button"
@@ -335,7 +335,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
             className="px-3.5 py-2 bg-brand hover:bg-brand-hover text-white rounded-[10px] text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer active:scale-98"
           >
             <Download className="w-4 h-4" />
-            <span>خروجی کامل شاخص‌ها (JSON)</span>
+            <span>دریافت JSON</span>
           </button>
         </div>
       </div>
@@ -359,7 +359,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           {/* KPI 1: Active Headcount */}
           <div className="bg-surface-1 p-3.5 sm:p-4 rounded-[14px] border border-border-default shadow-xs flex flex-col justify-between space-y-2">
             <div className="flex items-center justify-between text-xs text-text-2 font-bold">
-              <span>پرسنل فعال</span>
+              <span>کارکنان فعال</span>
               <div className="w-7 h-7 rounded-[8px] bg-brand-soft text-brand flex items-center justify-center border border-brand/20">
                 <Users className="w-4 h-4" />
               </div>
@@ -381,7 +381,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           {/* KPI 2: Turnover Rate */}
           <div className="bg-surface-1 p-3.5 sm:p-4 rounded-[14px] border border-border-default shadow-xs flex flex-col justify-between space-y-2">
             <div className="flex items-center justify-between text-xs text-text-2 font-bold">
-              <span>نرخ خروج پرسنل</span>
+              <span>نرخ خروج کارکنان</span>
               <div className="w-7 h-7 rounded-[8px] bg-emerald-500/10 text-emerald-600 flex items-center justify-center border border-emerald-500/20">
                 <TrendingDown className="w-4 h-4" />
               </div>
@@ -392,18 +392,18 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
               </div>
               <div className="text-[11px] text-emerald-600 font-extrabold mt-1 flex items-center gap-1">
                 <span>▼</span>
-                <span>۰.۳٪ پایداری بالاتر</span>
+                <span>۰.۳٪ بهبود پایداری</span>
               </div>
             </div>
             <div className="text-[10px] text-text-3 font-medium truncate pt-1 border-t border-border-default">
-              ۲.۱٪ کمتر از میانگین صنعت
+              ۲.۱٪ بهتر از میانگین صنعت
             </div>
           </div>
 
           {/* KPI 3: Average Time to Hire */}
           <div className="bg-surface-1 p-3.5 sm:p-4 rounded-[14px] border border-border-default shadow-xs flex flex-col justify-between space-y-2">
             <div className="flex items-center justify-between text-xs text-text-2 font-bold">
-              <span>زمان استخدام</span>
+              <span>میانگین زمان استخدام</span>
               <div className="w-7 h-7 rounded-[8px] bg-info-soft text-info flex items-center justify-center border border-info/20">
                 <Clock className="w-4 h-4" />
               </div>
@@ -414,7 +414,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
               </div>
               <div className="text-[11px] text-info font-extrabold mt-1 flex items-center gap-1">
                 <span>⚡</span>
-                <span>۵۰٪ تسریع هوشمند</span>
+                <span>کاهش زمان جذب</span>
               </div>
             </div>
             <div className="text-[10px] text-text-3 font-medium truncate pt-1 border-t border-border-default">
@@ -425,7 +425,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           {/* KPI 4: Cost per Hire */}
           <div className="bg-surface-1 p-3.5 sm:p-4 rounded-[14px] border border-border-default shadow-xs flex flex-col justify-between space-y-2">
             <div className="flex items-center justify-between text-xs text-text-2 font-bold">
-              <span>هزینه جذب</span>
+              <span>هزینه جذب هر نفر</span>
               <div className="w-7 h-7 rounded-[8px] bg-purple-500/10 text-purple-600 flex items-center justify-center border border-purple-500/20">
                 <DollarSign className="w-4 h-4" />
               </div>
@@ -436,18 +436,18 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
               </div>
               <div className="text-[11px] text-purple-600 font-extrabold mt-1 flex items-center gap-1">
                 <span>▼</span>
-                <span>۱۵٪ صرفه‌جویی جذب</span>
+                <span>۱۵٪ کاهش هزینه</span>
               </div>
             </div>
             <div className="text-[10px] text-text-3 font-medium truncate pt-1 border-t border-border-default">
-              سورسینگ و ارزیابی شایستگی
+              ارزیابی و مصاحبه
             </div>
           </div>
 
           {/* KPI 5: Open Positions */}
           <div className="bg-surface-1 p-3.5 sm:p-4 rounded-[14px] border border-border-default shadow-xs flex flex-col justify-between space-y-2">
             <div className="flex items-center justify-between text-xs text-text-2 font-bold">
-              <span>موقعیت‌های باز</span>
+              <span>فرصت‌های شغلی باز</span>
               <div className="w-7 h-7 rounded-[8px] bg-warning-soft text-warning flex items-center justify-center border border-warning/20">
                 <Briefcase className="w-4 h-4" />
               </div>
@@ -469,7 +469,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           {/* KPI 6: Pending Leaves / Payroll Total */}
           <div className="bg-surface-1 p-3.5 sm:p-4 rounded-[14px] border border-border-default shadow-xs flex flex-col justify-between space-y-2">
             <div className="flex items-center justify-between text-xs text-text-2 font-bold">
-              <span>مرخصی‌های باز</span>
+              <span>درخواست‌های مرخصی</span>
               <div className="w-7 h-7 rounded-[8px] bg-sky-500/10 text-sky-600 flex items-center justify-center border border-sky-500/20">
                 <CalendarClock className="w-4 h-4" />
               </div>
@@ -480,7 +480,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
               </div>
               <div className="text-[11px] text-sky-600 font-extrabold mt-1 flex items-center gap-1">
                 <span>✓</span>
-                <span>پاسخ‌دهی ۲۴ ساعته</span>
+                <span>میانگین بررسی: ۲۴ ساعت</span>
               </div>
             </div>
             <div className="text-[10px] text-text-3 font-medium truncate pt-1 border-t border-border-default">
@@ -501,10 +501,10 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
               <div>
                 <h3 className="text-sm font-black text-text-1 flex items-center gap-2">
                   <Users className="w-4 h-4 text-brand" />
-                  <span>روند رشد سرمایه انسانی و پرسنل فعال (Headcount Trend)</span>
+                  <span>روند رشد کارکنان</span>
                 </h3>
                 <span className="text-[11px] text-text-3 font-semibold mt-0.5 inline-block">
-                  دوره: ۶ ماهه سال ۱۴۰۳ (فروردین تا شهریور)
+                  ۶ ماه نخست سال ۱۴۰۳ (فروردین تا شهریور)
                 </span>
               </div>
               <button
@@ -513,7 +513,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                 className="text-[11px] font-bold text-text-2 hover:text-brand bg-surface-2 hover:bg-brand-soft border border-border-default px-2.5 py-1 rounded-[8px] transition-colors flex items-center gap-1 self-start sm:self-auto cursor-pointer"
               >
                 <FileDown className="w-3.5 h-3.5" />
-                <span>خروجی CSV</span>
+                <span>دریافت CSV</span>
               </button>
             </div>
 
@@ -549,7 +549,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                   <Area
                     type="monotone"
                     dataKey="headcount"
-                    name="پرسنل فعال"
+                    name="کارکنان فعال"
                     stroke="#059669"
                     strokeWidth={2.5}
                     fillOpacity={1}
@@ -569,7 +569,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                 <span className="font-extrabold text-text-1 mt-0.5 block">{toPersianDigits(27)} نفر</span>
               </div>
               <div className="bg-surface-2/60 p-2 rounded-[8px]">
-                <span className="text-text-3 block">نرخ حفظ نیرو</span>
+                <span className="text-text-3 block">نرخ ماندگاری</span>
                 <span className="font-extrabold text-emerald-600 mt-0.5 block">۹۶.۲٪</span>
               </div>
             </div>
@@ -585,10 +585,10 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
               <div>
                 <h3 className="text-sm font-black text-text-1 flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-brand" />
-                  <span>قیف مراحل جذب و استخدام (Recruitment Funnel)</span>
+                  <span>مراحل جذب و استخدام</span>
                 </h3>
                 <span className="text-[11px] text-text-3 font-semibold mt-0.5 inline-block">
-                  محاسبه برخط از کل پایپ‌لاین کارجویان ({toPersianDigits(funnelTotal)} رزومه ثبت‌شده)
+                  بر اساس {toPersianDigits(funnelTotal)} رزومه ثبت‌شده
                 </span>
               </div>
               <button
@@ -597,7 +597,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                 className="text-[11px] font-bold text-text-2 hover:text-brand bg-surface-2 hover:bg-brand-soft border border-border-default px-2.5 py-1 rounded-[8px] transition-colors flex items-center gap-1 self-start sm:self-auto cursor-pointer"
               >
                 <FileDown className="w-3.5 h-3.5" />
-                <span>خروجی CSV</span>
+                <span>دریافت CSV</span>
               </button>
             </div>
 
@@ -630,7 +630,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                     width={130}
                   />
                   <Tooltip content={<CustomChartTooltip unit="نفر" />} />
-                  <Bar dataKey="count" name="تعداد کارجویان" radius={[0, 6, 6, 0]}>
+                  <Bar dataKey="count" name="کارجویان" radius={[0, 6, 6, 0]}>
                     {funnelChartData.map((entry, index) => (
                       <Bar key={`cell-${index}`} fill={entry.fill} />
                     ))}
@@ -642,7 +642,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
             <div className="grid grid-cols-4 gap-1.5 pt-3 mt-3 border-t border-border-default text-center text-[10px]">
               {funnelChartData.map((stage) => (
                 <div key={stage.stage} className="bg-surface-2/60 p-1.5 rounded-[8px]">
-                  <span className="text-text-3 block truncate">{stage.stage.split('(')[0]}</span>
+                  <span className="text-text-3 block truncate">{stage.stage}</span>
                   <span className="font-black text-text-1 mt-0.5 block">
                     {toPersianDigits(stage.count)} ({toPersianDigits(stage.percentage)}٪)
                   </span>
@@ -661,10 +661,10 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
               <div>
                 <h3 className="text-sm font-black text-text-1 flex items-center gap-2">
                   <TrendingDown className="w-4 h-4 text-emerald-600" />
-                  <span>تحلیل نرخ ترک کار و پایداری (Turnover & Benchmark)</span>
+                  <span>نرخ خروج در مقایسه با صنعت</span>
                 </h3>
                 <span className="text-[11px] text-text-3 font-semibold mt-0.5 inline-block">
-                  مقایسه فصلی سازمان با میانگین صنعت آرایشی، بهداشتی و دارویی (FMCG)
+                  مقایسه فصلی با میانگین صنعت (FMCG)
                 </span>
               </div>
               <button
@@ -673,7 +673,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                 className="text-[11px] font-bold text-text-2 hover:text-brand bg-surface-2 hover:bg-brand-soft border border-border-default px-2.5 py-1 rounded-[8px] transition-colors flex items-center gap-1 self-start sm:self-auto cursor-pointer"
               >
                 <FileDown className="w-3.5 h-3.5" />
-                <span>خروجی CSV</span>
+                <span>دریافت CSV</span>
               </button>
             </div>
 
@@ -712,10 +712,10 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
 
             <div className="pt-3 mt-3 border-t border-border-default flex items-center justify-between text-xs">
               <span className="text-text-2 font-medium">
-                شاخص ترک کار فصل جاری: <strong className="text-text-1">{metrics?.turnoverRatePct != null ? `${toPersianDigits(metrics.turnoverRatePct)}٪` : '—'}</strong>
+                نرخ خروج فصل جاری: <strong className="text-text-1">{metrics?.turnoverRatePct != null ? `${toPersianDigits(metrics.turnoverRatePct)}٪` : '—'}</strong>
               </span>
               <span className="text-[11px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
-                پایداری سازمانی بالاتر از استاندارد صنعت
+                بهتر از میانگین صنعت
               </span>
             </div>
           </Card>
@@ -730,10 +730,10 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
               <div>
                 <h3 className="text-sm font-black text-text-1 flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-sky-600" />
-                  <span>مصرف مرخصی به تفکیک دپارتمان‌ها (Leave Usage)</span>
+                  <span>مصرف مرخصی به تفکیک دپارتمان</span>
                 </h3>
                 <span className="text-[11px] text-text-3 font-semibold mt-0.5 inline-block">
-                  مجموع روزهای مرخصی استحقاقی، استعلاجی و ساعتی مصوب سال جاری
+                  مجموع روزهای مرخصی استفاده‌شده در سال جاری
                 </span>
               </div>
               <button
@@ -742,7 +742,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                 className="text-[11px] font-bold text-text-2 hover:text-brand bg-surface-2 hover:bg-brand-soft border border-border-default px-2.5 py-1 rounded-[8px] transition-colors flex items-center gap-1 self-start sm:self-auto cursor-pointer"
               >
                 <FileDown className="w-3.5 h-3.5" />
-                <span>خروجی CSV</span>
+                <span>دریافت CSV</span>
               </button>
             </div>
 
@@ -778,10 +778,10 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
 
             <div className="pt-3 mt-3 border-t border-border-default flex items-center justify-between text-xs">
               <span className="text-text-2 font-medium">
-                درخواست‌های در انتظار بررسی: <strong className="text-text-1">{metrics?.pendingLeavesCount != null ? `${toPersianDigits(metrics.pendingLeavesCount)} مورد` : '—'}</strong>
+                در انتظار بررسی: <strong className="text-text-1">{metrics?.pendingLeavesCount != null ? `${toPersianDigits(metrics.pendingLeavesCount)} مورد` : '—'}</strong>
               </span>
               <span className="text-[11px] font-extrabold px-2.5 py-0.5 rounded-full bg-info-soft text-info border border-info/20">
-                منطبق با سقف قانون کار (۲۶ روز سالانه)
+                سقف مجاز قانون کار: ۲۶ روز
               </span>
             </div>
           </Card>

@@ -36,7 +36,7 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
 
   // Form states
-  const [jobTitle, setJobTitle] = useState('مدیر برند (Brand Manager) - لاین مراقبت پوست');
+  const [jobTitle, setJobTitle] = useState('مدیر برند - محصولات مراقبت از پوست');
   const [selectedDeptId, setSelectedDeptId] = useState(
     initialDeptId || departments[2]?.id || departments[0]?.id || 'dept-mkt'
   );
@@ -49,12 +49,12 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
 
   const [seniority, setSeniority] = useState<'کارآموز' | 'کارشناس' | 'کارشناس ارشد' | 'سرپرست' | 'مدیر'>('مدیر');
   const [workType, setWorkType] = useState<'تمام‌وقت' | 'پاره‌وقت' | 'پروژه‌ای' | 'شیفتی کارخانه'>('تمام‌وقت');
-  const [location, setLocation] = useState('تهران، خیابان ولیعصر (ستاد مرکزی هلدینگ)');
-  const [brandFocus, setBrandFocus] = useState('دافی و کامان (Dafi & Comeon)');
-  const [keySkills, setKeySkills] = useState('تحلیل بازار FMCG، استراتژی کمپین‌های ۳۶۰ درجه، هدایت تیم خلاقیت و روابط عمومی، بودجه‌ریزی برند');
+  const [location, setLocation] = useState('تهران، ستاد مرکزی هلدینگ');
+  const [brandFocus, setBrandFocus] = useState('دافی و کامان');
+  const [keySkills, setKeySkills] = useState('تحلیل بازار FMCG، تدوین استراتژی کمپین‌ها، بودجه‌ریزی برند، مدیریت تیم');
   const [selectedPerks, setSelectedPerks] = useState<string[]>([
-    'پکیج ماهانه رایگان محصولات بهداشتی و آرایشی برندهای دافی و کامان',
-    'بیمه تکمیلی درجه یک درمان برای پرسنل و خانواده',
+    'بسته ماهانه محصولات بهداشتی برندهای دافی و کامان',
+    'بیمه تکمیلی برای کارمندان و خانواده',
     'پاداش عملکرد و بهره‌وری فصلی',
   ]);
   const [tone, setTone] = useState<'حرفه‌ای و سازمانی' | 'پرانرژی و استارتاپی' | 'کاریزماتیک و الهام‌بخش'>('پرانرژی و استارتاپی');
@@ -67,13 +67,13 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
   const [savedSuccess, setSavedSuccess] = useState(false);
 
   const perksOptions = [
-    'پکیج ماهانه رایگان محصولات بهداشتی و آرایشی برندهای دافی و کامان',
-    'بیمه تکمیلی درجه یک درمان برای پرسنل و خانواده',
+    'بسته ماهانه محصولات بهداشتی برندهای دافی و کامان',
+    'بیمه تکمیلی برای کارمندان و خانواده',
     'پاداش عملکرد و بهره‌وری فصلی',
     'سرویس ایاب و ذهاب از میادین اصلی تهران و کرج',
     'وعده غذایی گرم (صبحانه و ناهار سازمانی)',
-    'وام و تسهیلات رفاهی قرض‌الحسنه سازمانی',
-    'دوره آموزشی و سرتیفیکیت معتبر آکادمی سیلانه',
+    'وام و تسهیلات قرض‌الحسنه سازمانی',
+    'دوره‌های آموزشی آکادمی سیلانه',
   ];
 
   const togglePerk = (perk: string) => {
@@ -119,10 +119,10 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
       });
       const data = await res.json();
       setResult(data);
-      showToast('شرح شغل و آگهی هوشمند با موفقیت تدوین شد.');
+      showToast('شرح شغل و آگهی با موفقیت تدوین شد.');
     } catch (err) {
       console.error('Job Ad generation error:', err);
-      showToast('خطا در ارتباط با موتور هوش مصنوعی.');
+      showToast('خطا در برقراری ارتباط با سرویس.');
     } finally {
       setIsLoading(false);
     }
@@ -130,7 +130,7 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
 
   const handleCopy = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
-    showToast(`متن ${label} با موفقیت در کلیپ‌بورد کپی شد.`);
+    showToast(`متن ${label} کپی شد.`);
   };
 
   const handleSaveAsJob = () => {
@@ -157,7 +157,7 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
     if (onJobCreated) {
       onJobCreated(newJob);
       setSavedSuccess(true);
-      showToast('موقعیت شغلی در بانک فرصت‌های هلدینگ ثبت شد.');
+      showToast('موقعیت شغلی با موفقیت ثبت شد.');
       setTimeout(() => setSavedSuccess(false), 3500);
     }
   };
@@ -195,11 +195,11 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
               <div className="flex items-center gap-1.5">
                 <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
                 <h1 className="text-sm sm:text-base font-black">
-                  دستیار هوشمند تدوین آگهی و شرح شغل
+                  تدوین آگهی و شرح شغل
                 </h1>
               </div>
               <p className="text-[11px] text-emerald-200 mt-0.5">
-                تولید ساختاریافته بر اساس نیازمندی‌های هلدینگ سیلانه سبز
+                نگارش شرح شغل و متن آگهی بر اساس استانداردهای هلدینگ
               </p>
             </div>
           </div>
@@ -310,7 +310,7 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
             <div className="space-y-3.5 animate-fadeIn">
               <div>
                 <label className="block text-xs font-black text-text-1 mb-1.5">
-                  عنوان جایگاه شغلی:
+                  عنوان شغل:
                 </label>
                 <input
                   type="text"
@@ -324,7 +324,7 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-black text-text-1 mb-1.5">
-                    دپارتمان هلدینگ سیلانه سبز:
+                    دپارتمان:
                   </label>
                   <select
                     value={selectedDeptId}
@@ -341,21 +341,21 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
 
                 <div>
                   <label className="block text-xs font-black text-text-1 mb-1.5">
-                    برند تحت پوشش هلدینگ:
+                    برند مربوطه:
                   </label>
                   <input
                     type="text"
                     value={brandFocus}
                     onChange={(e) => setBrandFocus(e.target.value)}
                     className="w-full min-h-[44px] px-3.5 py-2 text-xs border border-border-default rounded-[12px] bg-surface-1 text-text-1 focus:ring-2 focus:ring-brand outline-none"
-                    placeholder="مثال: دافی (Dafi)، کامان، میس‌ویک..."
+                    placeholder="مثال: دافی، کامان، میس‌ویک..."
                   />
                 </div>
               </div>
 
               <div>
                 <label className="block text-xs font-black text-text-1 mb-1.5">
-                  سطح ارشدیت جایگاه:
+                  سطح ارشدیت:
                 </label>
                 <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                   {(['کارآموز', 'کارشناس', 'کارشناس ارشد', 'سرپرست', 'مدیر'] as const).map((s) => (
@@ -390,9 +390,9 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
                     onChange={(e) => setWorkType(e.target.value as any)}
                     className="w-full min-h-[44px] px-3.5 py-2 text-xs border border-border-default rounded-[12px] bg-surface-1 text-text-1 focus:ring-2 focus:ring-brand outline-none"
                   >
-                    <option value="تمام‌وقت">تمام‌وقت (حضوری ستاد)</option>
+                    <option value="تمام‌وقت">تمام‌وقت (ستاد)</option>
                     <option value="پاره‌وقت">پاره‌وقت / پروژه‌ای</option>
-                    <option value="شیفتی کارخانه">شیفتی چرخشی (کارخانجات اشتهارد)</option>
+                    <option value="شیفتی کارخانه">نوبت‌کاری (کارخانجات اشتهارد)</option>
                   </select>
                 </div>
 
@@ -405,14 +405,14 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
                     className="w-full min-h-[44px] px-3.5 py-2 text-xs border border-border-default rounded-[12px] bg-surface-1 text-text-1 focus:ring-2 focus:ring-brand outline-none"
-                    placeholder="تهران ستاد یا کارخانجات اشتهارد..."
+                    placeholder="تهران یا کارخانجات اشتهارد..."
                   />
                 </div>
               </div>
 
               <div>
                 <label className="block text-xs font-black text-text-1 mb-1.5">
-                  لحن و استایل نگارش آگهی:
+                  لحن نگارش آگهی:
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                   {(
@@ -440,14 +440,14 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
 
               <div>
                 <label className="block text-xs font-black text-text-1 mb-1.5">
-                  مهارت‌های کلیدی و تجارب مورد انتظار:
+                  مهارت‌ها و سوابق مورد نیاز:
                 </label>
                 <textarea
                   rows={3}
                   value={keySkills}
                   onChange={(e) => setKeySkills(e.target.value)}
                   className="w-full p-3 text-xs border border-border-default rounded-[12px] bg-surface-1 text-text-1 focus:ring-2 focus:ring-brand outline-none leading-relaxed"
-                  placeholder="مهارت‌های فنی، تجارب در صنعت FMCG، نرم‌افزارهای مورد نیاز..."
+                  placeholder="مهارت‌های فنی، سوابق کاری در صنعت FMCG و نرم‌افزارهای مرتبط..."
                 />
               </div>
             </div>
@@ -460,9 +460,9 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
                 <label className="block text-xs font-black text-text-1 mb-1.5 flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
                     <Gift className="w-4 h-4 text-brand" />
-                    مزایا و تسهیلات رفاهی ویژه هلدینگ سیلانه سبز:
+                    مزایا و تسهیلات رفاهی:
                   </span>
-                  <span className="text-[10px] text-text-3">لمس جهت انتخاب</span>
+                  <span className="text-[10px] text-text-3">انتخاب گزینه‌ها</span>
                 </label>
                 <div className="flex flex-wrap gap-1.5">
                   {perksOptions.map((perk, idx) => {
@@ -498,12 +498,12 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
                   {isLoading ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>هوش مصنوعی در حال تدوین آگهی و شرح شغل...</span>
+                      <span>در حال تنظیم شرح شغل و آگهی...</span>
                     </>
                   ) : (
                     <>
                       <Sparkles className="w-4 h-4 text-amber-300" />
-                      <span>تولید آنی شرح شغل و آگهی با Gemini</span>
+                      <span>تولید شرح شغل و آگهی</span>
                     </>
                   )}
                 </button>
@@ -558,7 +558,7 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
                     : 'text-text-3 hover:text-text-1'
                 }`}
               >
-                📢 آگهی شبکه‌ها
+                آگهی انتشار
               </button>
               <button
                 type="button"
@@ -569,7 +569,7 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
                     : 'text-text-3 hover:text-text-1'
                 }`}
               >
-                📄 شرح شغل (JD)
+                شرح شغل
               </button>
               <button
                 type="button"
@@ -580,7 +580,7 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
                     : 'text-text-3 hover:text-text-1'
                 }`}
               >
-                🎯 سوالات مصاحبه
+                پرسش‌های مصاحبه
               </button>
             </div>
 
@@ -603,12 +603,17 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
           <div className="px-4 py-2.5 bg-brand-soft border-b border-brand/20 flex items-center justify-between text-xs">
             <div className="flex items-center gap-1.5 text-brand font-bold">
               <Coins className="w-4 h-4 text-brand" />
-              <span>بازه حقوق پیشنهادی بازار کار ایران:</span>
+              <span>حقوق پیشنهادی:</span>
               <span className="font-mono">{result.salaryBenchmarkToman}</span>
             </div>
             <span className="text-[11px] text-text-2 font-medium">
               برند: {result.brandFocus}
             </span>
+          </div>
+
+          {/* AI Advisory Note */}
+          <div className="px-4 py-2 bg-amber-500/10 border-b border-amber-500/20 text-[11px] text-amber-700 dark:text-amber-300">
+            محتوای تولیدشده توسط هوش مصنوعی جنبه پیشنهادی دارد و نیازمند بررسی و تأیید نهایی توسط مدیر مربوطه است.
           </div>
 
           {/* Document Content View */}
@@ -618,7 +623,7 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-black text-text-1">
-                    متن آماده انتشار در لینکدین، تلگرام و شبکه‌های استخدامی:
+                    متن آگهی برای انتشار در شبکه‌های اجتماعی و شغلی:
                   </span>
                   <button
                     type="button"
@@ -642,7 +647,7 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-black text-text-1">
-                    سند استاندارد شرح شغل سازمانی هلدینگ سیلانه سبز:
+                    سند شرح شغل سازمانی:
                   </span>
                   <button
                     type="button"
@@ -651,7 +656,7 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
                     className="min-h-[44px] px-3 rounded-[10px] bg-surface-2 hover:bg-surface-3 text-text-1 text-xs font-bold flex items-center gap-1.5 border border-border-default cursor-pointer transition-all active:scale-95 shadow-2xs"
                   >
                     <Copy className="w-3.5 h-3.5 text-brand" />
-                    <span>کپی مارک‌داون</span>
+                    <span>کپی متن</span>
                   </button>
                 </div>
 
@@ -666,7 +671,7 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-black text-text-1">
-                    سوالات مصاحبه تخصصی و رفتاری (متدولوژی STAR):
+                    پرسش‌های مصاحبه تخصصی و رفتاری (روش STAR):
                   </span>
                   <button
                     type="button"
@@ -708,12 +713,12 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
                 {savedSuccess ? (
                   <>
                     <Check className="w-4 h-4" />
-                    <span>در بانک موقعیت‌های شغلی ثبت شد!</span>
+                    <span>موقعیت شغلی ثبت شد</span>
                   </>
                 ) : (
                   <>
                     <BookmarkPlus className="w-4 h-4" />
-                    <span>ثبت رسمی در فرصت‌های شغلی هلدینگ</span>
+                    <span>ثبت در فرصت‌های شغلی</span>
                   </>
                 )}
               </button>

@@ -214,7 +214,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
   const handleBatchPromoteToPhoneInterview = async () => {
     if (selectedCandidateIds.length === 0) return;
     const confirmMove = confirm(
-      `آیا از انتقال دسته‌جمعی ${toPersianDigits(selectedCandidateIds.length)} کارجوی انتخاب‌شده به مرحله «مصاحبه تلفنی» اطمینان دارید؟`
+      `آیا از انتقال گروهی ${toPersianDigits(selectedCandidateIds.length)} کارجو به مرحله «مصاحبه تلفنی» اطمینان دارید؟`
     );
     if (!confirmMove) return;
 
@@ -244,7 +244,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
     setSelectedCandidateIds([]);
     setBatchActionFeedback(
       `انتقال انجام شد: ${toPersianDigits(successCount)} کارجو به مصاحبه تلفنی منتقل شدند` +
-        (failCount > 0 ? ` (${toPersianDigits(failCount)} کارجو به دلیل مرحله فعلی نامعتبر رد شدند)` : '')
+        (failCount > 0 ? ` (${toPersianDigits(failCount)} کارجو قابل انتقال نبودند)` : '')
     );
   };
 
@@ -266,7 +266,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
 
     setIsPerformingBatchAction(false);
     setSelectedCandidateIds([]);
-    setBatchActionFeedback(`${toPersianDigits(count)} کارجو با موفقیت به استخر استعدادهای سازمانی اضافه شدند.`);
+    setBatchActionFeedback(`${toPersianDigits(count)} کارجو به بانک استعدادها اضافه شدند.`);
   };
 
   // Export CSV Report with UTF-8 BOM
@@ -275,9 +275,9 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
       'نام و نام خانوادگی',
       'عنوان موقعیت شغلی',
       'امتیاز کلی (از ۱۰)',
-      'پیشنهاد سیستم',
-      'مرحله قانونی فعلی',
-      'استخر استعداد',
+      'پیشنهاد ارزیابی',
+      'مرحله فعلی',
+      'بانک استعداد',
       'نقاط قوت',
       'نقل قول رزومه',
       'نام فایل رزومه',
@@ -336,29 +336,29 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-[11px] font-extrabold bg-brand-soft text-brand px-2.5 py-0.5 rounded-md border border-brand/20 flex items-center gap-1">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>استودیوی غربالگری هوشمند رزومه‌ها (Bulk Screening Studio)</span>
+                <span>غربالگری رزومه‌ها</span>
               </span>
               <span className="text-xs text-text-3 font-medium flex items-center gap-1">
                 <Calendar className="w-3.5 h-3.5" />
-                <span>جلسه ارزیابی: {toPersianDigits(batchTimestamp)}</span>
+                <span>تاریخ ارزیابی: {toPersianDigits(batchTimestamp)}</span>
               </span>
-              {/* AI Engine Indicator (Strictly required: if false, label as موتور محلی (بدون Gemini)) */}
+              {/* AI Engine Indicator */}
               {aiAvailable ? (
                 <span className="text-[11px] font-bold bg-purple-500/10 text-purple-700 dark:text-purple-300 px-2.5 py-0.5 rounded-md border border-purple-500/20 flex items-center gap-1">
                   <Sparkles className="w-3 h-3 text-purple-600 dark:text-purple-400" />
-                  <span>ارزیابی هوش مصنوعی (Gemini)</span>
+                  <span>ارزیابی هوشمند (Gemini)</span>
                 </span>
               ) : (
                 <span className="text-[11px] font-bold bg-slate-500/10 text-slate-700 dark:text-slate-300 px-2.5 py-0.5 rounded-md border border-slate-500/20 flex items-center gap-1">
                   <Cpu className="w-3 h-3 text-slate-500" />
-                  <span>موتور محلی (بدون Gemini)</span>
+                  <span>ارزیابی محلی</span>
                 </span>
               )}
             </div>
 
             <div className="flex items-center gap-2 pt-1">
               <h1 className="text-xl sm:text-2xl font-black text-text-1 flex items-center gap-2">
-                <span>نتایج غربالگری ردیف: «{job.title}»</span>
+                <span>نتایج غربالگری: {job.title}</span>
               </h1>
             </div>
 
@@ -373,7 +373,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
               <span>نوع همکاری: {job.employmentType}</span>
               <span>•</span>
               <span className="text-brand font-bold">
-                {toPersianDigits(stats.total)} رزومه در این جایگاه
+                {toPersianDigits(stats.total)} کارجو در این ردیف شغلی
               </span>
             </div>
           </div>
@@ -398,7 +398,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
               title="دریافت فایل اکسل و CSV گزارش ارزیابی"
             >
               <Download className="w-3.5 h-3.5 text-text-3" />
-              <span>خروجی اکسل / CSV</span>
+              <span>دریافت فایل خروجی</span>
             </button>
 
             {onClose && (
@@ -418,8 +418,8 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
         <div className="mt-3.5 bg-amber-500/10 border border-amber-500/25 rounded-[12px] p-3 text-xs text-amber-900 dark:text-amber-200 flex items-start gap-2.5">
           <Info className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
           <div className="leading-relaxed">
-            <strong className="font-bold">دسته‌بندی‌های ارائه‌شده صرفاً پیشنهاد هوشمند سیستم هستند:</strong>{' '}
-            مرحله استخدامی هیچ کارجویی به‌صورت خودکار تغییر نکرده و همگی در مرحله «بررسی اولیه» قرار دارند. تصمیم نهایی جهت انتقال به مصاحبه یا رد، در حیطه اختیار مدیر و کارشناس جذب است.
+            <strong className="font-bold">دسته‌بندی‌ها جنبه پیشنهادی دارند:</strong>{' '}
+            وضعیت استخدامی کارجویان تغییر نکرده و تصمیم‌گیری برای انتقال به مصاحبه یا رد بر عهده شماست.
           </div>
         </div>
 
@@ -448,14 +448,14 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
               : 'bg-surface-1 border-border-default hover:border-brand/40'
           }`}
         >
-          <div className="text-[11px] text-text-3 font-semibold mb-1">کل رزومه‌های پردازش‌شده</div>
+          <div className="text-[11px] text-text-3 font-semibold mb-1">کل رزومه‌ها</div>
           <div className="flex items-baseline justify-between">
             <span className="text-xl font-black text-text-1">{toPersianDigits(stats.total)}</span>
             <span className="text-[10px] bg-brand-soft text-brand font-bold px-1.5 py-0.5 rounded">
               ۱۰۰٪
             </span>
           </div>
-          <div className="text-[10px] text-text-3 mt-1 truncate">پایپ‌لاین غربالگری ردیف</div>
+          <div className="text-[10px] text-text-3 mt-1 truncate">رزومه‌های دریافتی</div>
         </div>
 
         {/* Card 2: Interview Priority (اولویت مصاحبه) */}
@@ -477,7 +477,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
               {toPersianDigits(stats.priorityPercent)}٪
             </span>
           </div>
-          <div className="text-[10px] text-text-3 mt-1 truncate">نمره بالاتر از آستانه برتر</div>
+          <div className="text-[10px] text-text-3 mt-1 truncate">نمره بالای ۷</div>
         </div>
 
         {/* Card 3: Needs Review (نیازمند بررسی) */}
@@ -499,7 +499,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
               {toPersianDigits(stats.reviewPercent)}٪
             </span>
           </div>
-          <div className="text-[10px] text-text-3 mt-1 truncate">رزومه‌های بینابینی</div>
+          <div className="text-[10px] text-text-3 mt-1 truncate">نمره ۵ تا ۷</div>
         </div>
 
         {/* Card 4: Initial Rejection (رد اولیه) */}
@@ -513,7 +513,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
         >
           <div className="text-[11px] text-danger font-bold mb-1 flex items-center gap-1">
             <XCircle className="w-3.5 h-3.5" />
-            <span>رد در غربالگری</span>
+            <span>رد اولیه</span>
           </div>
           <div className="flex items-baseline justify-between">
             <span className="text-xl font-black text-danger">{toPersianDigits(stats.rejected)}</span>
@@ -521,10 +521,10 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
               {toPersianDigits(stats.rejectedPercent)}٪
             </span>
           </div>
-          <div className="text-[10px] text-text-3 mt-1 truncate">پایین‌تر از حداقل شاخص</div>
+          <div className="text-[10px] text-text-3 mt-1 truncate">نمره زیر ۵</div>
         </div>
 
-        {/* Card 5: Talent Pool (استخر استعدادها) */}
+        {/* Card 5: Talent Pool (بانک استعدادها) */}
         <div
           onClick={() => setActiveFilter('TALENT_POOL')}
           className={`p-3.5 rounded-[14px] border transition-all cursor-pointer shadow-2xs ${
@@ -535,7 +535,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
         >
           <div className="text-[11px] text-purple-700 dark:text-purple-300 font-bold mb-1 flex items-center gap-1">
             <Award className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
-            <span>استخر استعداد</span>
+            <span>بانک استعدادها</span>
           </div>
           <div className="flex items-baseline justify-between">
             <span className="text-xl font-black text-purple-700 dark:text-purple-300">
@@ -545,7 +545,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
               ذخیره
             </span>
           </div>
-          <div className="text-[10px] text-text-3 mt-1 truncate">فرصت‌های آتی هلدینگ</div>
+          <div className="text-[10px] text-text-3 mt-1 truncate">مناسب همکاری‌های آتی</div>
         </div>
 
         {/* Card 6: Average Score */}
@@ -555,7 +555,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
             <span className="text-xl font-black text-brand">{toPersianDigits(stats.avgScore)}</span>
             <span className="text-[10px] text-text-3 font-medium">از ۱۰.۰</span>
           </div>
-          <div className="text-[10px] text-text-3 mt-1 truncate">بر مبنای وزن‌دهی شغلی</div>
+          <div className="text-[10px] text-text-3 mt-1 truncate">بر اساس شاخص‌های شغل</div>
         </div>
       </div>
 
@@ -625,7 +625,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
               }`}
             >
               <Award className="w-3.5 h-3.5" />
-              <span>استخر استعداد ({toPersianDigits(stats.talentPool)})</span>
+              <span>بانک استعدادها ({toPersianDigits(stats.talentPool)})</span>
             </button>
           </div>
 
@@ -637,7 +637,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="جستجوی نام، نقل‌قول، مهارت..."
+                placeholder="جستجوی نام کارجو، مهارت یا سوابق..."
                 className="w-full bg-surface-2 border border-border-default rounded-[8px] pr-8 pl-7 py-1.5 text-xs text-text-1 placeholder:text-text-3 focus:outline-none focus:ring-2 focus:ring-brand/30"
               />
               {searchQuery && (
@@ -658,8 +658,8 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
                 onChange={(e) => setSortBy(e.target.value as any)}
                 className="bg-transparent text-text-1 font-medium focus:outline-none cursor-pointer"
               >
-                <option value="SCORE_DESC">بالاترین نمره</option>
-                <option value="SCORE_ASC">پایین‌ترین نمره</option>
+                <option value="SCORE_DESC">بالاترین امتیاز</option>
+                <option value="SCORE_ASC">پایین‌ترین امتیاز</option>
                 <option value="NAME_ASC">نام کارجو (الفبایی)</option>
               </select>
             </div>
@@ -692,7 +692,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
                 className="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-[8px] text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer disabled:opacity-50"
               >
                 <Award className="w-3.5 h-3.5" />
-                <span>افزودن به استخر استعداد</span>
+                <span>افزودن به بانک استعدادها</span>
               </button>
 
               <button
@@ -751,11 +751,11 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
               className="w-4 h-4 rounded text-brand border-border-default focus:ring-brand cursor-pointer"
             />
             <label htmlFor="select-all-candidates" className="font-semibold text-text-2 cursor-pointer">
-              انتخاب همه ({toPersianDigits(displayCandidates.length)} کارجو در این نما)
+              انتخاب همه ({toPersianDigits(displayCandidates.length)} کارجو)
             </label>
           </div>
           <span className="text-[11px]">
-            نکته: با کلیک روی هر کارت، کارنامه تحلیلی تفصیلی و متن کامل رزومه باز می‌شود.
+            با انتخاب هر کارت، جزئیات ارزیابی و متن رزومه نمایش داده می‌شود.
           </span>
         </div>
 
@@ -865,7 +865,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
                             )}
                             {candidate.inTalentPool && (
                               <span className="text-[10px] text-purple-700 dark:text-purple-300 font-bold bg-purple-500/10 px-1.5 py-0.2 rounded border border-purple-500/20">
-                                در استخر استعداد
+                                در بانک استعدادها
                               </span>
                             )}
                           </div>
@@ -880,7 +880,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
                           <span>{toPersianDigits(score.toFixed(1))}</span>
                           <span className="text-[9px] opacity-80">/ ۱۰</span>
                         </div>
-                        <div className="text-[9px] text-text-3 text-center mt-0.5">امتیاز تطابق</div>
+                        <div className="text-[9px] text-text-3 text-center mt-0.5">امتیاز کل</div>
                       </div>
                     </div>
 
@@ -942,7 +942,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
                         className="px-2.5 py-1 text-[11px] font-bold text-brand hover:bg-brand-soft rounded-[6px] transition-colors flex items-center gap-1 cursor-pointer"
                       >
                         <FileText className="w-3.5 h-3.5" />
-                        <span>کارنامه جامع و متن رزومه</span>
+                        <span>مشاهده جزئیات رزومه</span>
                       </button>
 
                       {/* Talent Pool Toggle */}
@@ -954,7 +954,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
                             ? 'bg-purple-600 text-white shadow-2xs'
                             : 'text-text-3 hover:text-purple-600 hover:bg-purple-500/10'
                         }`}
-                        title={candidate.inTalentPool ? 'حذف از استخر استعداد' : 'افزودن به استخر استعدادها'}
+                        title={candidate.inTalentPool ? 'حذف از بانک استعدادها' : 'افزودن به بانک استعدادها'}
                       >
                         <Award className="w-3.5 h-3.5" />
                       </button>
@@ -1048,7 +1048,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
 
                 <div>
                   <h3 className="text-base font-extrabold text-text-1 flex items-center gap-2">
-                    <span>کارنامه سنجش شایستگی: {selectedCandidateForDetails.fullName}</span>
+                    <span>ارزیابی شایستگی: {selectedCandidateForDetails.fullName}</span>
                   </h3>
                   <div className="flex flex-wrap items-center gap-2 text-xs text-text-3 mt-0.5">
                     <span>ردیف شغلی: {selectedCandidateForDetails.jobTitle || job.title}</span>
@@ -1083,7 +1083,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
                     : 'border-transparent text-text-2 hover:text-text-1'
                 }`}
               >
-                ماتریس تفصیلی شاخص‌ها و نمرات
+                شاخص‌ها و امتیازها
               </button>
 
               <button
@@ -1095,7 +1095,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
                     : 'border-transparent text-text-2 hover:text-text-1'
                 }`}
               >
-                متن خام استخراج‌شده از رزومه
+                متن استخراج‌شده رزومه
               </button>
             </div>
 
@@ -1108,7 +1108,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
                     <div className="bg-surface-2 p-3.5 rounded-[12px] border border-border-default space-y-1.5">
                       <div className="text-xs font-bold text-text-1 flex items-center gap-1.5">
                         <Sparkles className="w-4 h-4 text-brand" />
-                        <span>جمع‌بندی تحلیلی هوش مصنوعی (Executive Summary)</span>
+                        <span>جمع‌بندی ارزیابی</span>
                       </div>
                       <p className="text-text-2 leading-relaxed">
                         {selectedCandidateForDetails.executiveSummary}
@@ -1121,10 +1121,10 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
                     <div className="text-xs font-bold text-text-1 flex items-center justify-between">
                       <span className="flex items-center gap-1.5">
                         <SlidersHorizontal className="w-4 h-4 text-brand" />
-                        <span>نمرات شاخص‌ها و استدلال ارزیابی</span>
+                        <span>امتیاز شاخص‌ها و توضیحات</span>
                       </span>
                       <span className="text-[11px] text-text-3">
-                        نمره از ۱۰ • وزن‌دهی مطابق ردیف شغلی
+                        نمره از ۱۰ • متناسب با وزن شاخص‌ها
                       </span>
                     </div>
 
@@ -1184,7 +1184,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
                       <div className="bg-brand-soft/20 p-3.5 rounded-[12px] border border-brand/25 space-y-2">
                         <div className="text-xs font-bold text-brand flex items-center gap-1.5">
                           <Quote className="w-4 h-4" />
-                          <span>نقل‌قول‌های مستند استخراج‌شده از رزومه (تضمین عدم توهم هوش مصنوعی)</span>
+                          <span>شواهد متنی استخراج‌شده از رزومه</span>
                         </div>
                         <ul className="space-y-1.5">
                           {selectedCandidateForDetails.resumeQuotes.map((q, idx) => (
@@ -1205,7 +1205,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
                     <div className="bg-success-soft/30 p-3 rounded-[10px] border border-success/20 space-y-1.5">
                       <div className="font-bold text-success flex items-center gap-1.5">
                         <CheckCircle2 className="w-4 h-4" />
-                        <span>نقاط قوت کلیدی</span>
+                        <span>نقاط قوت</span>
                       </div>
                       <ul className="space-y-1">
                         {(selectedCandidateForDetails.strengths || []).map((s, i) => (
@@ -1221,7 +1221,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
                     <div className="bg-warning-soft/30 p-3 rounded-[10px] border border-warning/20 space-y-1.5">
                       <div className="font-bold text-warning flex items-center gap-1.5">
                         <AlertTriangle className="w-4 h-4" />
-                        <span>نواحی نیازمند بررسی و شایستگی‌های مفقود</span>
+                        <span>زمینه‌های نیازمند بهبود</span>
                       </div>
                       <ul className="space-y-1">
                         {(selectedCandidateForDetails.weaknesses || []).map((w, i) => (
@@ -1240,7 +1240,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-text-3">
-                      متن زیر با کتابخانه استخراج PDF/Word روی مرورگر خوانده و بدون تغییر تحلیل شده است.
+                      متن رزومه کارجو جهت بررسی و تطبیق مستقیم.
                     </span>
                     <button
                       type="button"
@@ -1253,7 +1253,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
                   </div>
 
                   <div className="bg-surface-2 p-3.5 rounded-[12px] border border-border-default font-mono text-[11px] text-text-2 leading-relaxed max-h-[350px] overflow-y-auto whitespace-pre-wrap select-all">
-                    {selectedCandidateForDetails.resumeText || 'متن متنی برای این رزومه ثبت نشده است.'}
+                    {selectedCandidateForDetails.resumeText || 'متنی برای این رزومه ثبت نشده است.'}
                   </div>
                 </div>
               )}
@@ -1289,7 +1289,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
                   }`}
                 >
                   <Award className="w-3.5 h-3.5" />
-                  <span>{selectedCandidateForDetails.inTalentPool ? 'در استخر استعدادها' : 'افزودن به استخر'}</span>
+                  <span>{selectedCandidateForDetails.inTalentPool ? 'در بانک استعدادها' : 'افزودن به بانک استعدادها'}</span>
                 </button>
               </div>
 
@@ -1311,7 +1311,7 @@ export const BulkScreeningStudio: React.FC<BulkScreeningStudioProps> = ({
                       className="px-3 py-1.5 bg-surface-2 hover:bg-danger-soft text-danger border border-border-default rounded-[8px] text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer"
                     >
                       <UserX className="w-3.5 h-3.5" />
-                      <span>پیش‌نویس رد محترمانه</span>
+                      <span>پیش‌نویس عدم پذیرش</span>
                     </button>
                   </>
                 )}

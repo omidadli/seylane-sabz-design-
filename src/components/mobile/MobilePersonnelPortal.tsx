@@ -22,7 +22,7 @@ import { formatToman, toPersianDigits } from '../../utils/jalali';
 function getLeaveTypeLabel(leaveType: LeaveType): string {
   switch (leaveType) {
     case LeaveType.ANNUAL:
-      return 'روزانه استحقاقی';
+      return 'استحقاقی';
     case LeaveType.SICK:
       return 'استعلاجی';
     case LeaveType.HOURLY:
@@ -34,18 +34,18 @@ function getLeaveTypeLabel(leaveType: LeaveType): string {
     case LeaveType.MATERNITY:
       return 'زایمان';
     default:
-      return 'نامشخص';
+      return 'سایر';
   }
 }
 
 function getLeaveStatusBadge(status: LeaveStatus): { label: string; className: string } {
   switch (status) {
     case LeaveStatus.APPROVED:
-      return { label: 'تایید شده', className: 'bg-emerald-100 text-emerald-800' };
+      return { label: 'تأییدشده', className: 'bg-emerald-100 text-emerald-800' };
     case LeaveStatus.REJECTED:
-      return { label: 'رد شده', className: 'bg-rose-100 text-rose-800' };
+      return { label: 'ردشده', className: 'bg-rose-100 text-rose-800' };
     default:
-      return { label: 'در انتظار تایید', className: 'bg-amber-100 text-amber-800' };
+      return { label: 'در انتظار تأیید', className: 'bg-amber-100 text-amber-800' };
   }
 }
 
@@ -90,10 +90,10 @@ export const MobilePersonnelPortal: React.FC<MobilePersonnelPortalProps> = ({
             <div>
               <h1 className="text-sm sm:text-base font-black flex items-center gap-1.5">
                 <Users className="w-4 h-4 text-emerald-300" />
-                کارتابل جامع امور اداری و پرسنلی
+                کارتابل اداری و پرسنلی
               </h1>
               <p className="text-[11px] text-emerald-200 mt-0.5">
-                مدیریت احکام، تردد، مرخصی و فیش حقوقی مطابق قانون کار ۱۴۰۳
+                مدیریت احکام، تردد، مرخصی و فیش حقوق
               </p>
             </div>
           </div>
@@ -110,7 +110,7 @@ export const MobilePersonnelPortal: React.FC<MobilePersonnelPortalProps> = ({
               : 'text-slate-600 hover:text-slate-900'
           }`}
         >
-          👥 لیست پرسنل
+          کارمندان
         </button>
         <button
           onClick={() => setActiveTab('payroll')}
@@ -120,7 +120,7 @@ export const MobilePersonnelPortal: React.FC<MobilePersonnelPortalProps> = ({
               : 'text-slate-600 hover:text-slate-900'
           }`}
         >
-          💰 فیش‌های حقوقی
+          فیش حقوق
         </button>
         <button
           onClick={() => setActiveTab('leaves')}
@@ -130,7 +130,7 @@ export const MobilePersonnelPortal: React.FC<MobilePersonnelPortalProps> = ({
               : 'text-slate-600 hover:text-slate-900'
           }`}
         >
-          🏖️ مرخصی و تردد
+          مرخصی و تردد
         </button>
         <button
           onClick={() => setActiveTab('onboarding')}
@@ -140,7 +140,7 @@ export const MobilePersonnelPortal: React.FC<MobilePersonnelPortalProps> = ({
               : 'text-slate-600 hover:text-slate-900'
           }`}
         >
-          📋 ورود همکاران جدید
+          پذیرش نیروهای جدید
         </button>
       </div>
 
@@ -154,7 +154,7 @@ export const MobilePersonnelPortal: React.FC<MobilePersonnelPortalProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="جستجوی همکار بر اساس نام، شغل یا دپارتمان..."
+              placeholder="جستجو بر اساس نام، شغل یا دپارتمان..."
               className="w-full pr-9 pl-3 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-slate-800"
             />
           </div>
@@ -184,7 +184,7 @@ export const MobilePersonnelPortal: React.FC<MobilePersonnelPortalProps> = ({
                       {emp.jobTitle} • {emp.department}
                     </span>
                     <span className="text-[9px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-mono mt-0.5 inline-block">
-                      کد پرسنلی: {emp.personnelCode}
+                      کد پرسنلی: {toPersianDigits(emp.personnelCode)}
                     </span>
                   </div>
                 </div>
@@ -218,11 +218,11 @@ export const MobilePersonnelPortal: React.FC<MobilePersonnelPortalProps> = ({
             <div>
               <span className="font-bold block">دوره مالی جاری: شهریور ۱۴۰۳</span>
               <span className="text-[10px] text-emerald-700">
-                بر اساس مصوبات شورای عالی کار و کسر ۷٪ بیمه تامین اجتماعی
+                کسر ۷٪ بیمه تامین اجتماعی
               </span>
             </div>
             <span className="px-2 py-1 rounded bg-emerald-600 text-white font-mono text-[10px] font-bold">
-              نهایی‌شده
+              نهایی
             </span>
           </div>
 
@@ -248,10 +248,10 @@ export const MobilePersonnelPortal: React.FC<MobilePersonnelPortalProps> = ({
                   </div>
                 </div>
 
-                {/* Detailed breakdown breakdown */}
+                {/* Detailed breakdown */}
                 <div className="grid grid-cols-2 gap-2 text-[10px] bg-slate-50 p-2 rounded-lg border border-slate-100">
                   <div>
-                    <span className="text-slate-500">جمع ناخالص مزایا: </span>
+                    <span className="text-slate-500">ناخالص پرداختی: </span>
                     <span className="font-bold text-slate-700 font-mono">
                       {formatToman(slip.grossSalaryToman)}
                     </span>
@@ -278,13 +278,13 @@ export const MobilePersonnelPortal: React.FC<MobilePersonnelPortalProps> = ({
         <div className="space-y-3">
           <div className="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
             <div>
-              <span className="text-slate-500 block">مانده مرخصی استحقاقی قانونی:</span>
+              <span className="text-slate-500 block">مانده مرخصی استحقاقی:</span>
               <span className="text-xs font-bold text-emerald-800">
-                ۲۶ روز کاری در سال (۲.۱۶ روز در هر ماه)
+                ۲۶ روز کاری در سال (۲.۱۶ روز در ماه)
               </span>
             </div>
             <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">
-              سیستم اتوماتیک
+              محاسبه خودکار
             </span>
           </div>
 
@@ -330,17 +330,17 @@ export const MobilePersonnelPortal: React.FC<MobilePersonnelPortalProps> = ({
       {activeTab === 'onboarding' && (
         <div className="bg-white rounded-xl p-4 border border-slate-200 space-y-3 text-xs">
           <span className="font-bold text-slate-800 block">
-            بسته خوش‌آمدگویی و ان‌بوردینگ همکاران جدید هلدینگ سیلانه سبز:
+            چک‌لیست پذیرش همکاران جدید:
           </span>
 
           <div className="space-y-2">
             {[
-              { title: 'تحویل پکیج محصولات خوش‌آمدگویی (برندهای دافی و کامان)', done: true },
+              { title: 'تحویل بسته محصولات خوش‌آمدگویی (برندهای دافی و کامان)', done: true },
               { title: 'ثبت پرونده طب کار و آزمایشات بدو استخدام', done: true },
-              { title: 'صدور کارت تردد الکترونیکی و ثبت انگشت در کارخانجات اشتهارد', done: true },
+              { title: 'صدور کارت تردد و ثبت اثر انگشت در کارخانه اشتهارد', done: true },
               { title: 'معرفی به مدیر مستقیم دپارتمان و همکاران تیم', done: true },
-              { title: 'افتتاح حساب بانکی حقوق و عضویت در بیمه تکمیلی سامان', done: false },
-              { title: 'گذراندن دوره آشنایی با ارزش‌ها و استانداردهای کیفی سیلانه سبز', done: false },
+              { title: 'افتتاح حساب بانکی و ثبت‌نام بیمه تکمیلی', done: false },
+              { title: 'گذراندن دوره آشنایی با سازمان و استانداردهای کیفی', done: false },
             ].map((item, idx) => (
               <div
                 key={idx}
@@ -352,7 +352,7 @@ export const MobilePersonnelPortal: React.FC<MobilePersonnelPortalProps> = ({
                     item.done ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-600'
                   }`}
                 >
-                  {item.done ? 'تکمیل شد' : 'در دست اقدام'}
+                  {item.done ? 'انجام شد' : 'در حال انجام'}
                 </span>
               </div>
             ))}

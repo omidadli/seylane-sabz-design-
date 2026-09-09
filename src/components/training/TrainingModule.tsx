@@ -26,7 +26,7 @@ const COURSE_STATUS_META: Record<
   { label: string; className: string }
 > = {
   UPCOMING: {
-    label: 'ثبت‌نام باز / آتی',
+    label: 'آتی',
     className: 'bg-slate-100 text-slate-700 border border-slate-200',
   },
   IN_PROGRESS: {
@@ -46,7 +46,7 @@ function getSkillGapStatus(requiredLevel: number, teamAverageLevel: number): {
   const gap = requiredLevel - teamAverageLevel;
   if (gap <= 0) {
     return {
-      label: 'در حد مطلوب',
+      label: 'مطلوب',
       className: 'bg-emerald-50 text-emerald-800 border border-emerald-200',
     };
   }
@@ -57,7 +57,7 @@ function getSkillGapStatus(requiredLevel: number, teamAverageLevel: number): {
     };
   }
   return {
-    label: 'گپ مهارتی جدی',
+    label: 'نیازمند آموزش',
     className: 'bg-rose-50 text-rose-800 border border-rose-200',
   };
 }
@@ -127,7 +127,7 @@ export const TrainingModule: React.FC<TrainingModuleProps> = ({
       {currentRole === UserRole.HR_DIRECTOR && employees.length > 0 && (
         <div className="flex flex-col sm:flex-row sm:items-center gap-2 bg-white p-3 rounded-2xl border border-slate-200 shadow-2xs">
           <label className="text-xs font-bold text-slate-700" htmlFor="enroll-employee">
-            ثبت‌نام برای همکار:
+            ثبت‌نام برای کارمند:
           </label>
           <select
             id="enroll-employee"
@@ -135,13 +135,13 @@ export const TrainingModule: React.FC<TrainingModuleProps> = ({
             onChange={(e) => setSelectedEmployeeId(e.target.value)}
             className="px-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded-xl font-bold text-slate-800 max-w-xs"
           >
-            <option value="">خودم (کاربر جاری)</option>
+            <option value="">خودم</option>
             {employees.map((e) => (
               <option key={e.id} value={e.id}>{e.fullName} — {e.department}</option>
             ))}
           </select>
           <span className="text-[11px] text-slate-500">
-            {toPersianDigits(enrollments.length)} ثبت‌نام در سامانه
+            {toPersianDigits(enrollments.length)} ثبت‌نام انجام شده
           </span>
         </div>
       )}
@@ -149,9 +149,9 @@ export const TrainingModule: React.FC<TrainingModuleProps> = ({
       {/* Header bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs">
         <div>
-          <h2 className="text-sm font-bold text-slate-900">آموزش و توسعه شایستگی‌ها (L&D)</h2>
+          <h2 className="text-sm font-bold text-slate-900">آموزش و توسعه شایستگی‌ها</h2>
           <p className="text-xs text-slate-500">
-            برنامه‌ریزی دوره‌های سازمانی و پایش ماتریس مهارت‌های تخصصی تیم
+            برنامه‌ریزی دوره‌های آموزشی و پایش ماتریس مهارت‌ها
           </p>
         </div>
 
@@ -165,7 +165,7 @@ export const TrainingModule: React.FC<TrainingModuleProps> = ({
                 : 'text-slate-600 hover:bg-slate-100'
             }`}
           >
-            تقویم دوره‌های آموزشی
+            دوره‌های آموزشی
           </button>
 
           <button
@@ -177,7 +177,7 @@ export const TrainingModule: React.FC<TrainingModuleProps> = ({
                 : 'text-slate-600 hover:bg-slate-100'
             }`}
           >
-            ماتریس شایستگی‌های تیمی
+            ماتریس مهارت‌ها
           </button>
         </div>
       </div>
@@ -201,19 +201,19 @@ export const TrainingModule: React.FC<TrainingModuleProps> = ({
 
                 <div className="space-y-1.5 text-xs text-slate-600">
                   <div>
-                    <span className="text-slate-400">مدرس دوره: </span>
+                    <span className="text-slate-400">مدرس: </span>
                     <span className="font-semibold text-slate-800">{c.instructor}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400">واحد هدف: </span>
+                    <span className="text-slate-400">دپارتمان: </span>
                     <span>{c.department}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400">تعداد شرکت‌کنندگان: </span>
+                    <span className="text-slate-400">شرکت‌کنندگان: </span>
                     <span className="font-bold">{toPersianDigits(c.participantsCount)} نفر</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-slate-400">وضعیت برگزاری: </span>
+                    <span className="text-slate-400">وضعیت: </span>
                     <span
                       className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${statusMeta.className}`}
                     >
@@ -225,7 +225,7 @@ export const TrainingModule: React.FC<TrainingModuleProps> = ({
                 {/* Completion progress */}
                 <div className="space-y-1">
                   <div className="flex items-center justify-between text-[11px]">
-                    <span className="text-slate-500 font-medium">درصد پیشرفت دوره:</span>
+                    <span className="text-slate-500 font-medium">پیشرفت دوره:</span>
                     <span className="font-extrabold text-emerald-800">
                       {toPersianDigits(c.completionRate)}٪
                     </span>
@@ -241,7 +241,7 @@ export const TrainingModule: React.FC<TrainingModuleProps> = ({
                 <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
                   <span className="text-emerald-700 font-bold flex items-center gap-1 text-[11px]">
                     <CheckCircle className="w-3.5 h-3.5" />
-                    <span>همراه با گواهی حضور</span>
+                    <span>گواهی پایان دوره</span>
                   </span>
 
                   {enrolledCourseIds.has(c.id) ? (
@@ -254,9 +254,9 @@ export const TrainingModule: React.FC<TrainingModuleProps> = ({
                       type="button"
                       disabled={enrollingCourseId === c.id || !onEnroll}
                       onClick={() => handleEnroll(c.id)}
-                      className="px-3 py-1 bg-emerald-50 hover:bg-emerald-100 disabled:opacity-60 text-emerald-800 rounded-lg font-bold text-xs"
+                      className="px-3 py-1 bg-emerald-50 hover:bg-emerald-100 disabled:opacity-60 text-emerald-800 rounded-lg font-bold text-xs cursor-pointer"
                     >
-                      {enrollingCourseId === c.id ? 'در حال ثبت...' : 'ثبت نام در دوره'}
+                      {enrollingCourseId === c.id ? 'در حال ثبت...' : 'ثبت‌نام'}
                     </button>
                   )}
                 </div>
@@ -267,7 +267,7 @@ export const TrainingModule: React.FC<TrainingModuleProps> = ({
           {courses.length === 0 && (
             <div className="col-span-full bg-white rounded-2xl p-8 border border-dashed border-slate-200 text-center text-slate-500 text-xs">
               <BookOpen className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-              <p>در حال حاضر دوره آموزشی فعالی ثبت نشده است.</p>
+              <p>دوره‌ای یافت نشد.</p>
             </div>
           )}
         </div>
@@ -277,11 +277,11 @@ export const TrainingModule: React.FC<TrainingModuleProps> = ({
           <table className="w-full text-right text-xs">
             <thead className="bg-slate-50 text-slate-700 font-bold border-b border-slate-200">
               <tr>
-                <th className="p-3.5">مهارت / شایستگی</th>
+                <th className="p-3.5">مهارت</th>
                 <th className="p-3.5">دسته‌بندی</th>
-                <th className="p-3.5">سطح موردنیاز (۱ تا ۵)</th>
-                <th className="p-3.5">میانگین سطح تیم (۱ تا ۵)</th>
-                <th className="p-3.5 text-center">وضعیت پوشش مهارت</th>
+                <th className="p-3.5">سطح مورد نیاز</th>
+                <th className="p-3.5">میانگین تیم</th>
+                <th className="p-3.5 text-center">وضعیت</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-slate-700">
@@ -327,7 +327,7 @@ export const TrainingModule: React.FC<TrainingModuleProps> = ({
           {skillMatrix.length === 0 && (
             <div className="p-8 text-center text-slate-500 text-xs">
               <Star className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-              <p>رکوردی در ماتریس شایستگی‌ها ثبت نشده است.</p>
+              <p>موردی یافت نشد.</p>
             </div>
           )}
         </div>

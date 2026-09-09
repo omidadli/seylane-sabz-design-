@@ -65,7 +65,7 @@ const STATUS_META: Record<PayrollStatus, { label: string; chipClass: string; dot
     dotClass: 'bg-sky-500',
   },
   [PayrollStatus.PAID]: {
-    label: 'پرداخت‌شده (قفل)',
+    label: 'پرداخت‌شده',
     chipClass: 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800',
     dotClass: 'bg-emerald-500',
   },
@@ -107,7 +107,7 @@ function printSlips(slips: PayrollSlip[], employees: Employee[]) {
             <div style="font-size:11px;color:#64748b;margin-top:2px;">برندهای تجاری: دافی (Dafi) • کامان (Come'on) • میسویک (Misswake)</div>
           </div>
           <div style="text-align:left;">
-            <div style="font-size:14px;font-weight:800;color:#1e293b;">فیش رسمی حقوق و دستمزد</div>
+            <div style="font-size:14px;font-weight:800;color:#1e293b;">فیش حقوق و دستمزد</div>
             <div style="font-size:11px;color:#64748b;margin-top:2px;">دوره: ${slip.monthName} ${toPersianDigits(slip.yearJalali)}</div>
           </div>
         </div>
@@ -115,10 +115,10 @@ function printSlips(slips: PayrollSlip[], employees: Employee[]) {
         <div style="margin-top:14px;padding:8px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;display:grid;grid-template-columns:repeat(3, 1fr);gap:8px;font-size:11px;">
           <div><strong>نام و نام خانوادگی:</strong> ${slip.employeeName || '—'}</div>
           <div><strong>کد پرسنلی:</strong> ${toPersianDigits(slip.personnelCode || '—')}</div>
-          <div><strong>واحد سازمانی:</strong> ${emp?.department || '—'}</div>
-          <div><strong>سمت شغلی:</strong> ${emp?.jobTitle || '—'}</div>
-          <div><strong>وضعیت فیش:</strong> ${STATUS_META[slip.status]?.label || slip.status}</div>
-          <div><strong>کارکرد موظف دوره:</strong> ${slip.payableDays !== undefined ? `${toPersianDigits(slip.payableDays)} روز` : '۳۰/۳۱ روز کامل'}</div>
+          <div><strong>دپارتمان:</strong> ${emp?.department || '—'}</div>
+          <div><strong>سمت:</strong> ${emp?.jobTitle || '—'}</div>
+          <div><strong>وضعیت:</strong> ${STATUS_META[slip.status]?.label || slip.status}</div>
+          <div><strong>کارکرد موظف:</strong> ${slip.payableDays !== undefined ? `${toPersianDigits(slip.payableDays)} روز` : '۳۰ روز کامل'}</div>
         </div>
       </div>
 
@@ -129,28 +129,28 @@ function printSlips(slips: PayrollSlip[], employees: Employee[]) {
             <tr><th colspan="2" style="background:#ecfdf5;color:#065f46;text-align:right;padding:8px 10px;border-bottom:2px solid #a7f3d0;">حقوق و مزایا (تومان)</th></tr>
           </thead>
           <tbody>
-            ${row('حقوق پایه ماهانه', formatToman(slip.baseSalaryToman))}
-            ${row('کمک‌هزینه مسکن مصوب', formatToman(slip.housingAllowanceToman))}
-            ${row('بن اقلام مصرفی و خواربار', formatToman(slip.bonKargariToman))}
-            ${slip.seniorityBaseToman ? row('پایه سنوات (≥۱ سال سابقه)', formatToman(slip.seniorityBaseToman)) : ''}
+            ${row('حقوق پایه', formatToman(slip.baseSalaryToman))}
+            ${row('حق مسکن', formatToman(slip.housingAllowanceToman))}
+            ${row('بن خواربار', formatToman(slip.bonKargariToman))}
+            ${slip.seniorityBaseToman ? row('پایه سنوات', formatToman(slip.seniorityBaseToman)) : ''}
             ${slip.marriageAllowanceToman ? row('حق تأهل', formatToman(slip.marriageAllowanceToman)) : ''}
-            ${row('حق اولاد (ماده ۸۶ تامین اجتماعی)', formatToman(slip.childAllowanceToman))}
-            ${row('کمک‌هزینه ایاب و ذهاب', formatToman(slip.commuteAllowanceToman))}
-            ${row(`اضافه‌کاری${slip.overtimeHours ? ` (${toPersianDigits(slip.overtimeHours)} ساعت × ۱.۴)` : ''}`, formatToman(slip.overtimePayToman))}
-            <tr style="background:#f0fdf4;"><td style="padding:8px 10px;font-weight:900;color:#065f46;">جمع ناخالص حقوق و مزایا</td><td style="padding:8px 10px;font-weight:900;text-align:left;color:#065f46;">${formatToman(slip.grossSalaryToman)}</td></tr>
+            ${row('حق اولاد', formatToman(slip.childAllowanceToman))}
+            ${row('حق ایاب و ذهاب', formatToman(slip.commuteAllowanceToman))}
+            ${row(`اضافه‌کاری${slip.overtimeHours ? ` (${toPersianDigits(slip.overtimeHours)} ساعت)` : ''}`, formatToman(slip.overtimePayToman))}
+            <tr style="background:#f0fdf4;"><td style="padding:8px 10px;font-weight:900;color:#065f46;">جمع ناخالص</td><td style="padding:8px 10px;font-weight:900;text-align:left;color:#065f46;">${formatToman(slip.grossSalaryToman)}</td></tr>
           </tbody>
         </table>
 
         <!-- Deductions -->
         <table style="width:100%;border-collapse:collapse;font-size:11px;">
           <thead>
-            <tr><th colspan="2" style="background:#fff1f2;color:#9f1239;text-align:right;padding:8px 10px;border-bottom:2px solid #fecdd3;">کسورات قانونی (تومان)</th></tr>
+            <tr><th colspan="2" style="background:#fff1f2;color:#9f1239;text-align:right;padding:8px 10px;border-bottom:2px solid #fecdd3;">کسورات (تومان)</th></tr>
           </thead>
           <tbody>
-            ${row('بیمه تامین اجتماعی (۷٪ سهم کارگر)', formatToman(slip.ssoInsurance7PctToman))}
-            ${row('مالیات بر درآمد حقوق (پله‌ای)', formatToman(slip.incomeTaxToman))}
-            ${slip.otherDeductionsToman ? row('سایر کسورات قانونی', formatToman(slip.otherDeductionsToman)) : ''}
-            <tr style="background:#fff1f2;"><td style="padding:8px 10px;font-weight:900;color:#9f1239;">جمع کل کسورات</td><td style="padding:8px 10px;font-weight:900;text-align:left;color:#9f1239;">${formatToman(slip.ssoInsurance7PctToman + slip.incomeTaxToman + (slip.otherDeductionsToman || 0))}</td></tr>
+            ${row('بیمه سهم کارگر (۷٪)', formatToman(slip.ssoInsurance7PctToman))}
+            ${row('مالیات بر درآمد', formatToman(slip.incomeTaxToman))}
+            ${slip.otherDeductionsToman ? row('سایر کسورات', formatToman(slip.otherDeductionsToman)) : ''}
+            <tr style="background:#fff1f2;"><td style="padding:8px 10px;font-weight:900;color:#9f1239;">جمع کسورات</td><td style="padding:8px 10px;font-weight:900;text-align:left;color:#9f1239;">${formatToman(slip.ssoInsurance7PctToman + slip.incomeTaxToman + (slip.otherDeductionsToman || 0))}</td></tr>
           </tbody>
         </table>
       </div>
@@ -158,25 +158,25 @@ function printSlips(slips: PayrollSlip[], employees: Employee[]) {
       <!-- Net Salary Banner -->
       <div style="margin-top:16px;padding:12px 16px;background:#047857;color:#ffffff;border-radius:6px;display:flex;justify-content:space-between;align-items:center;">
         <div>
-          <div style="font-size:11px;color:#d1fae5;">خالص قابل واریز به حساب بانکی کارمند:</div>
+          <div style="font-size:11px;color:#d1fae5;">خالص پرداختی:</div>
           <div style="font-size:16px;font-weight:900;margin-top:2px;">${formatToman(slip.netSalaryToman)}</div>
         </div>
         <div style="text-align:left;font-size:10px;color:#a7f3d0;">
-          ${slip.paidAtJalali ? `تاریخ پرداخت قطعی: ${slip.paidAtJalali}` : 'وضعیت پرداخت: در انتظار تایید/تسویه'}
+          ${slip.paidAtJalali ? `تاریخ پرداخت: ${slip.paidAtJalali}` : 'در انتظار پرداخت'}
         </div>
       </div>
 
       <!-- Legal Reserves & Notes -->
       <div style="margin-top:12px;display:flex;justify-content:space-between;gap:12px;font-size:10px;color:#475569;background:#f8fafc;padding:8px 12px;border:1px solid #e2e8f0;border-radius:6px;">
-        <div><strong>ذخیره سنوات ماهانه:</strong> ${formatToman(slip.sanavatReserveToman)}</div>
-        <div><strong>ذخیره پاداش و عیدی:</strong> ${formatToman(slip.eidiReserveToman)} (سقف ۹۰ روز)</div>
-        ${slip.unpaidLeaveDays ? `<div><strong>کسر مرخصی بدون حقوق:</strong> ${toPersianDigits(slip.unpaidLeaveDays)} روز</div>` : ''}
+        <div><strong>ذخیره سنوات:</strong> ${formatToman(slip.sanavatReserveToman)}</div>
+        <div><strong>ذخیره عیدی:</strong> ${formatToman(slip.eidiReserveToman)}</div>
+        ${slip.unpaidLeaveDays ? `<div><strong>مرخصی بدون حقوق:</strong> ${toPersianDigits(slip.unpaidLeaveDays)} روز</div>` : ''}
       </div>
 
       <div style="margin-top:28px;display:grid;grid-template-columns:repeat(3, 1fr);gap:16px;text-align:center;font-size:10px;color:#64748b;">
         <div style="border-top:1px dashed #94a3b8;padding-top:6px;">امضای مسئول حقوق و دستمزد</div>
-        <div style="border-top:1px dashed #94a3b8;padding-top:6px;">تایید مدیریت منابع انسانی</div>
-        <div style="border-top:1px dashed #94a3b8;padding-top:6px;">امضا و اثر انگشت دریافت‌کننده</div>
+        <div style="border-top:1px dashed #94a3b8;padding-top:6px;">امضای مدیر منابع انسانی</div>
+        <div style="border-top:1px dashed #94a3b8;padding-top:6px;">امضای کارمند</div>
       </div>
     </div>
     `;
@@ -360,7 +360,7 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
       {/* Top KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
         <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xs">
-          <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mb-1">کل ناخالص دوره</div>
+          <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mb-1">مجموع ناخالص</div>
           <div className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
             {isHR ? formatToman(totalGross) : isDeptManager ? '—' : periodSlips[0] ? formatToman(periodSlips[0].grossSalaryToman) : '—'}
           </div>
@@ -370,12 +370,12 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
         </div>
 
         <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xs">
-          <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mb-1">خالص پرداختی به پرسنل</div>
+          <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mb-1">مجموع خالص پرداختی</div>
           <div className="text-base sm:text-lg font-extrabold text-emerald-700 dark:text-emerald-400">
             {isHR ? formatToman(totalNet) : isDeptManager ? '—' : periodSlips[0] ? formatToman(periodSlips[0].netSalaryToman) : '—'}
           </div>
           <div className="text-[10px] text-emerald-600 dark:text-emerald-400 mt-0.5 font-bold">
-            {isHR ? 'مجموع قابل واریز بانکی' : 'خالص فیش کارکرد'}
+            {isHR ? 'مجموع خالص' : 'خالص پرداختی'}
           </div>
         </div>
 
@@ -384,16 +384,16 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
           <div className="text-base sm:text-lg font-extrabold text-blue-700 dark:text-blue-400">
             {isHR ? formatToman(totalSSO) : isDeptManager ? '—' : periodSlips[0] ? formatToman(periodSlips[0].ssoInsurance7PctToman) : '—'}
           </div>
-          <div className="text-[10px] text-blue-600 dark:text-blue-400 mt-0.5">معافیت حق اولاد لحاظ شده</div>
+          <div className="text-[10px] text-blue-600 dark:text-blue-400 mt-0.5">با کسر معافیت‌ها</div>
         </div>
 
         <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xs">
-          <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mb-1">مالیات بر درآمد حقوق</div>
+          <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mb-1">مالیات بر درآمد</div>
           <div className="text-base sm:text-lg font-extrabold text-purple-700 dark:text-purple-400">
             {isHR ? formatToman(totalTax) : isDeptManager ? '—' : periodSlips[0] ? formatToman(periodSlips[0].incomeTaxToman) : '—'}
           </div>
           <div className="text-[10px] text-purple-600 dark:text-purple-400 mt-0.5">
-            جدول پله‌ای سال {toPersianDigits(selectedYear)}
+            سال {toPersianDigits(selectedYear)}
           </div>
         </div>
       </div>
@@ -409,7 +409,7 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
             <div>
               <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                  محاسبه مکانیزه حقوق و دستمزد — هلدینگ سیلانه سبز
+                  مدیریت حقوق و دستمزد
                 </h3>
                 {periodLocked && (
                   <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
@@ -419,7 +419,7 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
                 )}
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                تطبیق خودکار با بخشنامه مزد {toPersianDigits(selectedYear)} • پایه سنوات، حق تأهل و عیدی قانونی (سقف ۹۰ روز)
+                محاسبه حقوق و مزایا بر اساس بخشنامه مزد سال {toPersianDigits(selectedYear)}
               </p>
             </div>
           </div>
@@ -436,7 +436,7 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
                     ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 text-emerald-800 dark:text-emerald-300 ring-2 ring-emerald-500/20'
                     : 'bg-slate-50 dark:bg-slate-800/80 border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
                 }`}
-                title="انتخاب ماه و سال کارکرد جلالی"
+                title="انتخاب دوره"
               >
                 <CalendarDays className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 <span>
@@ -471,11 +471,11 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
 
                     <div className="text-center">
                       <span className="text-xs font-black text-slate-900 dark:text-white">
-                        سال مالی {toPersianDigits(selectedYear)}
+                        سال {toPersianDigits(selectedYear)}
                       </span>
                       {availableYears.includes(selectedYear) && (
                         <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
-                          دارای بخشنامه مصوب
+                          بخشنامه مصوب
                         </div>
                       )}
                     </div>
@@ -576,8 +576,8 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
                   }`}
                   title={
                     periodLocked
-                      ? 'این دوره مالی پرداخت و قفل شده است. محاسبات مجدد برای جلوگیری از مغایرت‌های مالیاتی و بانکی مسدود گردیده است.'
-                      : 'تولید و محاسبه فیش‌های دوره انتخابی'
+                      ? 'این دوره مالی پرداخت و قفل شده است.'
+                      : 'محاسبه فیش‌های دوره'
                   }
                 >
                   {periodLocked ? <Lock className="w-3.5 h-3.5" /> : <Calculator className="w-3.5 h-3.5" />}
@@ -586,13 +586,13 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
                       ? 'در حال محاسبه...'
                       : periodLocked
                       ? 'دوره قفل شده'
-                      : 'تولید فیش‌های دوره'}
+                      : 'محاسبه حقوق'}
                   </span>
                 </button>
 
                 {periodLocked && (
                   <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block z-30 w-64 p-2 bg-slate-900 text-white text-[10px] rounded-lg shadow-lg text-center leading-relaxed">
-                    این دوره مالی پرداخت و قفل شده است — هرگونه ویرایش یا بازتولید مسدود می‌باشد.
+                    این دوره پرداخت و قفل شده است.
                   </div>
                 )}
               </div>
@@ -629,9 +629,9 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
                     onClick={() => {
                       setConfirmModal({
                         isOpen: true,
-                        title: 'نهایی‌سازی فیش‌های پیش‌نویس دوره',
-                        description: `آیا از نهایی‌سازی ${toPersianDigits(draftCount)} فیش پیش‌نویس دوره ${MONTH_NAMES[selectedMonth - 1]} ${toPersianDigits(selectedYear)} اطمینان دارید؟ پس از نهایی‌سازی، فیش‌ها برای کارکنان قابل مشاهده خواهند شد.`,
-                        confirmLabel: 'تایید و نهایی‌سازی فیش‌ها',
+                        title: 'نهایی‌سازی فیش‌های دوره',
+                        description: `آیا از نهایی‌سازی ${toPersianDigits(draftCount)} فیش پیش‌نویس دوره ${MONTH_NAMES[selectedMonth - 1]} ${toPersianDigits(selectedYear)} اطمینان دارید؟`,
+                        confirmLabel: 'نهایی‌سازی',
                         variant: 'primary',
                         onConfirm: () => {
                           setConfirmModal(null);
@@ -642,7 +642,7 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
                     className="px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-2xs cursor-pointer transition-colors"
                   >
                     <FileCheck2 className="w-3.5 h-3.5" />
-                    <span>نهایی‌سازی {toPersianDigits(draftCount)} فیش</span>
+                    <span>نهایی‌سازی ({toPersianDigits(draftCount)})</span>
                   </button>
                 )}
 
@@ -652,9 +652,9 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
                     onClick={() => {
                       setConfirmModal({
                         isOpen: true,
-                        title: 'ثبت پرداخت و قفل قطعی دوره مالی',
-                        description: `آیا از ثبت پرداخت ${toPersianDigits(finalizedCount)} فیش نهایی‌شده برای دوره ${MONTH_NAMES[selectedMonth - 1]} ${toPersianDigits(selectedYear)} اطمینان دارید؟ با تایید، این دوره قفل شده و کلیه فیش‌ها تثبیت و غیرقابل ویرایش خواهند شد.`,
-                        confirmLabel: 'ثبت پرداخت و قفل دوره',
+                        title: 'ثبت پرداخت دوره',
+                        description: `آیا از ثبت پرداخت ${toPersianDigits(finalizedCount)} فیش نهایی‌شده دوره ${MONTH_NAMES[selectedMonth - 1]} ${toPersianDigits(selectedYear)} اطمینان دارید؟ پس از ثبت، این دوره قفل می‌شود.`,
+                        confirmLabel: 'ثبت پرداخت',
                         variant: 'warning',
                         onConfirm: () => {
                           setConfirmModal(null);
@@ -665,14 +665,14 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
                     className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-2xs cursor-pointer transition-colors"
                   >
                     <Banknote className="w-3.5 h-3.5" />
-                    <span>ثبت پرداخت و قفل دوره</span>
+                    <span>ثبت پرداخت</span>
                   </button>
                 )}
 
                 {periodLocked && (
                   <span className="px-3 py-1 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 rounded-xl text-xs font-bold flex items-center gap-1.5">
                     <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                    دوره پرداخت و قفل است
+                    دوره قفل است
                   </span>
                 )}
               </div>
@@ -690,10 +690,10 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
             </div>
             <div>
               <div className="text-xs font-bold">
-                {toPersianDigits(selectedSlipIds.size)} فیش از مجموع {toPersianDigits(periodSlips.length)} فیش انتخاب شده است
+                {toPersianDigits(selectedSlipIds.size)} فیش انتخاب شده است
               </div>
               <div className="text-[10px] text-slate-400">
-                امکان چاپ گروهی یا اجرای عملیات چرخه عمر بر روی موارد انتخابی
+                عملیات گروهی روی فیش‌های انتخابی
               </div>
             </div>
           </div>
@@ -718,7 +718,7 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
                         isOpen: true,
                         title: 'نهایی‌سازی فیش‌های انتخابی دوره',
                         description: `آیا مایلید تمام فیش‌های پیش‌نویس این دوره نهایی شوند؟`,
-                        confirmLabel: 'نهایی‌سازی دوره',
+                        confirmLabel: 'نهایی‌سازی',
                         variant: 'primary',
                         onConfirm: () => {
                           setConfirmModal(null);
@@ -739,9 +739,9 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
                     onClick={() => {
                       setConfirmModal({
                         isOpen: true,
-                        title: 'ثبت پرداخت و قفل فیش‌های دوره',
-                        description: `آیا مایلید پرداخت دوره ثبت و قفل شود؟`,
-                        confirmLabel: 'ثبت پرداخت و قفل',
+                        title: 'ثبت پرداخت دوره',
+                        description: `آیا از ثبت پرداخت دوره اطمینان دارید؟`,
+                        confirmLabel: 'ثبت پرداخت',
                         variant: 'warning',
                         onConfirm: () => {
                           setConfirmModal(null);
@@ -752,7 +752,7 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
                     className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 cursor-pointer transition-colors"
                   >
                     <Banknote className="w-3.5 h-3.5" />
-                    <span>ثبت پرداخت و قفل</span>
+                    <span>ثبت پرداخت</span>
                   </button>
                 )}
               </>
@@ -779,7 +779,7 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="جستجو بر اساس نام یا کد پرسنلی..."
+              placeholder="جستجو با نام یا کد پرسنلی..."
               className="w-full pl-3 pr-9 py-1.5 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-medium placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
             />
             {searchQuery && (
@@ -854,7 +854,7 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
               </p>
               {periodSlips.length === 0 && isHR && !periodLocked && (
                 <p className="text-[11px] text-slate-400 mt-1">
-                  جهت محاسبه حقوق بر روی دکمه «تولید فیش‌های دوره» در بالای صفحه کلیک کنید.
+                  جهت محاسبه حقوق بر روی دکمه «محاسبه حقوق» در بالای صفحه کلیک کنید.
                 </p>
               )}
             </div>
@@ -871,13 +871,13 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
                       title="انتخاب همه"
                     />
                   </th>
-                  <th className="p-3.5">پرسنل و مشخصات شغلی</th>
-                  <th className="p-3.5">وضعیت چرخه عمر</th>
+                  <th className="p-3.5">نام و مشخصات</th>
+                  <th className="p-3.5">وضعیت</th>
                   <th className="p-3.5">حقوق پایه (تومان)</th>
-                  <th className="p-3.5">مجموع مزایا و بن</th>
-                  <th className="p-3.5">بیمه سهم کارگر (۷٪)</th>
-                  <th className="p-3.5">مالیات پله‌ای</th>
-                  <th className="p-3.5">خالص پرداختی (تومان)</th>
+                  <th className="p-3.5">مزایا (تومان)</th>
+                  <th className="p-3.5">بیمه (تومان)</th>
+                  <th className="p-3.5">مالیات (تومان)</th>
+                  <th className="p-3.5">خالص (تومان)</th>
                   <th className="p-3.5 text-center w-28">عملیات</th>
                 </tr>
               </thead>
@@ -928,8 +928,8 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
                         </div>
                         {slip.payableDays !== undefined && slip.payableDays < 28 && (
                           <div className="text-[10px] text-amber-600 dark:text-amber-400 font-bold mt-0.5">
-                            کارکرد مؤثر: {toPersianDigits(slip.payableDays)} روز
-                            {slip.unpaidLeaveDays ? ` (کسر ${toPersianDigits(slip.unpaidLeaveDays)} روز بدون حقوق)` : ''}
+                            کارکرد: {toPersianDigits(slip.payableDays)} روز
+                            {slip.unpaidLeaveDays ? ` (${toPersianDigits(slip.unpaidLeaveDays)} روز بدون حقوق)` : ''}
                           </div>
                         )}
                       </td>
@@ -969,7 +969,7 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
                             type="button"
                             onClick={() => setSelectedSlip(slip)}
                             className="p-1.5 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 rounded-lg transition-colors cursor-pointer"
-                            title="مشاهده فیش رسمی حقوق"
+                            title="مشاهده فیش حقوق"
                           >
                             <Eye className="w-4 h-4" />
                           </button>
@@ -993,7 +993,7 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
         </div>
       </div>
 
-      {/* Payslip Document-Style Modal (فیش حقوقی رسمی شرکت‌های سیلانه سبز) */}
+      {/* Payslip Document-Style Modal */}
       {selectedSlip && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-3 sm:p-5 overflow-y-auto">
           <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-3xl w-full p-5 sm:p-7 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[92vh] overflow-y-auto space-y-5 animate-in fade-in zoom-in-95 duration-150">
@@ -1019,7 +1019,7 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
                     type="button"
                     onClick={() => printSlips([selectedSlip], employees)}
                     className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
-                    title="چاپ رسمی فیش"
+                    title="چاپ فیش"
                   >
                     <Printer className="w-3.5 h-3.5" />
                     <span>چاپ فیش</span>
@@ -1038,7 +1038,7 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
               {/* Title & Document Badge */}
               <div className="mt-3.5 flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-dashed border-slate-200 dark:border-slate-800">
                 <div className="text-xs font-extrabold text-slate-700 dark:text-slate-300">
-                  فیش رسمی محاسبه حقوق و دستمزد — دوره کارکرد: {selectedSlip.monthName} {toPersianDigits(selectedSlip.yearJalali)}
+                  فیش حقوق و دستمزد — دوره: {selectedSlip.monthName} {toPersianDigits(selectedSlip.yearJalali)}
                 </div>
                 <div className="flex items-center gap-2">
                   <span
@@ -1074,17 +1074,17 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
                     </span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[10px]">واحد سازمانی:</span>
+                    <span className="text-slate-400 block text-[10px]">دپارتمان:</span>
                     <span className="font-bold text-slate-800 dark:text-slate-200">{emp?.department || '—'}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[10px]">سمت سازمانی:</span>
+                    <span className="text-slate-400 block text-[10px]">سمت:</span>
                     <span className="font-bold text-slate-800 dark:text-slate-200">{emp?.jobTitle || '—'}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[10px]">روزهای کارکرد دوره:</span>
+                    <span className="text-slate-400 block text-[10px]">کارکرد:</span>
                     <span className="font-bold text-slate-800 dark:text-slate-200">
-                      {selectedSlip.payableDays !== undefined ? `${toPersianDigits(selectedSlip.payableDays)} روز` : '۳۰/۳۱ روز موظف'}
+                      {selectedSlip.payableDays !== undefined ? `${toPersianDigits(selectedSlip.payableDays)} روز` : '۳۰ روز'}
                     </span>
                   </div>
                   <div>
@@ -1100,7 +1100,7 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
                     </span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[10px]">تاریخ صدور سیستمی:</span>
+                    <span className="text-slate-400 block text-[10px]">تاریخ صدور:</span>
                     <span className="font-bold text-slate-800 dark:text-slate-200">
                       {selectedSlip.generatedAtJalali || '—'}
                     </span>
@@ -1114,52 +1114,52 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
               {/* Earnings Column (مزایا و اضافات) */}
               <div className="bg-emerald-50/40 dark:bg-emerald-950/20 p-4 rounded-xl border border-emerald-200 dark:border-emerald-800/60 space-y-2.5 text-xs">
                 <div className="font-bold text-emerald-900 dark:text-emerald-300 pb-2 border-b border-emerald-200 dark:border-emerald-800/80 flex items-center justify-between">
-                  <span>شرح حقوق و مزایا</span>
+                  <span>حقوق و مزایا</span>
                   <span className="text-[10px] text-emerald-700 dark:text-emerald-400 font-medium">مبالغ به تومان</span>
                 </div>
                 <div className="space-y-2 text-slate-700 dark:text-slate-300">
                   <div className="flex justify-between items-center">
-                    <span>حقوق پایه ماهانه:</span>
+                    <span>حقوق پایه:</span>
                     <span className="font-bold text-slate-900 dark:text-white">{formatToman(selectedSlip.baseSalaryToman)}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span>کمک‌هزینه مسکن مصوب:</span>
+                    <span>حق مسکن:</span>
                     <span className="font-bold text-slate-900 dark:text-white">{formatToman(selectedSlip.housingAllowanceToman)}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span>بن خواربار و اقلام مصرفی:</span>
+                    <span>بن خواربار:</span>
                     <span className="font-bold text-slate-900 dark:text-white">{formatToman(selectedSlip.bonKargariToman)}</span>
                   </div>
                   {selectedSlip.seniorityBaseToman ? (
                     <div className="flex justify-between items-center">
-                      <span>پایه سنوات (سابقه ≥۱ سال):</span>
+                      <span>پایه سنوات:</span>
                       <span className="font-bold text-slate-900 dark:text-white">{formatToman(selectedSlip.seniorityBaseToman)}</span>
                     </div>
                   ) : null}
                   {selectedSlip.marriageAllowanceToman ? (
                     <div className="flex justify-between items-center">
-                      <span>حق تأهل (ماده ۸۶ مکرر):</span>
+                      <span>حق تأهل:</span>
                       <span className="font-bold text-slate-900 dark:text-white">{formatToman(selectedSlip.marriageAllowanceToman)}</span>
                     </div>
                   ) : null}
                   <div className="flex justify-between items-center">
-                    <span>حق اولاد (ماده ۸۶ تامین اجتماعی):</span>
+                    <span>حق اولاد:</span>
                     <span className="font-bold text-slate-900 dark:text-white">{formatToman(selectedSlip.childAllowanceToman)}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span>کمک‌هزینه ایاب و ذهاب:</span>
+                    <span>حق ایاب و ذهاب:</span>
                     <span className="font-bold text-slate-900 dark:text-white">{formatToman(selectedSlip.commuteAllowanceToman)}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span>
-                      فوق‌العاده اضافه‌کاری
-                      {selectedSlip.overtimeHours ? ` (${toPersianDigits(selectedSlip.overtimeHours)} ساعت × ۱.۴)` : ''}:
+                      اضافه‌کاری
+                      {selectedSlip.overtimeHours ? ` (${toPersianDigits(selectedSlip.overtimeHours)} ساعت)` : ''}:
                     </span>
                     <span className="font-bold text-slate-900 dark:text-white">{formatToman(selectedSlip.overtimePayToman)}</span>
                   </div>
                 </div>
                 <div className="pt-2.5 border-t border-emerald-200 dark:border-emerald-800 flex justify-between font-black text-emerald-900 dark:text-emerald-300 text-sm">
-                  <span>جمع ناخالص حقوق و مزایا:</span>
+                  <span>جمع ناخالص:</span>
                   <span>{formatToman(selectedSlip.grossSalaryToman)}</span>
                 </div>
               </div>
@@ -1168,34 +1168,34 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
               <div className="bg-rose-50/40 dark:bg-rose-950/20 p-4 rounded-xl border border-rose-200 dark:border-rose-800/60 space-y-2.5 text-xs flex flex-col justify-between">
                 <div className="space-y-2.5">
                   <div className="font-bold text-rose-900 dark:text-rose-300 pb-2 border-b border-rose-200 dark:border-rose-800/80 flex items-center justify-between">
-                    <span>کسورات قانونی ماهانه</span>
+                    <span>کسورات قانونی</span>
                     <span className="text-[10px] text-rose-700 dark:text-rose-400 font-medium">مبالغ به تومان</span>
                   </div>
                   <div className="space-y-2 text-slate-700 dark:text-slate-300">
                     <div className="flex justify-between items-center">
                       <div>
-                        <span>بیمه تامین اجتماعی (۷٪ سهم کارگر):</span>
-                        <div className="text-[10px] text-slate-400">معافیت حق اولاد لحاظ گردیده</div>
+                        <span>بیمه سهم کارگر (۷٪):</span>
+                        <div className="text-[10px] text-slate-400">با کسر معافیت حق اولاد</div>
                       </div>
                       <span className="font-bold text-blue-700 dark:text-blue-400">{formatToman(selectedSlip.ssoInsurance7PctToman)}</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <div>
-                        <span>مالیات بر درآمد حقوق:</span>
-                        <div className="text-[10px] text-slate-400">محاسبه بر مبنای جدول پله‌ای</div>
+                        <span>مالیات بر درآمد:</span>
+                        <div className="text-[10px] text-slate-400">نرخ پله‌ای</div>
                       </div>
                       <span className="font-bold text-purple-700 dark:text-purple-400">{formatToman(selectedSlip.incomeTaxToman)}</span>
                     </div>
                     {selectedSlip.otherDeductionsToman ? (
                       <div className="flex justify-between items-center">
-                        <span>سایر کسورات قانونی:</span>
+                        <span>سایر کسورات:</span>
                         <span className="font-bold text-slate-900 dark:text-white">{formatToman(selectedSlip.otherDeductionsToman)}</span>
                       </div>
                     ) : null}
                   </div>
                 </div>
                 <div className="pt-2.5 border-t border-rose-200 dark:border-rose-800 flex justify-between font-black text-rose-900 dark:text-rose-300 text-sm">
-                  <span>جمع کل کسورات قانونی:</span>
+                  <span>جمع کسورات:</span>
                   <span>{formatToman(selectedSlip.ssoInsurance7PctToman + selectedSlip.incomeTaxToman + (selectedSlip.otherDeductionsToman || 0))}</span>
                 </div>
               </div>
@@ -1204,20 +1204,20 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
             {/* Legal Reserves Box */}
             <div className="bg-slate-50 dark:bg-slate-800/40 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700/80 text-xs text-slate-600 dark:text-slate-400 flex flex-col sm:flex-row sm:justify-between gap-2">
               <div>
-                <span className="font-bold text-slate-800 dark:text-slate-200">ذخیره سنوات پایان خدمت ماهانه: </span>
+                <span className="font-bold text-slate-800 dark:text-slate-200">ذخیره سنوات: </span>
                 <span className="font-semibold">{formatToman(selectedSlip.sanavatReserveToman)}</span>
               </div>
               <div>
-                <span className="font-bold text-slate-800 dark:text-slate-200">ذخیره عیدی و پاداش: </span>
+                <span className="font-bold text-slate-800 dark:text-slate-200">ذخیره عیدی: </span>
                 <span className="font-semibold">{formatToman(selectedSlip.eidiReserveToman)}</span>
-                <span className="text-[10px] text-slate-400 block sm:inline"> (سقف ۹۰ روز حداقل دستمزد قانون کار)</span>
+                <span className="text-[10px] text-slate-400 block sm:inline"> (سقف قانونی)</span>
               </div>
             </div>
 
             {/* Net Salary Highlight Line */}
             <div className="bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-4 sm:p-5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-md">
               <div>
-                <div className="text-xs text-emerald-100 font-medium">مبلغ خالص قابل واریز به حساب بانکی کارمند:</div>
+                <div className="text-xs text-emerald-100 font-medium">خالص پرداختی:</div>
                 <div className="text-xl sm:text-2xl font-black mt-0.5">{formatToman(selectedSlip.netSalaryToman)}</div>
                 {selectedSlip.statutoryYearNote && (
                   <div className="text-[10px] text-emerald-200 mt-1 max-w-lg leading-relaxed">
@@ -1232,7 +1232,7 @@ export const PayrollModule: React.FC<PayrollModuleProps> = ({
                 className="px-4 py-2.5 bg-white text-emerald-800 hover:bg-emerald-50 font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-sm transition-colors cursor-pointer shrink-0"
               >
                 <Printer className="w-4 h-4" />
-                <span>چاپ فیش رسمی</span>
+                <span>چاپ فیش</span>
               </button>
             </div>
           </div>

@@ -34,11 +34,11 @@ export const MobileDepartments: React.FC<MobileDepartmentsProps> = ({
   const [selectedDeptDetail, setSelectedDeptDetail] = useState<HoldingDepartment | null>(null);
 
   const categories = [
-    { id: 'ALL', label: 'همه دپارتمان‌ها (۱۰ واحد)' },
+    { id: 'ALL', label: 'همه دپارتمان‌ها (۱۰)' },
     { id: 'PRODUCTION', label: 'تولید و کیفیت' },
     { id: 'COMMERCIAL', label: 'مارکتینگ و فروش' },
-    { id: 'OPERATIONS', label: 'زنجیره تامین و R&D' },
-    { id: 'CORPORATE', label: 'ستاد مرکزی و IT' },
+    { id: 'OPERATIONS', label: 'زنجیره تامین و تحقیق و توسعه' },
+    { id: 'CORPORATE', label: 'ستاد مرکزی و فناوری اطلاعات' },
   ];
 
   const filteredDepts = departments.filter((d) => {
@@ -82,12 +82,12 @@ export const MobileDepartments: React.FC<MobileDepartmentsProps> = ({
                 دپارتمان‌های هلدینگ سیلانه سبز
               </h1>
               <p className="text-[11px] text-emerald-200 mt-0.5">
-                پوشش جامع ۱۰ دپارتمان تخصصی، کارخانجات اشتهارد و ستاد مرکزی
+                ۱۰ دپارتمان تخصصی کارخانجات اشتهارد و ستاد مرکزی
               </p>
             </div>
           </div>
           <div className="text-left bg-white/10 px-3 py-1.5 rounded-xl border border-white/20">
-            <span className="text-[10px] text-emerald-200 block">پرسنل هلدینگ:</span>
+            <span className="text-[10px] text-emerald-200 block">کل کارمندان:</span>
             <span className="text-xs font-black text-white font-mono">{totalPersonnel.toLocaleString('fa-IR')} نفر</span>
           </div>
         </div>
@@ -97,11 +97,11 @@ export const MobileDepartments: React.FC<MobileDepartmentsProps> = ({
       <div className="grid grid-cols-3 gap-2 text-center">
         <div className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm">
           <span className="text-[10px] text-slate-500 block">واحدهای فعال:</span>
-          <span className="text-sm font-black text-emerald-700 font-mono">۱۰ دپارتمان</span>
+          <span className="text-sm font-black text-emerald-700 font-mono">۱۰ واحد</span>
         </div>
         <div className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm">
           <span className="text-[10px] text-slate-500 block">موقعیت‌های باز:</span>
-          <span className="text-sm font-black text-amber-600 font-mono">{totalVacancies} ردیف شغل</span>
+          <span className="text-sm font-black text-amber-600 font-mono">{totalVacancies} ردیف شغلی</span>
         </div>
         <div className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm">
           <span className="text-[10px] text-slate-500 block">بهره‌وری تجمیعی:</span>
@@ -116,7 +116,7 @@ export const MobileDepartments: React.FC<MobileDepartmentsProps> = ({
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="جستجوی نام دپارتمان، برند (دافی، کامان، میس‌ویک) یا نام مدیر..."
+          placeholder="جستجوی دپارتمان، برند یا نام مدیر..."
           className="w-full pr-9 pl-3 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-slate-800"
         />
       </div>
@@ -184,14 +184,14 @@ export const MobileDepartments: React.FC<MobileDepartmentsProps> = ({
                   {dept.headcount} نفر
                 </span>
                 <span className="text-[10px] text-amber-600 font-semibold block">
-                  {dept.vacancies} ردیف باز
+                  {dept.vacancies} ردیف شغلی باز
                 </span>
               </div>
             </div>
 
             {/* Brands Tags */}
             <div>
-              <span className="text-[10px] text-slate-400 block mb-1">برندها و پروژه‌های تحت پوشش:</span>
+              <span className="text-[10px] text-slate-400 block mb-1">برندها و پروژه‌ها:</span>
               <div className="flex flex-wrap gap-1">
                 {dept.brands.map((b, idx) => (
                   <span
@@ -222,7 +222,7 @@ export const MobileDepartments: React.FC<MobileDepartmentsProps> = ({
                   className="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-sm"
                 >
                   <Sparkles className="w-3 h-3" />
-                  <span>تولید آگهی با AI</span>
+                  <span>تولید آگهی شغلی</span>
                 </button>
               )}
             </div>

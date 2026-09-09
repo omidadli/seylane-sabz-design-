@@ -134,7 +134,7 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
       showCloseButton={true}
       title={
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold text-text-3">پرونده الکترونیک پرسنل</span>
+          <span className="text-xs font-bold text-text-3">پرونده پرسنلی</span>
           <span className="text-xs text-text-3 font-mono">/</span>
           <span className="text-xs font-extrabold text-brand">
             کد پرسنلی: {toPersianDigits(employee.personnelCode || '—')}
@@ -166,10 +166,10 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
                     }`}
                   >
                     {employee.status === 'ACTIVE'
-                      ? 'شاغل فعال'
+                      ? 'فعال'
                       : employee.status === 'RESIGNED'
                       ? 'قطع همکاری'
-                      : 'در مرخصی'}
+                      : 'مرخصی'}
                   </span>
                 </div>
 
@@ -189,7 +189,7 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
                 type="button"
                 onClick={() => onEdit(employee)}
                 className="px-3 py-1.5 rounded-[10px] bg-surface-1 hover:bg-surface-2 border border-border-default text-text-1 text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer"
-                title="ویرایش مشخصات"
+                title="ویرایش"
               >
                 <Edit className="w-3.5 h-3.5 text-text-2" />
                 <span>ویرایش</span>
@@ -200,7 +200,7 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
                   type="button"
                   onClick={() => onDelete(employee)}
                   className="px-3 py-1.5 rounded-[10px] bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/30 dark:hover:bg-rose-900/40 border border-rose-200 dark:border-rose-800/40 text-rose-700 dark:text-rose-300 text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer"
-                  title="حذف پرونده (با بررسی سوابق قانونی)"
+                  title="حذف"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>حذف</span>
@@ -301,7 +301,7 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
                 <div className="flex items-center justify-between text-xs text-text-3 font-semibold mb-1">
                   <div className="flex items-center gap-1.5">
                     <Mail className="w-3.5 h-3.5 text-text-3" />
-                    <span>رایانامه سازمانی</span>
+                    <span>ایمیل سازمانی</span>
                   </div>
                   {employee.email && (
                     <a
@@ -321,7 +321,7 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
               <div className="bg-surface-1 p-3.5 rounded-[12px] border border-border-default shadow-2xs">
                 <div className="flex items-center gap-1.5 text-xs text-text-3 font-semibold mb-1">
                   <Users className="w-3.5 h-3.5 text-text-3" />
-                  <span>وضعیت تاهل و اولاد (ماده ۸۶)</span>
+                  <span>وضعیت تاهل و اولاد</span>
                 </div>
                 <div className="text-sm font-bold text-text-1">
                   {employee.maritalStatus === 'MARRIED' ? 'متاهل' : 'مجرد'}
@@ -334,10 +334,10 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
               <div className="bg-surface-1 p-3.5 rounded-[12px] border border-border-default shadow-2xs md:col-span-2">
                 <div className="flex items-center gap-1.5 text-xs text-text-3 font-semibold mb-1">
                   <CreditCard className="w-3.5 h-3.5 text-text-3" />
-                  <span>شماره شبا بانکی جهت واریز حقوق</span>
+                  <span>شماره شبا</span>
                 </div>
                 <div className="text-xs font-mono font-bold text-text-1" dir="ltr">
-                  {employee.bankIban ? toPersianDigits(employee.bankIban) : '— (ثبت‌نشده)'}
+                  {employee.bankIban ? toPersianDigits(employee.bankIban) : 'ثبت نشده'}
                 </div>
               </div>
 
@@ -346,7 +346,7 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="text-xs text-text-3 font-semibold mb-1">
-                      سابقه پرداخت حق بیمه تامین اجتماعی (روز)
+                      سابقه بیمه تامین اجتماعی (روز)
                     </div>
                     <div className="text-sm font-black text-text-1">
                       {toPersianDigits(employee.ssoContributionDays ?? 0)} روز
@@ -358,11 +358,11 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
                   </div>
                   {(employee.ssoContributionDays ?? 0) >= 720 ? (
                     <span className="text-[11px] font-bold px-2.5 py-1 rounded-[8px] bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/40">
-                      احراز شرط سابقه حق اولاد (ماده ۸۶)
+                      مشمول حق اولاد
                     </span>
                   ) : (
                     <span className="text-[11px] font-bold px-2.5 py-1 rounded-[8px] bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/40">
-                      زیر حد نصاب ۷۲۰ روزه ماده ۸۶
+                      کمتر از ۷۲۰ روز سابقه
                     </span>
                   )}
                 </div>
@@ -376,7 +376,7 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
               <div className="bg-surface-1 p-3.5 rounded-[12px] border border-border-default shadow-2xs">
-                <div className="text-xs text-text-3 font-semibold mb-1">واحد سازمانی</div>
+                <div className="text-xs text-text-3 font-semibold mb-1">دپارتمان</div>
                 <div className="text-sm font-bold text-text-1">{employee.department}</div>
               </div>
 
@@ -393,7 +393,7 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
               </div>
 
               <div className="bg-surface-1 p-3.5 rounded-[12px] border border-border-default shadow-2xs">
-                <div className="text-xs text-text-3 font-semibold mb-1">طول مدت خدمت در هلدینگ</div>
+                <div className="text-xs text-text-3 font-semibold mb-1">مدت خدمت</div>
                 <div className="text-sm font-black text-brand">
                   {calculateTenure(employee.hireDateJalali)}
                 </div>
@@ -411,7 +411,7 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
                   </div>
                 ) : (
                   <div className="text-xs text-text-3 font-medium">
-                    مستقیماً زیر نظر هیئت‌مدیره / مدیر ارشد هلدینگ
+                    مستقیماً زیر نظر مدیریت ارشد
                   </div>
                 )}
               </div>
@@ -422,7 +422,7 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5 text-xs font-bold text-text-1">
                   <FileText className="w-4 h-4 text-brand" />
-                  <span>اسناد و مدارک بارگذاری‌شده پرسنل</span>
+                  <span>اسناد و مدارک</span>
                 </div>
                 <span className="text-[11px] font-bold text-text-3">
                   {toPersianDigits(employee.documents?.length || 0)} مدرک
@@ -443,7 +443,7 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
                         <div>
                           <div className="text-xs font-bold text-text-1">{doc.title}</div>
                           <div className="text-[10px] text-text-3">
-                            تاریخ آپلود: {toPersianDigits(doc.uploadedAtJalali)}
+                            تاریخ بارگذاری: {toPersianDigits(doc.uploadedAtJalali)}
                           </div>
                         </div>
                       </div>
@@ -454,7 +454,7 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
                         onClick={(e) => {
                           if (doc.fileUrl === '#') {
                             e.preventDefault();
-                            alert('پیش‌نمایش سند در محیط نسخه آزمایشی در دسترس است.');
+                            alert('امکان مشاهده سند وجود ندارد.');
                           }
                         }}
                         className="p-1.5 rounded-[8px] text-text-3 hover:text-brand hover:bg-surface-1 transition-colors cursor-pointer"
@@ -467,7 +467,7 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
                 </div>
               ) : (
                 <div className="text-center py-6 border border-dashed border-border-default rounded-[10px] text-xs text-text-3">
-                  سندی تاکنون برای این پرسنل ثبت نشده است.
+                  سندی ثبت نشده است.
                 </div>
               )}
             </div>
@@ -507,7 +507,7 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
               </div>
 
               <div className="bg-surface-1 p-3.5 rounded-[12px] border border-border-default shadow-2xs">
-                <div className="text-xs text-text-3 font-semibold mb-1">حق اولاد (ماده ۸۶)</div>
+                <div className="text-xs text-text-3 font-semibold mb-1">حق اولاد</div>
                 <div className="text-sm font-bold text-text-1">
                   {canSeeSensitive
                     ? employee.childrenCount > 0
@@ -523,10 +523,10 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
               <div className="flex items-center justify-between pb-3 border-b border-border-default">
                 <div className="flex items-center gap-1.5 text-xs font-bold text-text-1">
                   <Clock className="w-4 h-4 text-brand" />
-                  <span>تاریخچه تعدیل حقوق و احکام کارگزینی</span>
+                  <span>سوابق احکام و تغییر حقوق</span>
                 </div>
                 <span className="text-[11px] font-bold text-text-3">
-                  ثبت رسمی تغییرات
+                  تغییرات شغلی
                 </span>
               </div>
 
@@ -552,10 +552,10 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
                             }`}
                           >
                             {hist.changeType === 'PROMOTION'
-                              ? 'ارتقای سازمانی'
+                              ? 'ارتقا'
                               : hist.changeType === 'SALARY_CHANGE'
-                              ? 'تعدیل حقوق پایه'
-                              : 'انتقال واحد سازمانی'}
+                              ? 'تغییر حقوق'
+                              : 'تغییر دپارتمان'}
                           </span>
                         </div>
 
@@ -579,10 +579,10 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
               ) : (
                 <div className="p-5 text-center border border-dashed border-border-default rounded-[10px] space-y-1">
                   <div className="text-xs font-bold text-text-2">
-                    احکام جدیدی پس از استخدام ثبت نشده است.
+                    حکم جدیدی ثبت نشده است.
                   </div>
                   <div className="text-[11px] text-text-3">
-                    قرارداد اولیه همکار از تاریخ {toPersianDigits(employee.hireDateJalali)} ملاک محاسبه فعلی است.
+                    قرارداد اولیه از تاریخ {toPersianDigits(employee.hireDateJalali)} ملاک محاسبه است.
                   </div>
                 </div>
               )}
@@ -600,7 +600,7 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
                   {toPersianDigits(26)} روز کاری
                 </div>
                 <div className="text-[11px] text-text-3">
-                  موضوع ماده ۶۴ قانون کار ج.ا.ا (۲.۱۶ روز کاری به ازای هر ماه خدمت)
+                  ماده ۶۴ قانون کار (۲.۱۶ روز در ماه)
                 </div>
               </div>
 
@@ -610,7 +610,7 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
                   {toPersianDigits(44)} ساعت
                 </div>
                 <div className="text-[11px] text-text-3">
-                  موضوع ماده ۵۱ قانون کار با رعایت شیفت‌های شنبه تا چهارشنبه
+                  ماده ۵۱ قانون کار
                 </div>
               </div>
             </div>
@@ -618,10 +618,10 @@ export const EmployeeProfileDrawer: React.FC<EmployeeProfileDrawerProps> = ({
             <div className="bg-surface-1 p-4 rounded-[14px] border border-border-default shadow-2xs space-y-2.5">
               <div className="text-xs font-bold text-text-1 flex items-center gap-1.5">
                 <Award className="w-4 h-4 text-brand" />
-                <span>ارزیابی دوره‌ای و شاخص‌های شایستگی</span>
+                <span>ارزیابی عملکرد</span>
               </div>
               <p className="text-xs text-text-2 leading-relaxed">
-                ارزیابی عملکرد بر اساس مدل شایستگی‌های هلدینگ سیلانه سبز شامل اهداف فردی (OKRs)، تعهد سازمانی و همکاری تیمی به صورت فصلی انجام می‌شود. جزئیات اهداف اختصاصی این پرسنل در ماژول «ارزیابی عملکرد و پاداش» در دسترس است.
+                ارزیابی عملکرد شامل اهداف فصلی، شاخص‌های کلیدی و بازخورد دوره‌ای است. جزئیات در بخش ارزیابی عملکرد قابل مشاهده است.
               </p>
             </div>
           </div>

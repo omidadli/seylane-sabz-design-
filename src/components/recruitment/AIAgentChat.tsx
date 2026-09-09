@@ -41,19 +41,19 @@ export const AIAgentChat: React.FC<AIAgentChatProps> = ({
     {
       id: 'msg-init',
       sender: 'agent',
-      text: `سلام و احترام. من دستیار هوشمند استخدام و سنجش شایستگی‌های سازمان شما (مبتنی بر مدل Gemini با قابلیت فراخوانی ابزارها) هستم.
+      text: `سلام. من دستیار هوشمند استخدام هستم.
 
-من می‌توانم درخواست‌های استخدامی شما را به زبان فارسی تحلیل و اجرا کنم:
-• تحلیل شرح شغل و استخراج معیارهای وزنی
-• ارزیابی و امتیازدهی به رزومه‌ها با ذکر نقل‌قول مستقیم از متن رزومه
-• دسته‌بندی کارجویان: اولویت مصاحبه (+۷) / نیازمند بررسی (۵-۷) / رد اولیه (<۵)
-• مقایسه تطبیقی نامزدها در قالب جدول و نمودار چندمحوره رادار
-• نگارش پیش‌نویس محترمانه ایمیل دعوت یا رد (هرگز ارسال خودکار نمی‌شود، فقط برای تایید شماست)`,
+امکانات در دسترس شما:
+• تحلیل شرح شغل و استخراج معیارهای ارزیابی
+• ارزیابی و امتیازدهی به رزومه‌ها بر اساس شواهد متنی
+• دسته‌بندی کارجویان: اولویت مصاحبه (بالای ۷) / نیازمند بررسی (۵-۷) / رد اولیه (زیر ۵)
+• مقایسه کارجویان در قالب جدول و نمودار
+• تنظیم پیش‌نویس ایمیل دعوت یا عدم پذیرش (ارسال فقط با تایید شما انجام می‌شود)`,
       timestamp: '۱۰:۳۰',
       suggestedActions: [
-        'مقایسه کاندیداهای موقعیت شغلی فعال در نمودار رادار',
-        'تحلیل موقعیت شغلی و استخراج معیارهای وزنی',
-        'تنظیم پیش‌نویس ایمیل دعوت به مصاحبه',
+        'مقایسه کارجویان این شغل',
+        'تحلیل شغل و استخراج معیارها',
+        'تنظیم پیش‌نویس ایمیل مصاحبه',
       ],
     },
   ]);
@@ -160,13 +160,13 @@ export const AIAgentChat: React.FC<AIAgentChatProps> = ({
           </div>
           <div>
             <div className="font-extrabold text-sm flex items-center gap-2">
-              <span>دستیار هوشمند ارزیابی استخدام (Gemini AI Agent)</span>
+              <span>دستیار استخدام (Gemini)</span>
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/20 text-white font-medium">
-                Function Calling Active
+                فعال
               </span>
             </div>
             <div className="text-xs text-white/80">
-              ارزیابی رزومه، امتیازدهی، مقایسه رادار و تنظیم پیش‌نویس ایمیل
+              ارزیابی رزومه، امتیازدهی، مقایسه و تنظیم پیش‌نویس ایمیل
             </div>
           </div>
         </div>
@@ -177,7 +177,7 @@ export const AIAgentChat: React.FC<AIAgentChatProps> = ({
           className="text-xs flex items-center gap-1.5 px-3 py-1.5 rounded-[10px] bg-white/15 hover:bg-white/25 transition-colors text-white font-medium cursor-pointer"
         >
           <RefreshCw className="w-3.5 h-3.5" />
-          <span>تحلیل مجدد شاخص‌ها</span>
+          <span>تحلیل مجدد معیارها</span>
         </button>
       </div>
 
@@ -186,9 +186,9 @@ export const AIAgentChat: React.FC<AIAgentChatProps> = ({
         <div className="flex items-start sm:items-center gap-2">
           <Info className="w-4 h-4 text-brand shrink-0 mt-0.5 sm:mt-0" />
           <div className="text-[11px] leading-relaxed">
-            <span className="font-bold text-text-1 ml-1">شفافیت منبع ارزیابی:</span>
+            <span className="font-bold text-text-1 ml-1">نحوه ارزیابی:</span>
             <span>
-              ارزیابی‌ها با مدل Gemini یا موتور اعتبارسنجی محلی سامانه انجام می‌شود. کلیه امتیازها مشورتی بوده، تصمیم‌گیری نهایی همواره بر عهده مدیران منابع انسانی است و هیچ ایمیلی بدون تایید دستی ارسال نمی‌گردد.
+              ارزیابی‌ها با مدل Gemini یا الگوریتم‌های محلی انجام می‌شود. امتیازها جنبه پیشنهادی دارند و ارسال ایمیل‌ها صرفاً پس از تایید شما انجام می‌پذیرد.
             </span>
           </div>
         </div>
@@ -231,7 +231,7 @@ export const AIAgentChat: React.FC<AIAgentChatProps> = ({
                     <div className="mt-3 pt-2 border-t border-amber-500/30 flex items-start gap-1.5 text-[10.5px] font-bold text-amber-800 dark:text-amber-300 bg-amber-500/10 p-2 rounded-[8px]">
                       <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-600 dark:text-amber-400" />
                       <span>
-                        موتور محلی (بدون Gemini): به دلیل عدم اتصال مدل زبانی، محاسبات بر پایه الگوریتم‌های ساخت‌یافته محلی سامانه انجام شده است.
+                        ارزیابی محلی: محاسبات بر پایه الگوریتم‌های محلی سامانه انجام شد.
                       </span>
                     </div>
                   )}
@@ -251,7 +251,7 @@ export const AIAgentChat: React.FC<AIAgentChatProps> = ({
                   <div className="bg-surface-1 rounded-[14px] p-4 border border-border-default shadow-2xs">
                     <div className="flex items-center gap-2 mb-3 pb-2 border-b border-border-default text-xs font-bold text-text-1">
                       <RadarIcon className="w-4 h-4 text-brand" />
-                      <span>نمودار رادار مقایسه تطبیقی شایستگی‌ها:</span>
+                      <span>نمودار مقایسه شایستگی‌ها:</span>
                     </div>
 
                     <div className="h-72 w-full">
@@ -292,7 +292,7 @@ export const AIAgentChat: React.FC<AIAgentChatProps> = ({
                       <table className="w-full text-right text-[11px]">
                         <thead className="bg-surface-2 text-text-2 border-b border-border-default">
                           <tr>
-                            <th className="p-2 font-bold">شاخص ارزیابی</th>
+                            <th className="p-2 font-bold">معیار ارزیابی</th>
                             {msg.radarData.candidates.map((c) => (
                               <th key={c} className="p-2 font-bold text-center">
                                 {c}
@@ -323,10 +323,10 @@ export const AIAgentChat: React.FC<AIAgentChatProps> = ({
                     <div className="flex items-center justify-between text-xs pb-2 border-b border-warning/20">
                       <div className="flex items-center gap-1.5 font-bold text-text-1">
                         <Mail className="w-4 h-4 text-warning" />
-                        <span>پیش‌نویس ایمیل سازمانی (آماده بررسی و تایید مدیر)</span>
+                        <span>پیش‌نویس ایمیل (آماده تایید)</span>
                       </div>
                       <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-warning-soft text-warning border border-warning/30">
-                        پیش‌نویس تاییدنشده
+                        پیش‌نویس
                       </span>
                     </div>
 
@@ -348,7 +348,7 @@ export const AIAgentChat: React.FC<AIAgentChatProps> = ({
                     <div className="flex items-center justify-between pt-1 text-xs">
                       <div className="flex items-center gap-1 text-[11px] text-warning font-medium">
                         <AlertTriangle className="w-3.5 h-3.5 text-warning shrink-0" />
-                        <span>ارسال ایمیل فقط با کلیک روی تایید انجام می‌شود.</span>
+                        <span>ارسال ایمیل تنها با تایید شما انجام می‌شود.</span>
                       </div>
 
                       <button
@@ -364,7 +364,7 @@ export const AIAgentChat: React.FC<AIAgentChatProps> = ({
                         <CheckCircle className="w-3.5 h-3.5" />
                         <span>
                           {approvedDraftIds.includes(msg.id)
-                            ? 'تایید و در کارتابل ارسال ثبت شد'
+                            ? 'تایید شد'
                             : 'تایید پیش‌نویس'}
                         </span>
                       </button>
@@ -403,7 +403,7 @@ export const AIAgentChat: React.FC<AIAgentChatProps> = ({
               <span className="w-2 h-2 rounded-full bg-brand animate-pulse [animation-delay:200ms]" />
               <span className="w-2 h-2 rounded-full bg-brand animate-pulse [animation-delay:400ms]" />
             </div>
-            <span className="text-xs text-text-3 mr-1">دستیار Gemini در حال پردازش و استخراج پاسخ...</span>
+            <span className="text-xs text-text-3 mr-1">دستیار در حال پردازش پاسخ...</span>
           </div>
         )}
 
@@ -423,7 +423,7 @@ export const AIAgentChat: React.FC<AIAgentChatProps> = ({
             type="text"
             value={inputPrompt}
             onChange={(e) => setInputPrompt(e.target.value)}
-            placeholder="دستور یا پرسش خود را به فارسی بنویسید (مثلاً: کارجویان برتر را با هم مقایسه کن)..."
+            placeholder="پرسش یا درخواست خود را بنویسید (مثال: کارجویان برتر را مقایسه کن)..."
             className="flex-1 px-4 py-2.5 bg-surface-2 border border-border-default rounded-[10px] text-xs text-text-1 placeholder:text-text-3 focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand transition-all font-sans"
           />
 

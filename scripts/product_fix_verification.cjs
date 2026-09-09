@@ -397,7 +397,9 @@ async function run() {
       saveCandidateResult: true,
     });
     assert(ev.status === 200, `evaluation failed: ${ev.status}`);
-    assert(ev.data.aiAvailable === false, 'fallback evaluation must be labeled aiAvailable:false');
+    if (!process.env.GEMINI_API_KEY) {
+      assert(ev.data.aiAvailable === false, 'fallback evaluation must be labeled aiAvailable:false');
+    }
     assert(typeof ev.data.overallScore === 'number', 'no score produced');
 
     // Now HIRED succeeds AND creates employee + onboarding checklist (REC-02)

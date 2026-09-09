@@ -34,21 +34,21 @@ interface HeaderProps {
 const roleOptions: { key: UserRole; shortLabel: string; fullLabel: string; desc: string }[] = [
   {
     key: UserRole.HR_DIRECTOR,
-    shortLabel: 'مدیر ارشد HR',
-    fullLabel: 'مدیر ارشد منابع انسانی',
-    desc: 'دسترسی نامحدود مالی، حقوق و تنظیمات',
+    shortLabel: 'مدیر منابع انسانی',
+    fullLabel: 'مدیر منابع انسانی',
+    desc: 'دسترسی کامل به حقوق و تنظیمات',
   },
   {
     key: UserRole.DEPT_MANAGER,
-    shortLabel: 'مدیر واحد',
-    fullLabel: 'مدیر دپارتمان / واحد',
-    desc: 'تأیید تردد، مرخصی و ارزیابی شایستگی',
+    shortLabel: 'مدیر دپارتمان',
+    fullLabel: 'مدیر دپارتمان',
+    desc: 'تأیید تردد، مرخصی و ارزیابی عملکرد',
   },
   {
     key: UserRole.EMPLOYEE,
-    shortLabel: 'همکار / پرسنل',
-    fullLabel: 'همکار سازمانی',
-    desc: 'مشاهده فیش، سوابق شخصی و درخواست‌ها',
+    shortLabel: 'کارمند',
+    fullLabel: 'کارمند',
+    desc: 'مشاهده فیش حقوق و ثبت درخواست‌ها',
   },
 ];
 
@@ -97,7 +97,7 @@ export const Header: React.FC<HeaderProps> = ({
               type="button"
               onClick={onToggleMobileSidebar}
               className="p-2 rounded-[10px] text-text-2 hover:text-text-1 hover:bg-surface-2 lg:hidden cursor-pointer transition-colors"
-              aria-label="منوی ماژول‌های سامانه"
+              aria-label="منوی سامانه"
             >
               <Menu className="w-5 h-5" />
             </button>
@@ -138,12 +138,12 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={onOpenCommandPalette}
-              aria-label="جستجوی سریع در سامانه با کلید میانبر کنترل K"
+              aria-label="جستجو در سامانه با کلید میانبر"
               className="w-full flex items-center justify-between px-3.5 py-1.5 rounded-[10px] bg-surface-2 hover:bg-surface-3 border border-border-default text-text-3 hover:text-text-2 text-xs font-medium transition-all group cursor-pointer shadow-2xs"
             >
               <div className="flex items-center gap-2 truncate">
                 <Search className="w-3.5 h-3.5 text-text-3 group-hover:text-brand transition-colors shrink-0" aria-hidden="true" />
-                <span className="truncate">جستجو در پرسنل، احکام، فیش‌ها...</span>
+                <span className="truncate">جستجو در پرسنل، احکام، فیش حقوق...</span>
               </div>
               <div className="flex items-center gap-1 shrink-0 mr-2" aria-hidden="true">
                 <kbd className="px-1.5 py-0.5 text-[10px] font-bold text-text-2 bg-surface-1 rounded-[6px] border border-border-default shadow-2xs">
@@ -159,7 +159,7 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Jalali "Today" Date Chip */}
           <div
             className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-[10px] bg-surface-2 border border-border-default text-[11px] text-text-2 font-bold select-none"
-            title="تقویم هجری خورشیدی رسمی ایران"
+            title="تقویم هجری خورشیدی"
             aria-label={`تاریخ امروز: ${jalaliDateStr}`}
           >
             <Calendar className="w-3.5 h-3.5 text-brand shrink-0" aria-hidden="true" />
@@ -171,9 +171,9 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={onOpenVoiceAssistant}
-              aria-label="دستیار هوشمند صوتی منابع انسانی (مدل هوش مصنوعی Gemini)"
+              aria-label="دستیار صوتی (Gemini)"
               className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-[10px] bg-brand-soft hover:opacity-90 text-brand border border-brand/20 text-xs font-bold transition-all cursor-pointer"
-              title="دستیار هوشمند صوتی منابع انسانی (Gemini)"
+              title="دستیار صوتی (Gemini)"
             >
               <Bot className="w-3.5 h-3.5 text-brand" aria-hidden="true" />
               <span className="hidden 2xl:inline">دستیار صوتی</span>
@@ -185,12 +185,12 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={onOpenJobGenerator}
-              aria-label="تولید هوشمند شرح شغل با هوش مصنوعی"
+              aria-label="ایجاد آگهی شغلی"
               className="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-[10px] bg-surface-2 hover:bg-surface-3 text-text-1 border border-border-default text-xs font-bold transition-all cursor-pointer"
-              title="تولید هوشمند شرح شغل با AI"
+              title="ایجاد آگهی شغلی"
             >
               <FilePlus2 className="w-3.5 h-3.5 text-text-3" aria-hidden="true" />
-              <span>آگهی شغل</span>
+              <span>آگهی شغلی</span>
             </button>
           )}
 
@@ -202,8 +202,8 @@ export const Header: React.FC<HeaderProps> = ({
               aria-haspopup="dialog"
               aria-expanded={isNotifOpen}
               className="relative p-2 rounded-[10px] text-text-2 hover:text-text-1 hover:bg-surface-2 transition-colors cursor-pointer border border-transparent hover:border-border-default"
-              title="اعلان‌های سیستمی و کارخانه"
-              aria-label="اعلان‌های سیستمی (۳ اعلان خوانده نشده)"
+              title="اعلان‌ها"
+              aria-label="اعلان‌ها (۳ مورد خوانده نشده)"
             >
               <Bell className="w-4 h-4" aria-hidden="true" />
               {/* Notification Indicator Dot */}
@@ -215,7 +215,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <div className="flex items-center justify-between pb-2 mb-2 border-b border-border-default">
                   <div className="flex items-center gap-1.5">
                     <Bell className="w-4 h-4 text-brand" />
-                    <span className="text-xs font-black text-text-1">اعلان‌های سامانه کارا</span>
+                    <span className="text-xs font-black text-text-1">اعلان‌ها</span>
                   </div>
                   <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-[6px] bg-brand-soft text-brand">
                     ۳ مورد جدید
@@ -228,7 +228,7 @@ export const Header: React.FC<HeaderProps> = ({
                     <div>
                       <div className="text-[11px] font-black text-text-1">تأیید تردد خط تولید کامان</div>
                       <div className="text-[10px] text-text-3 mt-0.5">
-                        شیفت صبح کارخانه اشتهارد با موفقیت بسته و تأیید شد.
+                        شیفت صبح کارخانه با موفقیت بسته و تأیید شد.
                       </div>
                     </div>
                   </div>
@@ -236,9 +236,9 @@ export const Header: React.FC<HeaderProps> = ({
                   <div className="p-2 rounded-[10px] bg-surface-2/80 border border-border-default flex items-start gap-2 text-right">
                     <Sparkles className="w-4 h-4 text-accent-blue shrink-0 mt-0.5" />
                     <div>
-                      <div className="text-[11px] font-black text-text-1">غربالگری هوشمند ۵ رزومه</div>
+                      <div className="text-[11px] font-black text-text-1">غربالگری ۵ رزومه</div>
                       <div className="text-[10px] text-text-3 mt-0.5">
-                        موقعیت کارشناس ارشد فرمولاسیون دافی بررسی و امتیازدهی شد.
+                        رزومه‌های موقعیت کارشناس ارشد بررسی شدند.
                       </div>
                     </div>
                   </div>
@@ -248,7 +248,7 @@ export const Header: React.FC<HeaderProps> = ({
                     <div>
                       <div className="text-[11px] font-black text-text-1">یادآوری قراردادهای آزمایشی</div>
                       <div className="text-[10px] text-text-3 mt-0.5">
-                        مهلت آزمایشی ۴ نفر از پرسنل اشتهارد در پایان هفته جاری خاتمه می‌یابد.
+                        دوره آزمایشی ۴ نفر از کارکنان کارخانه این هفته پایان می‌یابد.
                       </div>
                     </div>
                   </div>
@@ -256,7 +256,7 @@ export const Header: React.FC<HeaderProps> = ({
 
                 <div className="mt-2.5 pt-2 border-t border-border-default text-center">
                   <span className="text-[10px] text-text-3 font-medium">
-                    پایش لحظه‌ای هلدینگ سیلانه سبز
+                    سامانه منابع انسانی سیلانه سبز
                   </span>
                 </div>
               </div>

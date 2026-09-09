@@ -120,8 +120,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'action-voice',
-        title: 'گفتگوی صوتی هوشمند با دستیار منابع انسانی',
-        subtitle: 'پرسش درباره قوانین کار، تردد کارخانجات اشتهارد و گزارشات سریع',
+        title: 'گفتگوی صوتی با دستیار',
+        subtitle: 'پرسش درباره قوانین کار، تردد کارخانه و گزارش‌ها',
         category: 'اقدامات سریع و هوش مصنوعی',
         icon: Mic,
         badge: 'دستیار صوتی',
@@ -132,11 +132,11 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'action-job-generator',
-        title: 'تولید هوشمند شرح شغل و آگهی استخدام',
-        subtitle: 'نگارش مارک‌داون رسمی و پست شبکه‌های اجتماعی برای هلدینگ سیلانه سبز',
+        title: 'ایجاد آگهی شغلی',
+        subtitle: 'تنظیم متن آگهی و شرایط احراز شغل',
         category: 'اقدامات سریع و هوش مصنوعی',
         icon: Sparkles,
-        badge: 'تولید محتوا',
+        badge: 'آگهی شغلی',
         action: () => {
           onClose();
           onOpenJobGenerator?.();
@@ -144,8 +144,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'action-criteria-matrix',
-        title: 'ماتریس شاخص‌ها و وزن‌دهی ارزیابی هوش مصنوعی',
-        subtitle: 'تنظیم معیارهای وتویی، حداقل نمرات و دستورالعمل مدیر برای استخدام',
+        title: 'ماتریس شاخص‌های ارزیابی',
+        subtitle: 'تنظیم وزن معیارها و حدنصاب قبولی',
         category: 'اقدامات سریع و هوش مصنوعی',
         icon: SlidersHorizontal,
         badge: 'ماتریس ارزیابی',
@@ -156,11 +156,11 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'action-hirevue-video',
-        title: 'استودیوی هوشمند مصاحبه ویدیویی (HireVue AI Studio)',
-        subtitle: 'مصاحبه غیرهمزمان، آزمون صلاحیت رفتاری و ارزیابی عادلانه بدون سوگیری',
+        title: 'مصاحبه ویدیویی',
+        subtitle: 'ثبت پاسخ‌های ویدیویی و ارزیابی شایستگی‌ها',
         category: 'اقدامات سریع و هوش مصنوعی',
         icon: Video,
-        badge: 'HireVue AI',
+        badge: 'مصاحبه',
         action: () => {
           onClose();
           onSelectModule('recruitment');
@@ -168,11 +168,11 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'action-eightfold-skills',
-        title: 'گراف مهارت‌ها و جابجایی داخلی استعدادها (Eightfold AI)',
-        subtitle: 'شناسایی مهارت‌های مجاور ۳۰ روزه و ترفیع کارمندان دافی، کامان، میس‌ویک و کاپوت',
+        title: 'گراف مهارت‌ها و ارتقای شغلی',
+        subtitle: 'تحلیل مهارت‌ها و فرصت‌های ارتقای درون‌سازمانی',
         category: 'اقدامات سریع و هوش مصنوعی',
         icon: Network,
-        badge: 'Eightfold AI',
+        badge: 'مهارت‌ها',
         action: () => {
           onClose();
           onSelectModule('recruitment');
@@ -180,11 +180,11 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'action-ziprecruiter-sourcing',
-        title: 'سورسینگ هوشمند و انتشار همزمان آگهی (ZipRecruiter Smart)',
-        subtitle: 'شکار استعدادهای برتر، دعوت با ۱ کلیک و انتشار در جابینجا، جاب‌ویژن و لینکدین',
+        title: 'انتشار آگهی و جذب کارجو',
+        subtitle: 'انتشار آگهی در بسترهای کاریابی و دریافت رزومه‌ها',
         category: 'اقدامات سریع و هوش مصنوعی',
         icon: Zap,
-        badge: 'سورسینگ هوشمند',
+        badge: 'انتشار آگهی',
         action: () => {
           onClose();
           onSelectModule('recruitment');
@@ -194,8 +194,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       // Navigation Modules
       {
         id: 'nav-dashboard',
-        title: 'داشبورد اجرایی و پایش ۳۶۰ درجه',
-        subtitle: 'شاخص‌های کلیدی منابع انسانی، پایش خطوط تولید و آمار کارخانجات',
+        title: 'داشبورد اجرایی',
+        subtitle: 'شاخص‌های کلیدی منابع انسانی و وضعیت کارخانجات',
         category: 'بخش‌های اصلی سامانه',
         icon: Sparkles,
         action: () => {
@@ -205,8 +205,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'nav-ai-governance',
-        title: 'مدیریت و حاکمیت هوش مصنوعی (Gemini Bot Center)',
-        subtitle: 'پیکربندی فرهنگ سازمانی، پایپ‌لاین ارزیابی دپارتمان‌ها و رفتار بات',
+        title: 'مدیریت دستیار',
+        subtitle: 'تنظیم رفتار دستیار و سند فرهنگ سازمانی',
         category: 'بخش‌های اصلی سامانه',
         icon: Bot,
         badge: 'Gemini',
@@ -217,8 +217,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'nav-recruitment',
-        title: 'جذب و استخدام (کانبان و غربالگری هوشمند)',
-        subtitle: 'مدیریت رزومه‌ها، ارزیابی چندبعدی هوش مصنوعی و مصاحبه‌ها',
+        title: 'جذب و استخدام',
+        subtitle: 'مدیریت رزومه‌ها، ارزیابی کارجویان و مصاحبه‌ها',
         category: 'بخش‌های اصلی سامانه',
         icon: UserPlus,
         action: () => {
@@ -228,8 +228,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'nav-employees',
-        title: 'پرونده پرسنلی و چارت سازمانی',
-        subtitle: 'مشخصات کارکنان، احکام کارگزینی، قراردادها و ساختار سازمانی برندها',
+        title: 'پرونده پرسنلی',
+        subtitle: 'اطلاعات کارکنان، احکام کارگزینی و چارت سازمانی',
         category: 'بخش‌های اصلی سامانه',
         icon: Users,
         action: () => {
@@ -239,8 +239,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'nav-attendance',
-        title: 'مدیریت تردد، مرخصی و شیفت‌های کاری',
-        subtitle: 'ثبت حضور و غیاب، مرخصی استحقاقی و تردد کارخانجات اشتهارد',
+        title: 'تردد و مرخصی',
+        subtitle: 'ثبت تردد، سهمیه مرخصی و شیفت‌های کارخانه',
         category: 'بخش‌های اصلی سامانه',
         icon: Clock,
         action: () => {
@@ -250,8 +250,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'nav-payroll',
-        title: 'حقوق، دستمزد و فیش‌های پرسنلی',
-        subtitle: 'محاسبه حقوق بر مبنای بخشنامه سال، بیمه ۷٪ تأمین اجتماعی و مالیات پله‌ای',
+        title: 'حقوق و دستمزد',
+        subtitle: 'محاسبه حقوق، بیمه ۷٪، مالیات و فیش حقوق',
         category: 'بخش‌های اصلی سامانه',
         icon: Wallet,
         badge: 'محرمانه',
@@ -262,8 +262,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'nav-performance',
-        title: 'مدیریت عملکرد و اهداف سازمانی (OKR)',
-        subtitle: 'تعریف اهداف فصلی، شاخص‌های کلیدی عملکرد و ارزیابی شایستگی',
+        title: 'ارزیابی عملکرد (OKR)',
+        subtitle: 'اهداف فصلی، شایستگی‌ها و ارزیابی دوره‌ای',
         category: 'بخش‌های اصلی سامانه',
         icon: TrendingUp,
         action: () => {
@@ -273,8 +273,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'nav-training',
-        title: 'آموزش سازمانی و ماتریس مهارت‌ها',
-        subtitle: 'دوره‌های تخصصی، استانداردهای GMP و توسعه فردی همکاران',
+        title: 'آموزش کارکنان',
+        subtitle: 'دوره‌های آموزشی، استانداردهای GMP و ماتریس مهارت',
         category: 'بخش‌های اصلی سامانه',
         icon: GraduationCap,
         action: () => {
@@ -284,8 +284,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'nav-checklists',
-        title: 'چک‌لیست‌های ان‌بوردینگ و آف‌بوردینگ',
-        subtitle: 'فرآیند ورود نیروهای جدید و تسویه‌حساب مرحله‌ای',
+        title: 'چک‌لیست استخدام و تسویه',
+        subtitle: 'مراحل ورود، تحویل اقلام و تسویه حساب',
         category: 'بخش‌های اصلی سامانه',
         icon: CheckSquare,
         action: () => {
@@ -295,8 +295,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'nav-analytics',
-        title: 'داشبورد تحلیل‌ها و شاخص‌های کلیدی (HR KPI)',
-        subtitle: 'نرخ گردش، زمان پر شدن موقعیت‌ها، هزینه‌های جذب و گزارشات آماری',
+        title: 'گزارش‌ها و تحلیل‌ها',
+        subtitle: 'نرخ خروج، زمان جذب و هزینه‌های پرسنلی',
         category: 'بخش‌های اصلی سامانه',
         icon: BarChart3,
         action: () => {
@@ -308,8 +308,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       // Brands & Facilities
       {
         id: 'brand-dafi',
-        title: 'برند دافی (Dafi)',
-        subtitle: 'تولید تخصصی دستمال مرطوب و مراقبت از پوست • ۴۲۰ پرسنل فعال',
+        title: 'برند دافی',
+        subtitle: 'تولید دستمال مرطوب و بهداشتی • ۴۲۰ نفر پرسنل',
         category: 'برندها و مراکز',
         icon: Building2,
         badge: 'برند هلدینگ',
@@ -320,8 +320,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'brand-comeon',
-        title: 'برند کامان (Come\'on)',
-        subtitle: 'محصولات لوکس مراقبت پوستی و آرایشی • ۳۸۰ پرسنل فعال',
+        title: 'برند کامان',
+        subtitle: 'محصولات مراقبت پوست و مو • ۳۸۰ نفر پرسنل',
         category: 'برندها و مراکز',
         icon: Building2,
         badge: 'برند هلدینگ',
@@ -332,8 +332,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'brand-factory',
-        title: 'مجموعه کارخانجات تولیدی اشتهارد',
-        subtitle: 'خطوط تولید دافی و کامان، سالن‌های تمیز (Clean Room) و انبار مرکزی',
+        title: 'کارخانجات اشتهارد',
+        subtitle: 'خطوط تولید، اتاق تمیز و انبار مرکزی',
         category: 'برندها و مراکز',
         icon: Building2,
         badge: 'سایت تولیدی',
@@ -365,8 +365,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     candidates.forEach((cand) => {
       items.push({
         id: `cand-${cand.id}`,
-        title: `${cand.fullName} — ${cand.jobTitle || 'متقاضی شغلی'}`,
-        subtitle: `امتیاز کل هوش مصنوعی: ${toPersianDigits(cand.overallScore ?? '—')} از ۱۰ • تاریخ ثبت: ${toPersianDigits(cand.appliedAtJalali || 'امروز')}`,
+        title: `${cand.fullName} — ${cand.jobTitle || 'کارجو'}`,
+        subtitle: `امتیاز کل: ${toPersianDigits(cand.overallScore ?? '—')} از ۱۰ • تاریخ ثبت: ${toPersianDigits(cand.appliedAtJalali || 'امروز')}`,
         category: 'کارجویان و رزومه‌ها',
         icon: Users,
         badge:
@@ -487,8 +487,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                 setSelectedIndex(0);
               }}
               onKeyDown={handleKeyDown}
-              placeholder="جستجو در تمام ماژول‌ها، پرسنل، احکام، فیش‌ها و اقدامات هوش مصنوعی..."
-              aria-label="جستجوی سریع در سامانه"
+              placeholder="جستجو در بخش‌ها، پرسنل، احکام، فیش حقوق..."
+              aria-label="جستجو در سامانه"
               className="w-full bg-transparent border-none text-text-1 text-sm font-semibold placeholder:text-text-3 focus:outline-none"
             />
             {query && (
@@ -510,7 +510,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           <div ref={listRef} className="overflow-y-auto p-2 flex-1 divide-y divide-border-default/40">
             {filteredItems.length === 0 ? (
               <div className="p-10 text-center text-text-3 text-xs">
-                موردی برای جستجوی شما یافت نشد. می‌توانید عناوینی مانند «استخدام»، «حقوق»، «مرخصی»، یا نام کارجویان را جستجو کنید.
+                موردی یافت نشد. می‌توانید عناوینی مانند «استخدام»، «حقوق»، «مرخصی» یا نام کارجو را جستجو کنید.
               </div>
             ) : (
               groupedItems.map((group) => (
@@ -606,7 +606,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                 <kbd className="px-1.5 py-0.5 bg-surface-1 border border-border-default rounded-[6px] text-[10px] font-bold text-text-2">
                   Enter
                 </kbd>
-                <span>انتخاب فوری</span>
+                <span>انتخاب</span>
               </span>
             </div>
             <div className="text-brand font-bold text-xs">

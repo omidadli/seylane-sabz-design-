@@ -126,11 +126,11 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
 
   // National ID validation
   if (!normalizedNationalId) {
-    errors.nationalId = 'کد ملی ۱۰ رقمی الزامی است';
+    errors.nationalId = 'کد ملی الزامی است';
   } else if (!/^\d{10}$/.test(normalizedNationalId)) {
-    errors.nationalId = 'کد ملی باید دقیقاً ۱۰ رقم عددی باشد';
+    errors.nationalId = 'کد ملی باید ۱۰ رقم باشد';
   } else if (!isValidIranianNationalId(normalizedNationalId)) {
-    errors.nationalId = 'کد ملی نامعتبر است (رقم کنترلی با الگوریتم ثبت احوال تطابق ندارد)';
+    errors.nationalId = 'کد ملی نامعتبر است';
   } else {
     // Uniqueness check
     const isDuplicate = existingEmployees.some(
@@ -139,7 +139,7 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
         toEnglishDigits(e.nationalId || '').trim() === normalizedNationalId
     );
     if (isDuplicate) {
-      errors.nationalId = 'این کد ملی قبلاً برای پرسنل دیگری در سامانه ثبت شده است';
+      errors.nationalId = 'این کد ملی قبلاً ثبت شده است';
     }
   }
 
@@ -147,15 +147,15 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
   if (!normalizedPhone) {
     errors.phone = 'شماره موبایل الزامی است';
   } else if (!/^09\d{9}$/.test(normalizedPhone)) {
-    errors.phone = 'شماره موبایل نامعتبر است (قالب معتبر: ۰۹۱۲۳۴۵۶۷۸۹)';
+    errors.phone = 'شماره موبایل نامعتبر است';
   }
 
   // Email validation
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!normalizedEmail) {
-    errors.email = 'رایانامه سازمانی الزامی است';
+    errors.email = 'ایمیل سازمانی الزامی است';
   } else if (!EMAIL_RE.test(normalizedEmail)) {
-    errors.email = 'قالب رایانامه نامعتبر است (مثال: name@company.ir)';
+    errors.email = 'ایمیل نامعتبر است';
   } else {
     // Uniqueness check
     const isDuplicate = existingEmployees.some(
@@ -164,7 +164,7 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
         (e.email || '').trim().toLowerCase() === normalizedEmail
     );
     if (isDuplicate) {
-      errors.email = 'این رایانامه سازمانی قبلاً ثبت شده است';
+      errors.email = 'این ایمیل قبلاً ثبت شده است';
     }
   }
 
@@ -210,7 +210,7 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
     });
 
     if (Object.keys(errors).length > 0) {
-      setFormError('لطفاً خطاهای مشخص‌شده در فرم را تصحیح فرمایید.');
+      setFormError('لطفاً خطاهای فرم را اصلاح کنید.');
       return;
     }
 
@@ -240,7 +240,7 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
       onClose();
     } catch (err: any) {
       console.error(err);
-      setFormError(err?.message || 'خطا در ثبت اطلاعات پرسنل');
+      setFormError(err?.message || 'خطا در ثبت اطلاعات');
     } finally {
       setIsSubmitting(false);
     }
@@ -256,15 +256,15 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
           <User className="w-5 h-5 text-brand" />
           <span>
             {isEditMode
-              ? `ویرایش پرونده پرسنلی «${initialEmployee?.fullName}»`
-              : 'ثبت پرونده پرسنلی همکار جدید'}
+              ? `ویرایش پرسنل: ${initialEmployee?.fullName}`
+              : 'ثبت همکار جدید'}
           </span>
         </div>
       }
       description={
         isEditMode
-          ? 'بروزرسانی مشخصات هویتی، شغلی و اطلاعات حقوق و دستمزد بر اساس مستندات کارگزینی'
-          : 'اطلاعات هویتی با کد ملی اعتبارسنجی شده و پس از ثبت، در چارت سازمانی و سیستم حضور و غیاب درج می‌گردد.'
+          ? 'ویرایش مشخصات فردی، شغلی و حقوقی همکار'
+          : 'مشخصات همکار در چارت سازمانی و بخش تردد ثبت می‌شود.'
       }
     >
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -279,7 +279,7 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
         <div className="space-y-3">
           <div className="text-xs font-black text-text-1 flex items-center gap-1.5 pb-1 border-b border-border-default">
             <Shield className="w-3.5 h-3.5 text-brand" />
-            <span>اطلاعات فردی و هویتی (ثبت احوال)</span>
+            <span>اطلاعات فردی و هویتی</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
@@ -321,7 +321,7 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
             {/* National ID */}
             <div>
               <label className="block text-xs font-bold text-text-1 mb-1">
-                کد ملی (۱۰ رقم بدون خط تیره) <span className="text-danger">*</span>
+                کد ملی <span className="text-danger">*</span>
               </label>
               <input
                 type="text"
@@ -350,7 +350,7 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
                 value={personnelCode}
                 onChange={(e) => setPersonnelCode(e.target.value)}
                 onBlur={() => handleBlur('personnelCode')}
-                placeholder="۱۰۰۴۵ (اختیاری)"
+                placeholder="اختیاری"
                 className={`w-full px-3 py-2 text-xs bg-surface-2 border rounded-[10px] text-text-1 font-mono focus:bg-surface-1 focus:outline-none focus:ring-2 focus:ring-brand/30 ${
                   touched.personnelCode && errors.personnelCode
                     ? 'border-danger focus:border-danger'
@@ -368,7 +368,7 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
         <div className="space-y-3 pt-2">
           <div className="text-xs font-black text-text-1 flex items-center gap-1.5 pb-1 border-b border-border-default">
             <Phone className="w-3.5 h-3.5 text-brand" />
-            <span>اطلاعات تماس و ارتباطات سازمانی</span>
+            <span>اطلاعات تماس</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
@@ -399,7 +399,7 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
             {/* Email */}
             <div>
               <label className="block text-xs font-bold text-text-1 mb-1">
-                رایانامه سازمانی <span className="text-danger">*</span>
+                ایمیل سازمانی <span className="text-danger">*</span>
               </label>
               <input
                 type="email"
@@ -426,14 +426,14 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
         <div className="space-y-3 pt-2">
           <div className="text-xs font-black text-text-1 flex items-center gap-1.5 pb-1 border-b border-border-default">
             <Building className="w-3.5 h-3.5 text-brand" />
-            <span>جایگاه سازمانی و قرارداد</span>
+            <span>جایگاه شغلی</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             {/* Department */}
             <div>
               <label className="block text-xs font-bold text-text-1 mb-1">
-                واحد سازمانی <span className="text-danger">*</span>
+                دپارتمان <span className="text-danger">*</span>
               </label>
               <select
                 value={department}
@@ -451,7 +451,7 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
             {/* Job Title */}
             <div>
               <label className="block text-xs font-bold text-text-1 mb-1">
-                عنوان و سمت شغلی <span className="text-danger">*</span>
+                عنوان شغلی <span className="text-danger">*</span>
               </label>
               <input
                 type="text"
@@ -459,7 +459,7 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
                 value={jobTitle}
                 onChange={(e) => setJobTitle(e.target.value)}
                 onBlur={() => handleBlur('jobTitle')}
-                placeholder="مثلاً: کارشناس ارشد دواپس"
+                placeholder="مثلاً: کارشناس ارشد فروش"
                 className={`w-full px-3 py-2 text-xs bg-surface-2 border rounded-[10px] text-text-1 focus:bg-surface-1 focus:outline-none focus:ring-2 focus:ring-brand/30 ${
                   touched.jobTitle && errors.jobTitle
                     ? 'border-danger focus:border-danger'
@@ -488,7 +488,7 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
                 onChange={(e) => setDirectManagerId(e.target.value)}
                 className="w-full px-3 py-2 text-xs bg-surface-2 border border-border-default rounded-[10px] text-text-1 focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand"
               >
-                <option value="">فاقد مدیر مستقیم (هیئت‌مدیره / مدیر ارشد)</option>
+                <option value="">فاقد مدیر مستقیم</option>
                 {existingEmployees
                   .filter((e) => e.id !== initialEmployee?.id)
                   .map((e) => (
@@ -505,14 +505,14 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
         <div className="space-y-3 pt-2">
           <div className="text-xs font-black text-text-1 flex items-center gap-1.5 pb-1 border-b border-border-default">
             <DollarSign className="w-3.5 h-3.5 text-brand" />
-            <span>حقوق پایه و الزامات ماده ۸۶ قانون تامین اجتماعی</span>
+            <span>حقوق و مزایا</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             {/* Base Salary */}
             <div>
               <label className="block text-xs font-bold text-text-1 mb-1">
-                حقوق پایه ماهانه (تومان) <span className="text-danger">*</span>
+                حقوق پایه (تومان) <span className="text-danger">*</span>
               </label>
               <input
                 type="number"
@@ -544,7 +544,7 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
             {/* Children count */}
             <div>
               <label className="block text-xs font-bold text-text-1 mb-1">
-                تعداد فرزندان مشمول ماده ۸۶
+                تعداد فرزندان مشمول
               </label>
               <input
                 type="number"
@@ -558,22 +558,22 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
 
             {/* Status (especially relevant in Edit mode) */}
             <div>
-              <label className="block text-xs font-bold text-text-1 mb-1">وضعیت همکاری</label>
+              <label className="block text-xs font-bold text-text-1 mb-1">وضعیت</label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as any)}
                 className="w-full px-3 py-2 text-xs bg-surface-2 border border-border-default rounded-[10px] text-text-1 focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand font-bold"
               >
-                <option value="ACTIVE">شاغل فعال</option>
-                <option value="ON_LEAVE">در مرخصی</option>
-                <option value="RESIGNED">قطع همکاری (استعفا / پایان قرارداد)</option>
+                <option value="ACTIVE">فعال</option>
+                <option value="ON_LEAVE">مرخصی</option>
+                <option value="RESIGNED">قطع همکاری</option>
               </select>
             </div>
 
             {/* Bank IBAN */}
             <div className="sm:col-span-2">
               <label className="block text-xs font-bold text-text-1 mb-1">
-                شماره شبا بانکی (جهت تسویه حقوق)
+                شماره شبا
               </label>
               <input
                 type="text"
@@ -606,7 +606,7 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
             {isSubmitting ? (
               <span>در حال ذخیره...</span>
             ) : (
-              <span>{isEditMode ? 'ذخیره تغییرات پرونده' : 'ثبت قطعی همکار جدید'}</span>
+              <span>{isEditMode ? 'ذخیره تغییرات' : 'ثبت همکار'}</span>
             )}
           </button>
         </div>

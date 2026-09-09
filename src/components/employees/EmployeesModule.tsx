@@ -387,13 +387,13 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-surface-1 p-4 rounded-[16px] border border-border-default shadow-2xs">
         <div>
           <h2 className="text-sm font-black text-text-1 flex items-center gap-2">
-            <span>پرونده پرسنلی و چارت سازمانی</span>
+            <span>اطلاعات پرسنلی و چارت سازمانی</span>
             <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-brand-soft text-brand border border-brand/20">
-              {toPersianDigits(localEmployees.length)} همکار
+              {toPersianDigits(localEmployees.length)} نفر
             </span>
           </h2>
           <p className="text-xs text-text-3 mt-0.5 font-medium">
-            مدیریت مشخصات هویتی، قراردادها، شماره ملی، تاریخ استخدام و ساختار درختی هلدینگ سیلانه سبز
+            اطلاعات هویتی، قراردادها، سوابق و ساختار سازمانی
           </p>
         </div>
 
@@ -410,7 +410,7 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
               }`}
             >
               <List className="w-3.5 h-3.5" />
-              <span>جدول پرسنلی</span>
+              <span>فهرست پرسنل</span>
             </button>
 
             <button
@@ -423,7 +423,7 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
               }`}
             >
               <Network className="w-3.5 h-3.5" />
-              <span>چارت سلسله‌مراتبی</span>
+              <span>چارت سازمانی</span>
             </button>
           </div>
 
@@ -438,7 +438,7 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
               className="px-4 py-2 bg-brand hover:bg-brand-hover text-white rounded-[10px] text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer active:scale-95"
             >
               <Plus className="w-4 h-4" />
-              <span>ثبت همکار جدید</span>
+              <span>افزودن پرسنل</span>
             </button>
           )}
         </div>
@@ -456,7 +456,7 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="جستجو بر اساس نام، کدملی، کد پرسنلی، واحد، سمت یا شماره تماس..."
+                  placeholder="جستجوی نام، کدملی، کد پرسنلی، دپارتمان یا سمت..."
                   className="w-full pr-9 pl-8 py-2 text-xs bg-surface-2 text-text-1 border border-border-default rounded-[10px] focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand font-sans placeholder:text-text-3"
                 />
                 {searchTerm && (
@@ -491,12 +491,12 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
                     {revealAllSensitive ? (
                       <>
                         <EyeOff className="w-3.5 h-3.5 text-brand" />
-                        <span>مخفی‌سازی داده‌های مالی</span>
+                        <span>مخفی‌سازی اطلاعات محرمانه</span>
                       </>
                     ) : (
                       <>
                         <Eye className="w-3.5 h-3.5" />
-                        <span>نمایش داده‌های محرمانه</span>
+                        <span>نمایش اطلاعات محرمانه</span>
                       </>
                     )}
                   </button>
@@ -517,7 +517,7 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
                   {isColumnMenuOpen && (
                     <div className="absolute left-0 mt-1 w-52 bg-surface-1 rounded-[12px] border border-border-default shadow-xl p-3 z-30 space-y-1.5 text-right animate-in fade-in zoom-in-95 duration-150">
                       <div className="text-[11px] font-black text-text-3 pb-1 border-b border-border-default">
-                        نمایش / پنهان‌سازی ستون‌های جدول
+                        انتخاب ستون‌ها
                       </div>
                       <label className="flex items-center gap-2 text-xs text-text-2 cursor-pointer py-1">
                         <input
@@ -552,7 +552,7 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
                           }
                           className="rounded text-brand focus:ring-brand"
                         />
-                        <span>واحد سازمانی</span>
+                        <span>دپارتمان</span>
                       </label>
                       <label className="flex items-center gap-2 text-xs text-text-2 cursor-pointer py-1">
                         <input
@@ -585,7 +585,7 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
                           }
                           className="rounded text-brand focus:ring-brand"
                         />
-                        <span>اولاد و تاهل</span>
+                        <span>وضعیت تاهل و اولاد</span>
                       </label>
                       {canSeeSensitive && (
                         <label className="flex items-center gap-2 text-xs text-text-2 cursor-pointer py-1">
@@ -653,7 +653,7 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
                     : 'bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300'
                 }`}
               >
-                شاغل فعال
+                فعال
               </button>
 
               <button
@@ -667,7 +667,7 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
                     : 'bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-950/40 dark:text-amber-300'
                 }`}
               >
-                در مرخصی
+                مرخصی
               </button>
 
               <button
@@ -712,7 +712,7 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
                     : 'bg-surface-2 text-text-2 hover:bg-surface-2/80 border border-border-default'
                 }`}
               >
-                دارای اولاد (ماده ۸۶)
+                دارای اولاد
               </button>
 
               {/* Clear filters action */}
@@ -723,7 +723,7 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
                   className="mr-auto text-[11px] text-brand hover:underline font-bold flex items-center gap-1 cursor-pointer"
                 >
                   <X className="w-3 h-3" />
-                  <span>حذف تمام فیلترها</span>
+                  <span>پاک کردن فیلترها</span>
                 </button>
               )}
             </div>
@@ -736,7 +736,7 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
                 {/* Sticky Header */}
                 <thead className="sticky top-0 z-10 bg-surface-2 text-text-1 font-black border-b border-border-default shadow-xs select-none">
                   <tr>
-                    <th className="p-3.5 pr-4">همکار و رایانامه</th>
+                    <th className="p-3.5 pr-4">نام و ایمیل</th>
                     {visibleColumns.personnelCode && (
                       <th className="p-3.5">کد پرسنلی</th>
                     )}
@@ -744,7 +744,7 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
                       <th className="p-3.5">کد ملی</th>
                     )}
                     {visibleColumns.department && (
-                      <th className="p-3.5">واحد و سمت شغلی</th>
+                      <th className="p-3.5">دپارتمان و سمت</th>
                     )}
                     {visibleColumns.phone && <th className="p-3.5">شماره تماس</th>}
                     {visibleColumns.hireDate && <th className="p-3.5">تاریخ استخدام</th>}
@@ -863,7 +863,7 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
                             {emp.status === 'ACTIVE' ? (
                               <span className="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 text-[11px] font-bold inline-flex items-center gap-1">
                                 <UserCheck className="w-3 h-3" />
-                                <span>شاغل فعال</span>
+                                <span>فعال</span>
                               </span>
                             ) : emp.status === 'RESIGNED' ? (
                               <span className="px-2.5 py-1 rounded-full bg-rose-50 text-rose-800 border border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 text-[11px] font-bold inline-flex items-center gap-1">
@@ -872,7 +872,7 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
                               </span>
                             ) : (
                               <span className="px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 text-[11px] font-bold inline-flex items-center gap-1">
-                                <span>در مرخصی</span>
+                                <span>مرخصی</span>
                               </span>
                             )}
                           </td>
@@ -889,7 +889,7 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
                                 type="button"
                                 onClick={() => handleOpenProfile(emp)}
                                 className="p-1.5 rounded-[8px] text-text-3 hover:text-brand hover:bg-surface-2 transition-colors cursor-pointer"
-                                title="مشاهده پرونده کامل"
+                                title="مشاهده پرونده"
                               >
                                 <Eye className="w-3.5 h-3.5" />
                               </button>
@@ -908,7 +908,7 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
                                   type="button"
                                   onClick={() => handleDeleteEmployee(emp)}
                                   className="p-1.5 rounded-[8px] text-text-3 hover:text-danger hover:bg-danger-soft transition-colors cursor-pointer"
-                                  title="حذف پرونده (با بررسی مراجع قانونی)"
+                                  title="حذف پرونده"
                                 >
                                   <Trash2 className="w-3.5 h-3.5" />
                                 </button>
@@ -927,7 +927,7 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
                         className="p-10 text-center text-text-3 font-medium"
                       >
                         <Users className="w-8 h-8 mx-auto text-text-3/40 mb-2" />
-                        <p>هیچ همکاری مطابق با فیلترها یا عبارت جستجو یافت نشد.</p>
+                        <p>پرسنلی با این مشخصات یافت نشد.</p>
                       </td>
                     </tr>
                   )}
@@ -938,10 +938,10 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
             {/* Table Footer Stats */}
             <div className="p-3 bg-surface-2/40 border-t border-border-default flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-text-3 font-medium">
               <span>
-                نمایش {toPersianDigits(filtered.length)} از {toPersianDigits(localEmployees.length)} همکار سازمانی
+                نمایش {toPersianDigits(filtered.length)} از {toPersianDigits(localEmployees.length)} پرسنل
               </span>
               <span>
-                کلیک روی هر سطر جهت گشودن پرونده تفصیلی پرسنل
+                برای مشاهده جزئیات پرونده، روی سطر کلیک کنید.
               </span>
             </div>
           </div>
@@ -989,7 +989,7 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
           title={
             <div className="flex items-center gap-2 text-danger">
               <AlertTriangle className="w-5 h-5" />
-              <span>ممانعت قانونی از حذف پرونده پرسنلی</span>
+              <span>امکان حذف پرونده وجود ندارد</span>
             </div>
           }
         >
@@ -999,17 +999,17 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
                 {deleteBlockedInfo.message}
               </p>
               <p className="text-text-2">
-                همکار «{deleteBlockedInfo.employee.fullName}» دارای سوابق ثبتی (فیش حقوق، گزارش تردد یا احکام مرخصی) در هلدینگ سیلانه سبز است. طبق ماده قوانین کار و الزامات سازمان تامین اجتماعی، حذف کامل پرونده‌هایی که بار حقوقی دارند مجاز نبوده و موجب اخلال در گزارش‌های مالیاتی خواهد شد.
+                برای «{deleteBlockedInfo.employee.fullName}» سوابق ثبتی (فیش حقوق، تردد یا مرخصی) ثبت شده است. به دلیل وجود سوابق مالی و قانونی، امکان حذف پرونده وجود ندارد.
               </p>
             </div>
 
             <div className="bg-surface-2 p-3.5 rounded-[12px] border border-border-default text-xs space-y-2">
               <div className="font-bold text-text-1 flex items-center gap-1.5">
                 <Sparkles className="w-4 h-4 text-brand" />
-                <span>راهکار پیشنهادی:</span>
+                <span>پیشنهاد:</span>
               </div>
               <p className="text-text-2 leading-relaxed">
-                می‌توانید وضعیت پرسنل را به «قطع همکاری» تغییر دهید تا دسترسی‌های وی غیرفعال شده و در لیست حقوق جاری منظور نشود، در حالی که سوابق گذشته محفوظ بماند.
+                می‌توانید وضعیت را به «قطع همکاری» تغییر دهید تا دسترسی‌ها غیرفعال شود و سوابق گذشته محفوظ بماند.
               </p>
             </div>
 
@@ -1028,7 +1028,7 @@ export const EmployeesModule: React.FC<EmployeesModuleProps> = ({
                 className="px-4 py-2 text-xs font-bold bg-brand hover:bg-brand-hover text-white rounded-[10px] shadow-2xs cursor-pointer flex items-center gap-1.5"
               >
                 <UserX className="w-3.5 h-3.5" />
-                <span>تغییر وضعیت به قطع همکاری (Resigned)</span>
+                <span>تغییر به قطع همکاری</span>
               </button>
             </div>
           </div>

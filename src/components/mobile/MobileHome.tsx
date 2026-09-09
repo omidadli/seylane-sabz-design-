@@ -60,12 +60,12 @@ export const MobileHome: React.FC<MobileHomeProps> = ({
 
   // Brands of Seilaneh Sabz Holding
   const holdingBrands = [
-    { name: 'دافی (Dafi)', focus: 'مراقبت از پوست و دستمال‌های بهداشتی', badge: 'برند لیدر', icon: '🌿' },
-    { name: 'کامان (Comeon)', focus: 'فرمولاسیون سوئیس، بهداشت تخصصی پوست و مو', badge: 'نوآور', icon: '✨' },
-    { name: 'میس‌ویک (Misswake)', focus: 'سلامت دهان، دندان و خمیردندان‌های روزانه', badge: 'تخصصی', icon: '🦷' },
-    { name: 'کاپوت (Kapoot)', focus: 'سلامت خانواده و بهداشت فردی', badge: 'صادراتی', icon: '🛡️' },
-    { name: 'آمبرلا (Umbrella)', focus: 'مرطوب‌کننده، آبرسان عمیق و لوسیون بدن', badge: 'پرمصرف', icon: '💧' },
-    { name: 'زنون (Zenon)', focus: 'لاین اختصاصی محصولات بهداشتی آقایان', badge: 'مردانه', icon: '⚡' },
+    { name: 'دافی', focus: 'مراقبت از پوست و دستمال‌های بهداشتی', badge: 'برند اصلی', icon: '🌿' },
+    { name: 'کامان', focus: 'بهداشت تخصصی پوست و مو', badge: 'نوآور', icon: '✨' },
+    { name: 'میس‌ویک', focus: 'سلامت دهان و دندان', badge: 'تخصصی', icon: '🦷' },
+    { name: 'کاپوت', focus: 'سلامت خانواده و بهداشت فردی', badge: 'صادراتی', icon: '🛡️' },
+    { name: 'آمبرلا', focus: 'مرطوب‌کننده و لوسیون بدن', badge: 'پرمصرف', icon: '💧' },
+    { name: 'زنون', focus: 'محصولات بهداشتی آقایان', badge: 'مردانه', icon: '⚡' },
   ];
 
   return (
@@ -107,7 +107,7 @@ export const MobileHome: React.FC<MobileHomeProps> = ({
               <span className="text-base select-none">👋</span>
             </h1>
             <p className="text-xs text-emerald-100/85 leading-relaxed mt-1">
-              سامانه هوشمند منابع انسانی فعال است؛ پایش لحظه‌ای ۱۳۵۰ پرسنل ستاد و کارخانجات اشتهارد.
+              پایش لحظه‌ای وضعیت ۱۳۵۰ کارمند ستاد و کارخانجات اشتهارد.
             </p>
           </div>
 
@@ -125,14 +125,14 @@ export const MobileHome: React.FC<MobileHomeProps> = ({
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5">
                   <span className="text-xs font-black text-white">
-                    تماس صوتی مستقیم با دستیار AI
+                    گفتگوی صوتی با دستیار هوش مصنوعی
                   </span>
                   <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-400 text-slate-950 font-black">
                     هوشمند
                   </span>
                 </div>
                 <span className="text-[10px] text-emerald-200 block truncate mt-0.5">
-                  لمس کنید و بگویید: «یک آگهی برای مدیر برند دافی بنویس»
+                  مثال: «یک آگهی شغلی برای مدیر برند دافی بنویس»
                 </span>
               </div>
             </div>
@@ -166,10 +166,10 @@ export const MobileHome: React.FC<MobileHomeProps> = ({
             </div>
             <div className="mt-2">
               <span className="text-xs font-black text-text-1 block group-hover:text-brand transition-colors">
-                تولید آگهی و JD
+                تولید شرح شغل و آگهی
               </span>
               <span className="text-[10px] text-text-3 block mt-0.5 font-medium">
-                تنظیم هوشمند با AI
+                نگارش با هوش مصنوعی
               </span>
             </div>
           </button>
@@ -211,15 +211,15 @@ export const MobileHome: React.FC<MobileHomeProps> = ({
                 <Zap className="w-5 h-5" />
               </div>
               <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-[6px] bg-warning-soft text-warning">
-                تک‌لمسی
+                سریع
               </span>
             </div>
             <div className="mt-2">
               <span className="text-xs font-black text-text-1 block group-hover:text-brand transition-colors">
-                اتوماسیون‌های HR
+                وظایف خودکار
               </span>
               <span className="text-[10px] text-text-3 block mt-0.5 font-medium">
-                ۱۲۸ ساعت صرفه‌جویی
+                صرفه‌جویی در زمان
               </span>
             </div>
           </button>
@@ -241,7 +241,7 @@ export const MobileHome: React.FC<MobileHomeProps> = ({
             </div>
             <div className="mt-2">
               <span className="text-xs font-black text-text-1 block group-hover:text-brand transition-colors">
-                کارتابل اداری
+                کارتابل پرسنلی
               </span>
               <span className="text-[10px] text-text-3 block mt-0.5 font-medium">
                 فیش حقوق، تردد و مرخصی
@@ -261,7 +261,7 @@ export const MobileHome: React.FC<MobileHomeProps> = ({
             </h2>
           </div>
           <span className="text-[10px] font-bold text-text-3">
-            ورق بزنید ‹›
+            مشاهده بیشتر
           </span>
         </div>
 
@@ -306,7 +306,7 @@ export const MobileHome: React.FC<MobileHomeProps> = ({
           {/* Snap Card 3: Pending Leaves */}
           <div className="snap-start min-w-[155px] sm:min-w-[170px] shrink-0 p-3.5 rounded-[16px] bg-surface-1 border border-border-default shadow-2xs flex flex-col justify-between">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-bold text-text-3">مرخصی معوقه</span>
+              <span className="text-[11px] font-bold text-text-3">مرخصی‌های در انتظار</span>
               <span className="w-6 h-6 rounded-full bg-teal-50 dark:bg-teal-950/40 text-teal-600 flex items-center justify-center text-[10px]">
                 🏖️
               </span>
@@ -324,7 +324,7 @@ export const MobileHome: React.FC<MobileHomeProps> = ({
           {/* Snap Card 4: Turnover Rate */}
           <div className="snap-start min-w-[155px] sm:min-w-[170px] shrink-0 p-3.5 rounded-[16px] bg-surface-1 border border-border-default shadow-2xs flex flex-col justify-between">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-bold text-text-3">نرخ خروج (Turnover)</span>
+              <span className="text-[11px] font-bold text-text-3">نرخ خروج خدمت</span>
               <span className="w-6 h-6 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 flex items-center justify-center text-[10px]">
                 📉
               </span>
@@ -334,7 +334,7 @@ export const MobileHome: React.FC<MobileHomeProps> = ({
                 {metrics?.turnoverRatePct != null ? `${toPersianDigits(metrics.turnoverRatePct)}٪` : '—'}
               </div>
               <span className="text-[10px] text-brand font-bold mt-0.5 block">
-                زیر میانگین صنعت FMCG
+                پایین‌تر از میانگین صنعت FMCG
               </span>
             </div>
           </div>
@@ -342,7 +342,7 @@ export const MobileHome: React.FC<MobileHomeProps> = ({
           {/* Snap Card 5: Average Time to Hire */}
           <div className="snap-start min-w-[155px] sm:min-w-[170px] shrink-0 p-3.5 rounded-[16px] bg-surface-1 border border-border-default shadow-2xs flex flex-col justify-between">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-bold text-text-3">زمان استخدام</span>
+              <span className="text-[11px] font-bold text-text-3">میانگین زمان جذب</span>
               <span className="w-6 h-6 rounded-full bg-blue-50 dark:bg-blue-950/40 text-blue-600 flex items-center justify-center text-[10px]">
                 ⏱️
               </span>
@@ -365,7 +365,7 @@ export const MobileHome: React.FC<MobileHomeProps> = ({
           <div className="flex items-center gap-1.5">
             <Package className="w-4 h-4 text-brand" />
             <h2 id="brands-snap-heading" className="text-xs font-black text-text-1">
-              سبد برندهای ملی هلدینگ سیلانه سبز
+              برندهای هلدینگ سیلانه سبز
             </h2>
           </div>
           <span className="text-[10px] text-text-3 font-medium">
@@ -406,7 +406,7 @@ export const MobileHome: React.FC<MobileHomeProps> = ({
           <div className="flex items-center gap-1.5">
             <Zap className="w-4 h-4 text-warning" />
             <h2 className="text-xs font-black text-text-1">
-              اتوماسیون‌های سریع (یک لمس)
+              وظایف خودکار سریع
             </h2>
           </div>
           <button

@@ -621,13 +621,13 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
             </div>
             <div>
               <h3 className="text-base font-extrabold text-text-1 flex items-center gap-2">
-                <span>بارگذاری گروهی و غربالگری هوشمند رزومه‌ها</span>
+                <span>بارگذاری گروهی رزومه‌ها</span>
                 <span className="text-[10px] bg-brand-soft text-brand font-bold px-2 py-0.5 rounded-md border border-brand/20">
                   سیلانه سبز
                 </span>
               </h3>
               <p className="text-xs text-text-3 mt-0.5">
-                ورودی نامحدود فایل، استخراج بدون وقفه متن رزومه و تطبیق شایستگی‌ها با موتور محلی / AI
+                بارگذاری فایل‌ها، استخراج متن و سنجش تطابق با شاخص‌های شغلی
               </p>
             </div>
           </div>
@@ -673,7 +673,7 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
               <div className="min-w-0">
                 <div className="text-xs font-bold truncate">گام ۱: موقعیت شغلی</div>
                 <div className="text-[10px] text-text-3 truncate max-w-[140px] sm:max-w-[170px]">
-                  {selectedJob ? selectedJob.title : 'انتخاب جایگاه سازمانی'}
+                  {selectedJob ? selectedJob.title : 'انتخاب ردیف شغلی'}
                 </div>
               </div>
             </button>
@@ -709,7 +709,7 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
                 <div className="text-[10px] text-text-3 truncate">
                   {totalFiles > 0
                     ? `${toPersianDigits(successCount)} سالم از ${toPersianDigits(totalFiles)}`
-                    : 'ورودی نامحدود و ZIP'}
+                    : 'فایل‌های رزومه و ZIP'}
                 </div>
               </div>
             </button>
@@ -741,8 +741,8 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
                 ۳
               </div>
               <div className="min-w-0">
-                <div className="text-xs font-bold truncate">گام ۳: تأیید و شروع</div>
-                <div className="text-[10px] text-text-3 truncate">ارزیابی و رتبه‌بندی</div>
+                <div className="text-xs font-bold truncate">گام ۳: تأیید و ارزیابی</div>
+                <div className="text-[10px] text-text-3 truncate">بررسی نهایی</div>
               </div>
             </button>
           </div>
@@ -1298,7 +1298,7 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
                 <div className="flex items-start gap-2 text-text-3 bg-surface-1 p-2.5 rounded-[8px] border border-border-default">
                   <HelpCircle className="w-4 h-4 text-brand shrink-0 mt-0.5" />
                   <span>
-                    <strong>قانون صیانت از پایپ‌لاین:</strong> تمام رزومه‌ها در مرحله «بررسی اولیه» ثبت خواهند شد و برچسب‌های اولویت صرفاً پیشنهاد هوش مصنوعی بوده و تصمیم‌گیری نهایی نیازمند تایید شماست.
+                    <strong>توجه:</strong> رزومه‌ها در مرحله «بررسی اولیه» ثبت می‌شوند و اولویت‌ها جنبه پیشنهادی دارند.
                   </span>
                 </div>
               </div>
@@ -1343,7 +1343,7 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
                   <span className="flex items-center gap-2">
                     <CheckCircle2 className="w-5 h-5 text-brand" />
                     <span className="text-sm font-extrabold text-brand">
-                      ارزیابی و ثبت {toPersianDigits(processedStats.total)} رزومه واقعی برای «{selectedJob?.title}» با موفقیت تکمیل شد
+                      ارزیابی و ثبت {toPersianDigits(processedStats.total)} رزومه برای «{selectedJob?.title}» انجام شد
                     </span>
                   </span>
                 </div>
@@ -1396,10 +1396,10 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
                         onOpenStudio(selectedJobId);
                         onClose();
                       }}
-                      className="px-4 py-2 bg-brand hover:bg-brand-hover text-white rounded-[10px] text-xs font-black transition-all shadow-md flex items-center gap-1.5 cursor-pointer animate-pulse"
+                      className="px-4 py-2 bg-brand hover:bg-brand-hover text-white rounded-[10px] text-xs font-black transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
                     >
                       <Sparkles className="w-4 h-4" />
-                      <span>ورود به استودیوی غربالگری (Screening Studio)</span>
+                      <span>ورود به بخش غربالگری</span>
                     </button>
                   ) : (
                     <button
@@ -1407,7 +1407,7 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
                       onClick={onClose}
                       className="px-4 py-2 bg-brand hover:bg-brand-hover text-white rounded-[10px] text-xs font-bold transition-all cursor-pointer"
                     >
-                      مشاهده کارجویان در کانبان
+                      مشاهده در مرحله مصاحبه
                     </button>
                   )}
                 </div>
@@ -1451,7 +1451,7 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
                 onClick={() => setCurrentStep(2)}
                 className="px-5 py-2.5 text-xs font-bold bg-brand hover:bg-brand-hover text-white rounded-[10px] shadow-sm transition-colors flex items-center gap-1.5 cursor-pointer"
               >
-                <span>ادامه: بارگذاری فایل‌ها</span>
+                <span>بارگذاری فایل‌ها</span>
                 <ArrowLeft className="w-4 h-4" />
               </button>
             )}
@@ -1471,11 +1471,11 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
                   </>
                 ) : successCount > 0 ? (
                   <>
-                    <span>ادامه با {toPersianDigits(successCount)} رزومه سالم</span>
+                    <span>ادامه ({toPersianDigits(successCount)} رزومه)</span>
                     <ArrowLeft className="w-4 h-4" />
                   </>
                 ) : (
-                  <span>انتخاب فایل‌های معتبر</span>
+                  <span>انتخاب فایل</span>
                 )}
               </button>
             )}
@@ -1491,12 +1491,12 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
                 {isProcessing ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>در حال ارزیابی هوشمند...</span>
+                    <span>در حال ارزیابی...</span>
                   </>
                 ) : (
                   <>
                     <Sparkles className="w-4 h-4" />
-                    <span>شروع ارزیابی هوشمند ({toPersianDigits(successCount)} رزومه)</span>
+                    <span>شروع ارزیابی ({toPersianDigits(successCount)} رزومه)</span>
                   </>
                 )}
               </button>
