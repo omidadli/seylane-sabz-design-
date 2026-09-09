@@ -3,18 +3,19 @@ import {
   Sparkles,
   Copy,
   Check,
-  Share2,
   FileText,
-  Send,
   Loader2,
-  PlusCircle,
   Briefcase,
   Building2,
   BookmarkPlus,
-  HelpCircle,
   Coins,
   Gift,
   ArrowRight,
+  ArrowLeft,
+  Share2,
+  HelpCircle,
+  RotateCcw,
+  CheckCircle2,
 } from 'lucide-react';
 import { HoldingDepartment, JobAdGenerationRequest, JobAdGenerationResult } from '../../types';
 
@@ -31,17 +32,21 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
   onJobCreated,
   onBack,
 }) => {
+  // Current Wizard Step (1: Job & Dept, 2: Requirements & Tone, 3: Perks & Generation)
+  const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
+
+  // Form states
   const [jobTitle, setJobTitle] = useState('مدیر برند (Brand Manager) - لاین مراقبت پوست');
   const [selectedDeptId, setSelectedDeptId] = useState(
     initialDeptId || departments[2]?.id || departments[0]?.id || 'dept-mkt'
   );
 
-  // Sync when navigating here from a specific department (e.g. "تولید آگهی با AI")
   useEffect(() => {
     if (initialDeptId) {
       setSelectedDeptId(initialDeptId);
     }
   }, [initialDeptId]);
+
   const [seniority, setSeniority] = useState<'کارآموز' | 'کارشناس' | 'کارشناس ارشد' | 'سرپرست' | 'مدیر'>('مدیر');
   const [workType, setWorkType] = useState<'تمام‌وقت' | 'پاره‌وقت' | 'پروژه‌ای' | 'شیفتی کارخانه'>('تمام‌وقت');
   const [location, setLocation] = useState('تهران، خیابان ولیعصر (ستاد مرکزی هلدینگ)');
@@ -54,10 +59,11 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
   ]);
   const [tone, setTone] = useState<'حرفه‌ای و سازمانی' | 'پرانرژی و استارتاپی' | 'کاریزماتیک و الهام‌بخش'>('پرانرژی و استارتاپی');
 
+  // Execution states
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<JobAdGenerationResult | null>(null);
   const [activeTab, setActiveTab] = useState<'ad' | 'jd' | 'questions'>('ad');
-  const [copiedType, setCopiedType] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [savedSuccess, setSavedSuccess] = useState(false);
 
   const perksOptions = [
@@ -76,6 +82,13 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
     } else {
       setSelectedPerks([...selectedPerks, perk]);
     }
+  };
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 2800);
   };
 
   const handleGenerate = async () => {
@@ -106,17 +119,18 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
       });
       const data = await res.json();
       setResult(data);
+      showToast('شرح شغل و آگهی هوشمند با موفقیت تدوین شد.');
     } catch (err) {
       console.error('Job Ad generation error:', err);
+      showToast('خطا در ارتباط با موتور هوش مصنوعی.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleCopy = (text: string, type: string) => {
+  const handleCopy = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
-    setCopiedType(type);
-    setTimeout(() => setCopiedType(null), 2500);
+    showToast(`متن ${label} با موفقیت در کلیپ‌بورد کپی شد.`);
   };
 
   const handleSaveAsJob = () => {
@@ -131,7 +145,7 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
       description: result.jobDescriptionMarkdown,
       requirements: keySkills,
       status: 'ACTIVE',
-      createdAtJalali: '۱۴۰۳/۰۶/۱۵',
+      createdAtJalali: '۱۴۰۴/۰۶/۱۸',
       applicationsCount: 0,
       criteria: [
         { id: 'c1', title: 'شایستگی‌های تخصصی نقش', weight: 40 },
@@ -143,21 +157,36 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
     if (onJobCreated) {
       onJobCreated(newJob);
       setSavedSuccess(true);
-      setTimeout(() => setSavedSuccess(false), 3000);
+      showToast('موقعیت شغلی در بانک فرصت‌های هلدینگ ثبت شد.');
+      setTimeout(() => setSavedSuccess(false), 3500);
     }
   };
 
   return (
-    <div className="space-y-4 pb-12">
+    <div dir="rtl" className="space-y-4 pb-12 relative">
+      {/* Floating Toast Notification */}
+      {toastMessage && (
+        <div
+          id="toast-notification"
+          className="fixed top-16 inset-x-4 max-w-sm mx-auto z-50 p-3 rounded-[12px] bg-brand text-white shadow-xl flex items-center gap-2 animate-fadeIn border border-white/20 text-xs font-bold"
+        >
+          <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
+          <span className="flex-1">{toastMessage}</span>
+        </div>
+      )}
+
       {/* Header Banner */}
-      <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-800 text-white shadow-lg relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-32 h-32 bg-white/5 rounded-full -translate-x-10 -translate-y-10 blur-xl pointer-events-none" />
+      <div className="p-4 rounded-[18px] bg-gradient-to-r from-brand via-emerald-800 to-teal-900 text-white shadow-lg relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-32 h-32 bg-white/10 rounded-full -translate-x-10 -translate-y-10 blur-xl pointer-events-none" />
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             {onBack && (
               <button
+                type="button"
+                id="btn-jobad-back"
                 onClick={onBack}
-                className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center cursor-pointer hover:bg-white/25"
+                className="min-h-[44px] min-w-[44px] rounded-[10px] bg-white/15 flex items-center justify-center cursor-pointer hover:bg-white/25 active:scale-95 transition-all"
+                title="بازگشت"
               >
                 <ArrowRight className="w-4 h-4 text-white" />
               </button>
@@ -166,340 +195,530 @@ export const MobileJobAdGenerator: React.FC<MobileJobAdGeneratorProps> = ({
               <div className="flex items-center gap-1.5">
                 <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
                 <h1 className="text-sm sm:text-base font-black">
-                  دستیار هوشمند تولید شرح شغل و آگهی استخدامی
+                  دستیار هوشمند تدوین آگهی و شرح شغل
                 </h1>
               </div>
               <p className="text-[11px] text-emerald-200 mt-0.5">
-                موتور هوش مصنوعی اختصاصی هلدینگ سیلانه سبز (پشتیبانی از دافی، کامان، میس‌ویک)
+                تولید ساختاریافته بر اساس نیازمندی‌های هلدینگ سیلانه سبز
               </p>
             </div>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/20">
+          <div className="w-10 h-10 rounded-[12px] bg-white/15 flex items-center justify-center border border-white/20 shrink-0">
             <FileText className="w-5 h-5 text-emerald-200" />
           </div>
         </div>
       </div>
 
-      {/* Generator Configuration Form */}
-      <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm space-y-3.5">
-        <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-          <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-            <Briefcase className="w-4 h-4 text-emerald-600" />
-            مشخصات موقعیت شغلی مورد نظر:
-          </span>
-          <span className="text-[11px] text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full font-semibold">
-            تنظیم هوشمند با Gemini
-          </span>
-        </div>
-
-        {/* Job Title */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
-            عنوان جایگاه شغلی:
-          </label>
-          <input
-            type="text"
-            value={jobTitle}
-            onChange={(e) => setJobTitle(e.target.value)}
-            className="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-slate-800"
-            placeholder="مثال: سرپرست تولید کارخانه اشتهارد، مدیر برند دافی..."
-          />
-        </div>
-
-        {/* Department & Brand Focus */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
-              دپارتمان هلدینگ سیلانه سبز:
-            </label>
-            <select
-              value={selectedDeptId}
-              onChange={(e) => setSelectedDeptId(e.target.value)}
-              className="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white focus:ring-2 focus:ring-emerald-500 outline-none text-slate-800"
+      {/* If No Result Generated Yet: Show Step Wizard */}
+      {!result ? (
+        <div className="bg-surface-1 rounded-[20px] p-4 sm:p-5 border border-border-default shadow-xs space-y-4">
+          {/* Step Wizard Progress Dots */}
+          <div className="flex items-center justify-between px-2 pt-1 pb-3 border-b border-border-default">
+            {/* Step 1 Indicator */}
+            <button
+              type="button"
+              onClick={() => setCurrentStep(1)}
+              className="flex items-center gap-2 cursor-pointer group"
             >
-              {departments.map((dept) => (
-                <option key={dept.id} value={dept.id}>
-                  {dept.name}
-                </option>
-              ))}
-            </select>
-          </div>
+              <div
+                className={`w-7 h-7 rounded-full flex items-center justify-center font-black text-xs transition-all ${
+                  currentStep === 1
+                    ? 'bg-brand text-white shadow-xs scale-105 ring-2 ring-brand/30'
+                    : currentStep > 1
+                    ? 'bg-brand-soft text-brand'
+                    : 'bg-surface-2 text-text-3'
+                }`}
+              >
+                {currentStep > 1 ? <Check className="w-4 h-4" /> : '۱'}
+              </div>
+              <span
+                className={`text-xs font-bold ${
+                  currentStep === 1 ? 'text-brand' : 'text-text-3'
+                }`}
+              >
+                شغل و برند
+              </span>
+            </button>
 
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
-              برند تحت پوشش هلدینگ:
-            </label>
-            <input
-              type="text"
-              value={brandFocus}
-              onChange={(e) => setBrandFocus(e.target.value)}
-              className="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-slate-800"
-              placeholder="مثال: دافی (Dafi)، کامان، میس‌ویک..."
+            {/* Connecting Line 1 */}
+            <div
+              className={`flex-1 h-0.5 mx-2 rounded-full transition-colors ${
+                currentStep >= 2 ? 'bg-brand' : 'bg-border-default'
+              }`}
             />
-          </div>
-        </div>
 
-        {/* Seniority, Work Type, Location */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">سطح ارشدیت:</label>
-            <select
-              value={seniority}
-              onChange={(e) => setSeniority(e.target.value as any)}
-              className="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white focus:ring-2 focus:ring-emerald-500 outline-none text-slate-800"
+            {/* Step 2 Indicator */}
+            <button
+              type="button"
+              onClick={() => setCurrentStep(2)}
+              className="flex items-center gap-2 cursor-pointer group"
             >
-              <option value="کارآموز">کارآموز (Intern)</option>
-              <option value="کارشناس">کارشناس (Junior/Mid)</option>
-              <option value="کارشناس ارشد">کارشناس ارشد (Senior)</option>
-              <option value="سرپرست">سرپرست (Supervisor / Lead)</option>
-              <option value="مدیر">مدیر دپارتمان (Manager / Head)</option>
-            </select>
-          </div>
+              <div
+                className={`w-7 h-7 rounded-full flex items-center justify-center font-black text-xs transition-all ${
+                  currentStep === 2
+                    ? 'bg-brand text-white shadow-xs scale-105 ring-2 ring-brand/30'
+                    : currentStep > 2
+                    ? 'bg-brand-soft text-brand'
+                    : 'bg-surface-2 text-text-3'
+                }`}
+              >
+                {currentStep > 2 ? <Check className="w-4 h-4" /> : '۲'}
+              </div>
+              <span
+                className={`text-xs font-bold ${
+                  currentStep === 2 ? 'text-brand' : 'text-text-3'
+                }`}
+              >
+                مهارت‌ها
+              </span>
+            </button>
 
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">نوع همکاری:</label>
-            <select
-              value={workType}
-              onChange={(e) => setWorkType(e.target.value as any)}
-              className="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white focus:ring-2 focus:ring-emerald-500 outline-none text-slate-800"
+            {/* Connecting Line 2 */}
+            <div
+              className={`flex-1 h-0.5 mx-2 rounded-full transition-colors ${
+                currentStep === 3 ? 'bg-brand' : 'bg-border-default'
+              }`}
+            />
+
+            {/* Step 3 Indicator */}
+            <button
+              type="button"
+              onClick={() => setCurrentStep(3)}
+              className="flex items-center gap-2 cursor-pointer group"
             >
-              <option value="تمام‌وقت">تمام‌وقت (حضوری)</option>
-              <option value="پاره‌وقت">پاره‌وقت / پروژه‌ای</option>
-              <option value="شیفتی کارخانه">شیفتی چرخشی (کارخانه اشتهارد)</option>
-            </select>
+              <div
+                className={`w-7 h-7 rounded-full flex items-center justify-center font-black text-xs transition-all ${
+                  currentStep === 3
+                    ? 'bg-brand text-white shadow-xs scale-105 ring-2 ring-brand/30'
+                    : 'bg-surface-2 text-text-3'
+                }`}
+              >
+                ۳
+              </div>
+              <span
+                className={`text-xs font-bold ${
+                  currentStep === 3 ? 'text-brand' : 'text-text-3'
+                }`}
+              >
+                مزایا و تولید
+              </span>
+            </button>
           </div>
 
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">لحن آگهی:</label>
-            <select
-              value={tone}
-              onChange={(e) => setTone(e.target.value as any)}
-              className="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white focus:ring-2 focus:ring-emerald-500 outline-none text-slate-800"
-            >
-              <option value="پرانرژی و استارتاپی">پرانرژی و استارتاپی (شبکه‌های اجتماعی)</option>
-              <option value="حرفه‌ای و سازمانی">حرفه‌ای و سازمانی (جابینجا / رسمی)</option>
-              <option value="کاریزماتیک و الهام‌بخش">کاریزماتیک و رهبری (مدیران ارشد)</option>
-            </select>
-          </div>
-        </div>
+          {/* Wizard Step 1: Job & Department */}
+          {currentStep === 1 && (
+            <div className="space-y-3.5 animate-fadeIn">
+              <div>
+                <label className="block text-xs font-black text-text-1 mb-1.5">
+                  عنوان جایگاه شغلی:
+                </label>
+                <input
+                  type="text"
+                  value={jobTitle}
+                  onChange={(e) => setJobTitle(e.target.value)}
+                  className="w-full min-h-[44px] px-3.5 py-2 text-xs border border-border-default rounded-[12px] bg-surface-1 text-text-1 focus:ring-2 focus:ring-brand outline-none"
+                  placeholder="مثال: سرپرست تولید کارخانه اشتهارد، مدیر برند دافی..."
+                />
+              </div>
 
-        {/* Key Skills */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
-            مهارت‌های کلیدی و تجارب مورد انتظار:
-          </label>
-          <textarea
-            rows={2}
-            value={keySkills}
-            onChange={(e) => setKeySkills(e.target.value)}
-            className="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-slate-800"
-            placeholder="مهارت‌های فنی، سوابق مرتبط، مدارک تحصیلی یا نرم‌افزارهای تخصصی..."
-          />
-        </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-black text-text-1 mb-1.5">
+                    دپارتمان هلدینگ سیلانه سبز:
+                  </label>
+                  <select
+                    value={selectedDeptId}
+                    onChange={(e) => setSelectedDeptId(e.target.value)}
+                    className="w-full min-h-[44px] px-3.5 py-2 text-xs border border-border-default rounded-[12px] bg-surface-1 text-text-1 focus:ring-2 focus:ring-brand outline-none"
+                  >
+                    {departments.map((dept) => (
+                      <option key={dept.id} value={dept.id}>
+                        {dept.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-        {/* Perks & Benefits Selection */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1.5 flex items-center justify-between">
-            <span className="flex items-center gap-1">
-              <Gift className="w-3.5 h-3.5 text-emerald-600" />
-              تسهیلات و مزایای ویژه هلدینگ سیلانه سبز:
-            </span>
-            <span className="text-[10px] text-slate-400">انتخاب موارد جذاب</span>
-          </label>
-          <div className="flex flex-wrap gap-1.5">
-            {perksOptions.map((perk, idx) => {
-              const active = selectedPerks.includes(perk);
-              return (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => togglePerk(perk)}
-                  className={`text-[11px] px-2.5 py-1.5 rounded-full border transition-all cursor-pointer ${
-                    active
-                      ? 'bg-emerald-600 text-white border-emerald-600 font-medium shadow-sm'
-                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
-                  }`}
-                >
-                  {active ? '✓ ' : '+ '}
-                  {perk}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+                <div>
+                  <label className="block text-xs font-black text-text-1 mb-1.5">
+                    برند تحت پوشش هلدینگ:
+                  </label>
+                  <input
+                    type="text"
+                    value={brandFocus}
+                    onChange={(e) => setBrandFocus(e.target.value)}
+                    className="w-full min-h-[44px] px-3.5 py-2 text-xs border border-border-default rounded-[12px] bg-surface-1 text-text-1 focus:ring-2 focus:ring-brand outline-none"
+                    placeholder="مثال: دافی (Dafi)، کامان، میس‌ویک..."
+                  />
+                </div>
+              </div>
 
-        {/* Generate Button */}
-        <button
-          type="button"
-          onClick={handleGenerate}
-          disabled={isLoading || !jobTitle}
-          className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer transition-all disabled:opacity-50"
-        >
-          {isLoading ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              <span>هوش مصنوعی در حال تدوین شرح شغل و آگهی استاندارد...</span>
-            </>
-          ) : (
-            <>
-              <Sparkles className="w-4 h-4 text-amber-300" />
-              <span>تولید آنی شرح شغل و آگهی استخدامی با هوش مصنوعی</span>
-            </>
+              <div>
+                <label className="block text-xs font-black text-text-1 mb-1.5">
+                  سطح ارشدیت جایگاه:
+                </label>
+                <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                  {(['کارآموز', 'کارشناس', 'کارشناس ارشد', 'سرپرست', 'مدیر'] as const).map((s) => (
+                    <button
+                      key={s}
+                      type="button"
+                      onClick={() => setSeniority(s)}
+                      className={`min-h-[44px] px-2 py-1.5 rounded-[10px] text-xs font-bold border transition-all cursor-pointer select-none ${
+                        seniority === s
+                          ? 'bg-brand text-white border-brand shadow-xs'
+                          : 'bg-surface-2 text-text-2 border-border-default hover:bg-surface-3'
+                      }`}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
           )}
-        </button>
-      </div>
 
-      {/* Generation Results View */}
-      {result && (
-        <div className="bg-white rounded-2xl border border-emerald-200 shadow-md overflow-hidden animate-fadeIn">
-          {/* Result Header Tabs */}
-          <div className="bg-slate-50 p-2 border-b border-slate-200 flex items-center justify-between flex-wrap gap-2">
-            <div className="flex items-center gap-1 bg-slate-200/80 p-1 rounded-xl">
+          {/* Wizard Step 2: Requirements & Tone */}
+          {currentStep === 2 && (
+            <div className="space-y-3.5 animate-fadeIn">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-black text-text-1 mb-1.5">
+                    نوع همکاری:
+                  </label>
+                  <select
+                    value={workType}
+                    onChange={(e) => setWorkType(e.target.value as any)}
+                    className="w-full min-h-[44px] px-3.5 py-2 text-xs border border-border-default rounded-[12px] bg-surface-1 text-text-1 focus:ring-2 focus:ring-brand outline-none"
+                  >
+                    <option value="تمام‌وقت">تمام‌وقت (حضوری ستاد)</option>
+                    <option value="پاره‌وقت">پاره‌وقت / پروژه‌ای</option>
+                    <option value="شیفتی کارخانه">شیفتی چرخشی (کارخانجات اشتهارد)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-black text-text-1 mb-1.5">
+                    محل خدمت:
+                  </label>
+                  <input
+                    type="text"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    className="w-full min-h-[44px] px-3.5 py-2 text-xs border border-border-default rounded-[12px] bg-surface-1 text-text-1 focus:ring-2 focus:ring-brand outline-none"
+                    placeholder="تهران ستاد یا کارخانجات اشتهارد..."
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-black text-text-1 mb-1.5">
+                  لحن و استایل نگارش آگهی:
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {(
+                    [
+                      'پرانرژی و استارتاپی',
+                      'حرفه‌ای و سازمانی',
+                      'کاریزماتیک و الهام‌بخش',
+                    ] as const
+                  ).map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setTone(t)}
+                      className={`min-h-[44px] px-3 py-2 rounded-[10px] text-xs font-bold border text-right transition-all cursor-pointer select-none ${
+                        tone === t
+                          ? 'bg-brand text-white border-brand shadow-xs'
+                          : 'bg-surface-2 text-text-2 border-border-default hover:bg-surface-3'
+                      }`}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-black text-text-1 mb-1.5">
+                  مهارت‌های کلیدی و تجارب مورد انتظار:
+                </label>
+                <textarea
+                  rows={3}
+                  value={keySkills}
+                  onChange={(e) => setKeySkills(e.target.value)}
+                  className="w-full p-3 text-xs border border-border-default rounded-[12px] bg-surface-1 text-text-1 focus:ring-2 focus:ring-brand outline-none leading-relaxed"
+                  placeholder="مهارت‌های فنی، تجارب در صنعت FMCG، نرم‌افزارهای مورد نیاز..."
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Wizard Step 3: Perks & Generation */}
+          {currentStep === 3 && (
+            <div className="space-y-3.5 animate-fadeIn">
+              <div>
+                <label className="block text-xs font-black text-text-1 mb-1.5 flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <Gift className="w-4 h-4 text-brand" />
+                    مزایا و تسهیلات رفاهی ویژه هلدینگ سیلانه سبز:
+                  </span>
+                  <span className="text-[10px] text-text-3">لمس جهت انتخاب</span>
+                </label>
+                <div className="flex flex-wrap gap-1.5">
+                  {perksOptions.map((perk, idx) => {
+                    const isSelected = selectedPerks.includes(perk);
+                    return (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => togglePerk(perk)}
+                        className={`min-h-[44px] text-xs px-3 py-2 rounded-[12px] border transition-all cursor-pointer select-none flex items-center gap-1.5 active:scale-95 ${
+                          isSelected
+                            ? 'bg-brand text-white border-brand font-bold shadow-xs'
+                            : 'bg-surface-2 text-text-2 border-border-default hover:bg-surface-3'
+                        }`}
+                      >
+                        {isSelected ? <Check className="w-3.5 h-3.5" /> : <span>+</span>}
+                        <span>{perk}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Final Step Generation CTA */}
+              <div className="pt-2">
+                <button
+                  type="button"
+                  id="btn-generate-jobad"
+                  onClick={handleGenerate}
+                  disabled={isLoading || !jobTitle}
+                  className="w-full min-h-[50px] py-3 px-4 rounded-[14px] bg-brand hover:bg-brand-hover text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md cursor-pointer transition-all active:scale-[0.98] disabled:opacity-50 select-none"
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>هوش مصنوعی در حال تدوین آگهی و شرح شغل...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-4 h-4 text-amber-300" />
+                      <span>تولید آنی شرح شغل و آگهی با Gemini</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Wizard Navigation Controls (Bottom Thumb-Zone Friendly) */}
+          <div className="flex items-center justify-between pt-3 border-t border-border-default">
+            {currentStep > 1 ? (
               <button
+                type="button"
+                id="btn-wizard-prev"
+                onClick={() => setCurrentStep((currentStep - 1) as any)}
+                className="min-h-[44px] px-4 rounded-[10px] bg-surface-2 hover:bg-surface-3 text-text-2 font-bold text-xs flex items-center gap-1.5 cursor-pointer transition-all active:scale-95"
+              >
+                <ArrowRight className="w-4 h-4" />
+                <span>گام قبلی</span>
+              </button>
+            ) : (
+              <div />
+            )}
+
+            {currentStep < 3 && (
+              <button
+                type="button"
+                id="btn-wizard-next"
+                onClick={() => setCurrentStep((currentStep + 1) as any)}
+                className="min-h-[44px] px-5 rounded-[10px] bg-brand hover:bg-brand-hover text-white font-black text-xs flex items-center gap-1.5 cursor-pointer transition-all active:scale-95 shadow-xs"
+              >
+                <span>گام بعدی</span>
+                <ArrowLeft className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        </div>
+      ) : (
+        /* 2. Generated Ad Preview in a Clean Document Card */
+        <div
+          id="jobad-document-card"
+          className="bg-surface-1 rounded-[20px] border border-border-default shadow-lg overflow-hidden animate-fadeIn space-y-0"
+        >
+          {/* Document Top Bar with Tab Switcher */}
+          <div className="p-3 bg-surface-2 border-b border-border-default flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center gap-1 bg-surface-1 p-1 rounded-[10px] border border-border-default">
+              <button
+                type="button"
                 onClick={() => setActiveTab('ad')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`min-h-[40px] px-3 rounded-[8px] text-xs font-black transition-all cursor-pointer ${
                   activeTab === 'ad'
-                    ? 'bg-white text-emerald-800 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-brand text-white shadow-2xs'
+                    : 'text-text-3 hover:text-text-1'
                 }`}
               >
-                📢 آگهی شبکه‌های اجتماعی
+                📢 آگهی شبکه‌ها
               </button>
               <button
+                type="button"
                 onClick={() => setActiveTab('jd')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`min-h-[40px] px-3 rounded-[8px] text-xs font-black transition-all cursor-pointer ${
                   activeTab === 'jd'
-                    ? 'bg-white text-emerald-800 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-brand text-white shadow-2xs'
+                    : 'text-text-3 hover:text-text-1'
                 }`}
               >
-                📄 شرح شغل رسمی (JD)
+                📄 شرح شغل (JD)
               </button>
               <button
+                type="button"
                 onClick={() => setActiveTab('questions')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`min-h-[40px] px-3 rounded-[8px] text-xs font-black transition-all cursor-pointer ${
                   activeTab === 'questions'
-                    ? 'bg-white text-emerald-800 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-brand text-white shadow-2xs'
+                    : 'text-text-3 hover:text-text-1'
                 }`}
               >
                 🎯 سوالات مصاحبه
               </button>
             </div>
 
-            <div className="flex items-center gap-2">
+            {/* Restart Button */}
+            <button
+              type="button"
+              onClick={() => {
+                setResult(null);
+                setCurrentStep(1);
+              }}
+              className="min-h-[40px] px-3 rounded-[10px] bg-surface-1 hover:bg-surface-3 text-text-2 text-xs font-bold border border-border-default flex items-center gap-1 cursor-pointer transition-all active:scale-95"
+              title="تنظیم موقعیت جدید"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>موقعیت جدید</span>
+            </button>
+          </div>
+
+          {/* Salary Benchmark Banner */}
+          <div className="px-4 py-2.5 bg-brand-soft border-b border-brand/20 flex items-center justify-between text-xs">
+            <div className="flex items-center gap-1.5 text-brand font-bold">
+              <Coins className="w-4 h-4 text-brand" />
+              <span>بازه حقوق پیشنهادی بازار کار ایران:</span>
+              <span className="font-mono">{result.salaryBenchmarkToman}</span>
+            </div>
+            <span className="text-[11px] text-text-2 font-medium">
+              برند: {result.brandFocus}
+            </span>
+          </div>
+
+          {/* Document Content View */}
+          <div className="p-4 sm:p-5 space-y-3">
+            {/* Tab 1: Social Media Recruitment Ad */}
+            {activeTab === 'ad' && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-black text-text-1">
+                    متن آماده انتشار در لینکدین، تلگرام و شبکه‌های استخدامی:
+                  </span>
+                  <button
+                    type="button"
+                    id="btn-copy-social-ad"
+                    onClick={() => handleCopy(result.recruitmentAdSocial, 'آگهی شبکه‌ها')}
+                    className="min-h-[44px] px-3 rounded-[10px] bg-surface-2 hover:bg-surface-3 text-text-1 text-xs font-bold flex items-center gap-1.5 border border-border-default cursor-pointer transition-all active:scale-95 shadow-2xs"
+                  >
+                    <Copy className="w-3.5 h-3.5 text-brand" />
+                    <span>کپی آگهی</span>
+                  </button>
+                </div>
+
+                <div className="p-4 rounded-[14px] bg-surface-2/60 border border-border-default text-text-1 text-xs leading-relaxed font-sans whitespace-pre-wrap selection:bg-brand/20">
+                  {result.recruitmentAdSocial}
+                </div>
+              </div>
+            )}
+
+            {/* Tab 2: Official Job Description Markdown */}
+            {activeTab === 'jd' && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-black text-text-1">
+                    سند استاندارد شرح شغل سازمانی هلدینگ سیلانه سبز:
+                  </span>
+                  <button
+                    type="button"
+                    id="btn-copy-jd"
+                    onClick={() => handleCopy(result.jobDescriptionMarkdown, 'شرح شغل')}
+                    className="min-h-[44px] px-3 rounded-[10px] bg-surface-2 hover:bg-surface-3 text-text-1 text-xs font-bold flex items-center gap-1.5 border border-border-default cursor-pointer transition-all active:scale-95 shadow-2xs"
+                  >
+                    <Copy className="w-3.5 h-3.5 text-brand" />
+                    <span>کپی مارک‌داون</span>
+                  </button>
+                </div>
+
+                <div className="p-4 rounded-[14px] bg-surface-2/60 border border-border-default text-text-1 text-xs leading-relaxed whitespace-pre-wrap">
+                  {result.jobDescriptionMarkdown}
+                </div>
+              </div>
+            )}
+
+            {/* Tab 3: STAR Interview Questions */}
+            {activeTab === 'questions' && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-black text-text-1">
+                    سوالات مصاحبه تخصصی و رفتاری (متدولوژی STAR):
+                  </span>
+                  <button
+                    type="button"
+                    id="btn-copy-questions"
+                    onClick={() =>
+                      handleCopy(result.interviewQuestions.join('\n\n'), 'سوالات مصاحبه')
+                    }
+                    className="min-h-[44px] px-3 rounded-[10px] bg-surface-2 hover:bg-surface-3 text-text-1 text-xs font-bold flex items-center gap-1.5 border border-border-default cursor-pointer transition-all active:scale-95 shadow-2xs"
+                  >
+                    <Copy className="w-3.5 h-3.5 text-brand" />
+                    <span>کپی سوالات</span>
+                  </button>
+                </div>
+
+                <div className="space-y-2">
+                  {result.interviewQuestions.map((q, idx) => (
+                    <div
+                      key={idx}
+                      className="p-3 rounded-[12px] bg-surface-2/70 border border-border-default flex items-start gap-2.5 text-xs text-text-1 leading-relaxed"
+                    >
+                      <span className="w-5 h-5 rounded-full bg-brand text-white flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
+                        {idx + 1}
+                      </span>
+                      <p className="flex-1">{q}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Bottom Actions in Document Card: Save to Open Positions */}
+            <div className="pt-2 flex items-center gap-2">
               <button
+                type="button"
+                id="btn-save-as-job"
                 onClick={handleSaveAsJob}
-                className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 text-xs font-bold flex items-center gap-1 cursor-pointer transition-colors"
+                className="flex-1 min-h-[48px] px-4 rounded-[12px] bg-brand hover:bg-brand-hover text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98] shadow-xs"
               >
                 {savedSuccess ? (
                   <>
-                    <Check className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>به ردیف‌های شغلی افزوده شد!</span>
+                    <Check className="w-4 h-4" />
+                    <span>در بانک موقعیت‌های شغلی ثبت شد!</span>
                   </>
                 ) : (
                   <>
-                    <BookmarkPlus className="w-3.5 h-3.5" />
-                    <span>ثبت در فرصت‌های شغلی</span>
+                    <BookmarkPlus className="w-4 h-4" />
+                    <span>ثبت رسمی در فرصت‌های شغلی هلدینگ</span>
                   </>
                 )}
               </button>
             </div>
           </div>
-
-          {/* Salary Benchmark Banner */}
-          <div className="px-4 py-2 bg-emerald-50/60 border-b border-emerald-100 flex items-center justify-between text-xs">
-            <div className="flex items-center gap-1.5 text-emerald-900 font-medium">
-              <Coins className="w-4 h-4 text-emerald-600" />
-              <span>بازه حقوق پیشنهادی بازار کار ایران:</span>
-              <span className="font-bold text-emerald-800">{result.salaryBenchmarkToman}</span>
-            </div>
-            <span className="text-[11px] text-slate-500">برند: {result.brandFocus}</span>
-          </div>
-
-          {/* Tab 1: Social Job Ad */}
-          {activeTab === 'ad' && (
-            <div className="p-4 sm:p-5 space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-700">
-                  متن آماده انتشار برای لینکدین، تلگرام و شبکه‌های استخدامی:
-                </span>
-                <button
-                  onClick={() => handleCopy(result.recruitmentAdSocial, 'ad')}
-                  className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors"
-                >
-                  {copiedType === 'ad' ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-emerald-600" />
-                      <span className="text-emerald-700 font-bold">کپی شد!</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5" />
-                      <span>کپی متن آگهی</span>
-                    </>
-                  )}
-                </button>
-              </div>
-
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-xs leading-relaxed font-sans whitespace-pre-wrap selection:bg-emerald-200">
-                {result.recruitmentAdSocial}
-              </div>
-            </div>
-          )}
-
-          {/* Tab 2: Official Job Description */}
-          {activeTab === 'jd' && (
-            <div className="p-4 sm:p-5 space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-700">
-                  سند استاندارد شرح شغل سازمانی هلدینگ سیلانه سبز:
-                </span>
-                <button
-                  onClick={() => handleCopy(result.jobDescriptionMarkdown, 'jd')}
-                  className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors"
-                >
-                  {copiedType === 'jd' ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-emerald-600" />
-                      <span className="text-emerald-700 font-bold">کپی شد!</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5" />
-                      <span>کپی مارک‌داون</span>
-                    </>
-                  )}
-                </button>
-              </div>
-
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-xs leading-relaxed whitespace-pre-wrap">
-                {result.jobDescriptionMarkdown}
-              </div>
-            </div>
-          )}
-
-          {/* Tab 3: Interview Questions */}
-          {activeTab === 'questions' && (
-            <div className="p-4 sm:p-5 space-y-3">
-              <span className="text-xs font-bold text-slate-700 block">
-                سوالات طلایی مصاحبه تخصصی و رفتاری (متدولوژی STAR):
-              </span>
-              <div className="space-y-2">
-                {result.interviewQuestions.map((q, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3 rounded-xl bg-emerald-50/50 border border-emerald-100 flex items-start gap-2.5 text-xs text-slate-800 leading-relaxed"
-                  >
-                    <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-[10px] flex-shrink-0 mt-0.5">
-                      {idx + 1}
-                    </span>
-                    <p className="flex-1">{q}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       )}
     </div>

@@ -12,6 +12,8 @@ import {
 } from '../../types';
 import { toPersianDigits, formatToman } from '../../utils/jalali';
 import { showToast } from '../common/Toast';
+import { Skeleton, SkeletonCard } from '../ui/Skeleton';
+import { EmptyState } from '../ui/EmptyState';
 import {
   Zap,
   Send,
@@ -163,6 +165,25 @@ export const ZipRecruiterSmartSourcing: React.FC<ZipRecruiterSmartSourcingProps>
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="space-y-6 animate-fadeIn">
+        <Skeleton className="h-44 w-full rounded-3xl" />
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <Skeleton className="h-6 w-56 rounded-lg" />
+            <Skeleton className="h-6 w-32 rounded-xl" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <SkeletonCard key={i} className="h-64" />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header Banner */}
@@ -240,81 +261,91 @@ export const ZipRecruiterSmartSourcing: React.FC<ZipRecruiterSmartSourcingProps>
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {sourcedList.map((cand) => (
-              <div
-                key={cand.id}
-                className="bg-white rounded-3xl border border-slate-200 p-5 shadow-xs hover:border-emerald-400 transition-all flex flex-col justify-between space-y-4"
-              >
-                <div className="space-y-3.5">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-2xl bg-slate-100 border border-slate-200 overflow-hidden flex items-center justify-center font-black text-slate-700 text-sm">
-                        {cand.fullName.split(' ')[0][0]}
-                        {cand.fullName.split(' ')[1]?.[0]}
+          {sourcedList.length === 0 ? (
+            <div className="bg-surface-1 rounded-3xl border border-border-default p-8">
+              <EmptyState
+                icon={<Users className="w-8 h-8 text-text-3" />}
+                title="استعدادی در این موقعیت یافت نشد"
+                description="موتور هوشمند ZipRecruiter هنوز رزومه یا کاندیدای خارجی مناسبی برای این ردیف شغلی پیدا نکرده است."
+              />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {sourcedList.map((cand) => (
+                <div
+                  key={cand.id}
+                  className="bg-surface-1 rounded-3xl border border-border-default p-5 shadow-xs hover:border-emerald-400 transition-all flex flex-col justify-between space-y-4"
+                >
+                  <div className="space-y-3.5">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-2xl bg-surface-2 border border-border-default overflow-hidden flex items-center justify-center font-black text-text-1 text-sm">
+                          {cand.fullName.split(' ')[0][0]}
+                          {cand.fullName.split(' ')[1]?.[0]}
+                        </div>
+                        <div>
+                          <div className="text-sm font-black text-text-1">{cand.fullName}</div>
+                          <div className="text-xs text-text-3">{cand.currentRole}</div>
+                        </div>
                       </div>
-                      <div>
-                        <div className="text-sm font-black text-slate-900">{cand.fullName}</div>
-                        <div className="text-xs text-slate-500">{cand.currentRole}</div>
+                      <div className="text-right">
+                        <div className="text-base font-black text-emerald-600">
+                          {toPersianDigits(cand.matchScorePct)}٪
+                        </div>
+                        <span className="text-[10px] text-text-3 block">انطباق آنی</span>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-base font-black text-emerald-600">
-                        {toPersianDigits(cand.matchScorePct)}٪
+
+                    <div className="p-3 rounded-2xl bg-surface-2 border border-border-default space-y-1.5 text-xs">
+                      <div className="flex items-center justify-between text-text-2">
+                        <span>شرکت فعلی:</span>
+                        <span className="font-bold text-text-1">{cand.currentCompany}</span>
                       </div>
-                      <span className="text-[10px] text-slate-400 block">انطباق آنی</span>
+                      <div className="flex items-center justify-between text-text-2">
+                        <span>سابقه کار تخصصی:</span>
+                        <span className="font-bold text-text-1">{toPersianDigits(cand.experienceYears)} سال</span>
+                      </div>
+                      <div className="flex items-center justify-between text-text-2">
+                        <span>سکونت:</span>
+                        <span className="font-bold text-text-1">{cand.location}</span>
+                      </div>
+                    </div>
+
+                    {/* Top Skills */}
+                    <div className="flex flex-wrap gap-1.5">
+                      {cand.topSkills.map((skill, sIdx) => (
+                        <span
+                          key={sIdx}
+                          className="px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/30 text-emerald-800 dark:text-emerald-300 text-[10px] font-bold border border-emerald-200 dark:border-emerald-800"
+                        >
+                          {skill}
+                        </span>
+                      ))}
                     </div>
                   </div>
 
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 space-y-1.5 text-xs">
-                    <div className="flex items-center justify-between text-slate-600">
-                      <span>شرکت فعلی:</span>
-                      <span className="font-bold text-slate-900">{cand.currentCompany}</span>
-                    </div>
-                    <div className="flex items-center justify-between text-slate-600">
-                      <span>سابقه کار تخصصی:</span>
-                      <span className="font-bold text-slate-900">{toPersianDigits(cand.experienceYears)} سال</span>
-                    </div>
-                    <div className="flex items-center justify-between text-slate-600">
-                      <span>سکونت:</span>
-                      <span className="font-bold text-slate-900">{cand.location}</span>
-                    </div>
-                  </div>
+                  <div className="pt-3 border-t border-border-default flex items-center justify-between gap-2">
+                    <span className="text-[10px] text-text-3">{cand.lastActive}</span>
 
-                  {/* Top Skills */}
-                  <div className="flex flex-wrap gap-1.5">
-                    {cand.topSkills.map((skill, sIdx) => (
-                      <span
-                        key={sIdx}
-                        className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 text-[10px] font-bold border border-emerald-200"
-                      >
-                        {skill}
+                    {cand.status === 'INVITED' ? (
+                      <span className="px-3 py-1.5 rounded-xl bg-purple-50 dark:bg-purple-950/30 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 text-xs font-bold flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <span>دعوت‌شده ({cand.invitedAtJalali})</span>
                       </span>
-                    ))}
+                    ) : (
+                      <button
+                        onClick={() => handleOpenInvite(cand)}
+                        className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-98 text-white font-black text-xs flex items-center gap-1.5 cursor-pointer transition-all shadow-2xs"
+                      >
+                        <Send className="w-3.5 h-3.5" />
+                        <span>دعوت به همکاری (۱ کلیک)</span>
+                      </button>
+                    )}
                   </div>
                 </div>
-
-                <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-                  <span className="text-[10px] text-slate-400">{cand.lastActive}</span>
-
-                  {cand.status === 'INVITED' ? (
-                    <span className="px-3 py-1.5 rounded-xl bg-purple-50 text-purple-700 border border-purple-200 text-xs font-bold flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      <span>دعوت‌شده ({cand.invitedAtJalali})</span>
-                    </span>
-                  ) : (
-                    <button
-                      onClick={() => handleOpenInvite(cand)}
-                      className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs"
-                    >
-                      <Send className="w-3.5 h-3.5" />
-                      <span>دعوت به همکاری (۱ کلیک)</span>
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
@@ -335,84 +366,94 @@ export const ZipRecruiterSmartSourcing: React.FC<ZipRecruiterSmartSourcingProps>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {channels.map((chan) => {
-              const isActive = chan.status === 'ACTIVE';
-              return (
-                <div
-                  key={chan.id}
-                  className="bg-white rounded-3xl border border-slate-200 p-5 shadow-xs space-y-4 flex flex-col justify-between"
-                >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2.5">
-                        <span className="text-2xl">{chan.platformLogo}</span>
-                        <div>
-                          <div className="text-sm font-black text-slate-900">{chan.platformName}</div>
-                          <div className="text-[11px] text-slate-400">همگام‌سازی: {chan.lastSyncJalali}</div>
+          {channels.length === 0 ? (
+            <div className="bg-surface-1 rounded-3xl border border-border-default p-8">
+              <EmptyState
+                icon={<Share2 className="w-8 h-8 text-text-3" />}
+                title="کانال انتشاری فعال نیست"
+                description="هنوز هیچ کانال انتشاری برای ارسال خودکار آگهی در بسترهای کاریابی ثبت نشده است."
+              />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {channels.map((chan) => {
+                const isActive = chan.status === 'ACTIVE';
+                return (
+                  <div
+                    key={chan.id}
+                    className="bg-surface-1 rounded-3xl border border-border-default p-5 shadow-xs space-y-4 flex flex-col justify-between"
+                  >
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2.5">
+                          <span className="text-2xl">{chan.platformLogo}</span>
+                          <div>
+                            <div className="text-sm font-black text-text-1">{chan.platformName}</div>
+                            <div className="text-[11px] text-text-3">همگام‌سازی: {chan.lastSyncJalali}</div>
+                          </div>
                         </div>
+
+                        <button
+                          onClick={() => handleToggleChannel(chan)}
+                          className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors active:scale-98 ${
+                            isActive
+                              ? 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800'
+                              : 'bg-surface-2 text-text-3 border border-border-default'
+                          }`}
+                        >
+                          <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
+                          <span>{isActive ? 'فعال و منتشر' : 'متوقف‌شده'}</span>
+                        </button>
                       </div>
 
+                      <div className="grid grid-cols-3 gap-2 p-3 rounded-2xl bg-surface-2 border border-border-default text-center">
+                        <div>
+                          <div className="text-[10px] text-text-3 flex items-center justify-center gap-0.5">
+                            <Eye className="w-3 h-3" />
+                            <span>بازدید</span>
+                          </div>
+                          <div className="text-xs font-black text-text-1 mt-1">
+                            {toPersianDigits(chan.impressionsCount)}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-[10px] text-text-3 flex items-center justify-center gap-0.5">
+                            <MousePointer className="w-3 h-3" />
+                            <span>کلیک</span>
+                          </div>
+                          <div className="text-xs font-black text-text-1 mt-1">
+                            {toPersianDigits(chan.clicksCount)}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-[10px] text-emerald-700 dark:text-emerald-400 font-bold flex items-center justify-center gap-0.5">
+                            <Users className="w-3 h-3" />
+                            <span>رزومه</span>
+                          </div>
+                          <div className="text-xs font-black text-emerald-700 dark:text-emerald-400 mt-1">
+                            {toPersianDigits(chan.applicationsReceived)}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="pt-3 border-t border-border-default flex items-center justify-between text-xs">
+                      <span className="text-text-3">
+                        هزینه درج آگهی: {formatToman(chan.costToman)} تومان
+                      </span>
                       <button
-                        onClick={() => handleToggleChannel(chan)}
-                        className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors ${
-                          isActive
-                            ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                            : 'bg-slate-100 text-slate-600 border border-slate-300'
-                        }`}
+                        onClick={() => showToast(`لینک آگهی در ${chan.platformName} کپی شد`, 'info')}
+                        className="text-emerald-700 dark:text-emerald-400 hover:text-emerald-800 font-bold flex items-center gap-1 text-[11px]"
                       >
-                        <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
-                        <span>{isActive ? 'فعال و منتشر' : 'متوقف‌شده'}</span>
+                        <span>مشاهده در سایت</span>
+                        <ExternalLink className="w-3 h-3" />
                       </button>
                     </div>
-
-                    <div className="grid grid-cols-3 gap-2 p-3 rounded-2xl bg-slate-50 border border-slate-100 text-center">
-                      <div>
-                        <div className="text-[10px] text-slate-500 flex items-center justify-center gap-0.5">
-                          <Eye className="w-3 h-3" />
-                          <span>بازدید</span>
-                        </div>
-                        <div className="text-xs font-black text-slate-900 mt-1">
-                          {toPersianDigits(chan.impressionsCount)}
-                        </div>
-                      </div>
-                      <div>
-                        <div className="text-[10px] text-slate-500 flex items-center justify-center gap-0.5">
-                          <MousePointer className="w-3 h-3" />
-                          <span>کلیک</span>
-                        </div>
-                        <div className="text-xs font-black text-slate-900 mt-1">
-                          {toPersianDigits(chan.clicksCount)}
-                        </div>
-                      </div>
-                      <div>
-                        <div className="text-[10px] text-emerald-700 font-bold flex items-center justify-center gap-0.5">
-                          <Users className="w-3 h-3" />
-                          <span>رزومه</span>
-                        </div>
-                        <div className="text-xs font-black text-emerald-700 mt-1">
-                          {toPersianDigits(chan.applicationsReceived)}
-                        </div>
-                      </div>
-                    </div>
                   </div>
-
-                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                    <span className="text-slate-500">
-                      هزینه درج آگهی: {formatToman(chan.costToman)} تومان
-                    </span>
-                    <button
-                      onClick={() => showToast(`لینک آگهی در ${chan.platformName} کپی شد`, 'info')}
-                      className="text-emerald-700 hover:text-emerald-800 font-bold flex items-center gap-1 text-[11px]"
-                    >
-                      <span>مشاهده در سایت</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
 
@@ -437,30 +478,42 @@ export const ZipRecruiterSmartSourcing: React.FC<ZipRecruiterSmartSourcingProps>
             </button>
           </div>
 
-          <div className="space-y-3">
-            {knockoutList.map((kq, idx) => (
-              <div
-                key={kq.id}
-                className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4"
-              >
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded-md bg-rose-50 text-rose-700 text-[10px] font-black border border-rose-200">
-                      شرط حذفی الزامی (Deal-Breaker)
-                    </span>
-                    <span className="text-xs font-bold text-slate-900">{kq.question}</span>
+          {knockoutList.length === 0 ? (
+            <div className="bg-surface-1 rounded-3xl border border-border-default p-8">
+              <EmptyState
+                icon={<Filter className="w-8 h-8 text-text-3" />}
+                title="هیچ شرط حذفی تعریف نشده است"
+                description="می‌توانید با تعریف شروط حذفی الزامی (مانند سابقه کار در کارخانجات یا امکان حضور شیفتی)، رزومه‌های غیرمنطبق را در ثانیه اول غربالگری کنید."
+                actionLabel="افزودن شرط حذفی جدید"
+                onAction={() => setIsAddingKq(true)}
+              />
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {knockoutList.map((kq) => (
+                <div
+                  key={kq.id}
+                  className="p-4 rounded-2xl bg-surface-1 border border-border-default shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded-md bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 text-[10px] font-black border border-rose-200 dark:border-rose-800">
+                        شرط حذفی الزامی (Deal-Breaker)
+                      </span>
+                      <span className="text-xs font-bold text-text-1">{kq.question}</span>
+                    </div>
+                    <p className="text-xs text-text-3">{kq.explanation}</p>
                   </div>
-                  <p className="text-xs text-slate-500">{kq.explanation}</p>
-                </div>
 
-                <div className="flex items-center gap-2 shrink-0">
-                  <span className="px-3 py-1 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
-                    پاسخ مجاز: تایید کامل
-                  </span>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className="px-3 py-1 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-800 dark:text-emerald-300 text-xs font-bold border border-emerald-200 dark:border-emerald-800">
+                      پاسخ مجاز: تایید کامل
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
 
           {/* Add Modal */}
           {isAddingKq && (
@@ -474,30 +527,30 @@ export const ZipRecruiterSmartSourcing: React.FC<ZipRecruiterSmartSourcingProps>
                     value={newKqText}
                     onChange={(e) => setNewKqText(e.target.value)}
                     placeholder="مثال: آیا دارای سابقه کار در کارخانجات دارویی یا آرایشی بهداشتی هستید؟"
-                    className="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2 text-xs focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-surface-1 border border-border-default rounded-xl px-3.5 py-2 text-xs text-text-1 focus:outline-none focus:border-emerald-500"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-slate-700 block mb-1">علت و الزام قانونی/سازمانی:</label>
+                  <label className="text-xs font-medium text-text-2 block mb-1">علت و الزام قانونی/سازمانی:</label>
                   <input
                     type="text"
                     value={newKqExplanation}
                     onChange={(e) => setNewKqExplanation(e.target.value)}
                     placeholder="الزام استانداردهای GMP و مقررات سازمان غذا و دارو"
-                    className="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2 text-xs focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-surface-1 border border-border-default rounded-xl px-3.5 py-2 text-xs text-text-1 focus:outline-none focus:border-emerald-500"
                   />
                 </div>
               </div>
               <div className="flex items-center justify-end gap-2">
                 <button
                   onClick={() => setIsAddingKq(false)}
-                  className="px-4 py-2 rounded-xl text-xs text-slate-600 bg-white border border-slate-200"
+                  className="px-4 py-2 rounded-xl text-xs text-text-2 bg-surface-1 border border-border-default active:scale-98 transition-all"
                 >
                   انصراف
                 </button>
                 <button
                   onClick={handleAddKnockout}
-                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs"
+                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs active:scale-98 transition-all"
                 >
                   افزودن و فعال‌سازی
                 </button>
@@ -510,25 +563,25 @@ export const ZipRecruiterSmartSourcing: React.FC<ZipRecruiterSmartSourcingProps>
       {/* Invite Modal (1-Click Invite to Apply) */}
       {selectedCandidateForInvite && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl border border-slate-200 p-6 max-w-lg w-full shadow-2xl space-y-4 animate-in zoom-in-95">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div className="bg-surface-1 rounded-3xl border border-border-default p-6 max-w-lg w-full shadow-2xl space-y-4 animate-in zoom-in-95">
+            <div className="flex items-center justify-between border-b border-border-default pb-3">
               <div className="flex items-center gap-2">
-                <div className="p-2 rounded-xl bg-emerald-100 text-emerald-800">
+                <div className="p-2 rounded-xl bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300">
                   <Send className="w-4 h-4" />
                 </div>
-                <h4 className="text-sm font-black text-slate-900">
+                <h4 className="text-sm font-black text-text-1">
                   ارسال دعوت‌نامه استخدامی به {selectedCandidateForInvite.fullName}
                 </h4>
               </div>
               <button
                 onClick={() => setSelectedCandidateForInvite(null)}
-                className="text-slate-400 hover:text-slate-600 text-xs"
+                className="text-text-3 hover:text-text-1 text-xs"
               >
                 ✕
               </button>
             </div>
 
-            <p className="text-xs text-slate-600 leading-relaxed">
+            <p className="text-xs text-text-2 leading-relaxed">
               این پیام از طریق پیامک رسمی و ایمیل سازمانی هلدینگ سیلانه سبز همراه با لینک ویژه ثبت‌نام بدون نیاز به پر کردن فرم‌های تکراری برای کارجو ارسال خواهد شد:
             </p>
 
@@ -536,23 +589,23 @@ export const ZipRecruiterSmartSourcing: React.FC<ZipRecruiterSmartSourcingProps>
               value={inviteCustomText}
               onChange={(e) => setInviteCustomText(e.target.value)}
               rows={4}
-              className="w-full bg-slate-50 border border-slate-300 rounded-2xl p-3.5 text-xs text-slate-800 focus:outline-none focus:border-emerald-500 font-sans leading-relaxed"
+              className="w-full bg-surface-2 border border-border-default rounded-2xl p-3.5 text-xs text-text-1 focus:outline-none focus:border-emerald-500 font-sans leading-relaxed"
             />
 
             <div className="flex items-center justify-between pt-2">
-              <span className="text-[11px] text-emerald-700 font-bold">
+              <span className="text-[11px] text-emerald-700 dark:text-emerald-400 font-bold">
                 تطابق پیش‌بینی‌شده: {toPersianDigits(selectedCandidateForInvite.matchScorePct)}٪
               </span>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setSelectedCandidateForInvite(null)}
-                  className="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold"
+                  className="px-4 py-2 rounded-xl bg-surface-2 text-text-2 text-xs font-bold active:scale-98 transition-all"
                 >
                   انصراف
                 </button>
                 <button
                   onClick={handleSendInvite}
-                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs flex items-center gap-1.5 shadow-md shadow-emerald-600/25"
+                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs flex items-center gap-1.5 shadow-md shadow-emerald-600/25 active:scale-98 transition-all"
                 >
                   <Send className="w-3.5 h-3.5" />
                   <span>ارسال فوری دعوت‌نامه</span>

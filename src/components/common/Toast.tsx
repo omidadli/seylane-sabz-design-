@@ -30,6 +30,29 @@ export const showToast = (
   }
 };
 
+/**
+ * Surface API and network errors as danger toasts with the server's Persian error message.
+ */
+export const showApiErrorToast = (
+  error: any,
+  fallbackMessage: string = 'خطایی در پردازش درخواست توسط سرور رخ داد',
+  title: string = 'خطای عملیات'
+) => {
+  let message = fallbackMessage;
+  if (typeof error === 'string' && error.trim()) {
+    message = error;
+  } else if (error?.response?.data?.error) {
+    message = String(error.response.data.error);
+  } else if (error?.response?.data?.message) {
+    message = String(error.response.data.message);
+  } else if (error?.error) {
+    message = String(error.error);
+  } else if (error?.message && !error.message.includes('[object Object]') && !error.message.includes('FetchError')) {
+    message = error.message;
+  }
+  showToast(message, 'error', title, 5000);
+};
+
 const ToastItem: React.FC<{
   toast: ToastMessage;
   onRemove: (id: string) => void;
@@ -38,24 +61,24 @@ const ToastItem: React.FC<{
 
   const variantStyles = {
     success: {
-      bg: 'bg-surface-1 border-brand/40 text-text-1',
+      bg: 'bg-surface-1 border-brand/40 text-text-1 shadow-brand/10',
       icon: <CheckCircle2 className="w-5 h-5 text-brand shrink-0 mt-0.5" />,
       progress: 'bg-brand',
     },
     error: {
-      bg: 'bg-surface-1 border-accent-rose/40 text-text-1',
-      icon: <AlertCircle className="w-5 h-5 text-accent-rose shrink-0 mt-0.5" />,
-      progress: 'bg-accent-rose',
+      bg: 'bg-surface-1 border-danger/40 text-text-1 shadow-danger/10',
+      icon: <AlertCircle className="w-5 h-5 text-danger shrink-0 mt-0.5" />,
+      progress: 'bg-danger',
     },
     warning: {
-      bg: 'bg-surface-1 border-accent-amber/40 text-text-1',
-      icon: <AlertTriangle className="w-5 h-5 text-accent-amber shrink-0 mt-0.5" />,
-      progress: 'bg-accent-amber',
+      bg: 'bg-surface-1 border-warning/40 text-text-1 shadow-warning/10',
+      icon: <AlertTriangle className="w-5 h-5 text-warning shrink-0 mt-0.5" />,
+      progress: 'bg-warning',
     },
     info: {
-      bg: 'bg-surface-1 border-accent-blue/40 text-text-1',
-      icon: <Info className="w-5 h-5 text-accent-blue shrink-0 mt-0.5" />,
-      progress: 'bg-accent-blue',
+      bg: 'bg-surface-1 border-info/40 text-text-1 shadow-info/10',
+      icon: <Info className="w-5 h-5 text-info shrink-0 mt-0.5" />,
+      progress: 'bg-info',
     },
   }[toast.type];
 

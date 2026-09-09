@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Card } from './Card';
 import { toPersianDigits } from '../../utils/jalali';
 
@@ -45,11 +45,59 @@ export const StatKpiCard: React.FC<StatKpiCardProps> = ({
   className = '',
   onClick,
 }) => {
+  // Micro-interaction: Animated number counting (180ms duration, respecting prefers-reduced-motion)
+  const [animatedNum, setAnimatedNum] = useState<number | null>(
+    typeof value === 'number' ? value : null
+  );
+  const prevValueRef = useRef<number | null>(typeof value === 'number' ? value : null);
+
+  useEffect(() => {
+    if (typeof value !== 'number') {
+      setAnimatedNum(null);
+      return;
+    }
+
+    // Check prefers-reduced-motion
+    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setAnimatedNum(value);
+      prevValueRef.current = value;
+      return;
+    }
+
+    const startVal = prevValueRef.current !== null && !isNaN(prevValueRef.current) ? prevValueRef.current : 0;
+    const endVal = value;
+    const duration = 200; // ms within 150-240ms range
+    const startTime = performance.now();
+
+    let animationFrameId: number;
+
+    const step = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      const current = Math.round(startVal + (endVal - startVal) * easeOut);
+      setAnimatedNum(current);
+
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(step);
+      } else {
+        prevValueRef.current = endVal;
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(step);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [value]);
+
   const displayValue =
     value === null || value === undefined || value === ''
       ? '—'
-      : typeof value === 'number'
-      ? toPersianDigits(value.toLocaleString('fa-IR'))
+      : typeof value === 'number' && animatedNum !== null
+      ? toPersianDigits(animatedNum.toLocaleString('fa-IR'))
       : toPersianDigits(value);
 
   const colors = accentColors[accent] || accentColors.emerald;
@@ -58,7 +106,7 @@ export const StatKpiCard: React.FC<StatKpiCardProps> = ({
     <Card
       hoverable={Boolean(onClick)}
       onClick={onClick}
-      className={`p-4 sm:p-5 relative overflow-hidden ${
+      className={`p-4 sm:p-5 relative overflow-hidden card-hover-lift ${
         onClick ? 'cursor-pointer hover:border-brand/50 transition-all' : ''
       } ${className}`}
     >

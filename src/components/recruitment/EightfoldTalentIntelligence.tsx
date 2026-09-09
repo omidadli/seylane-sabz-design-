@@ -11,6 +11,8 @@ import {
 } from '../../types';
 import { toPersianDigits } from '../../utils/jalali';
 import { showToast } from '../common/Toast';
+import { Skeleton, SkeletonCard } from '../ui/Skeleton';
+import { EmptyState } from '../ui/EmptyState';
 import {
   Network,
   Sparkles,
@@ -75,6 +77,24 @@ export const EightfoldTalentIntelligence: React.FC<EightfoldTalentIntelligencePr
     );
   };
 
+  if (isLoading) {
+    return (
+      <div className="space-y-6 animate-fadeIn">
+        <Skeleton className="h-44 w-full rounded-3xl" />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-5 space-y-3">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <SkeletonCard key={i} className="h-28" />
+            ))}
+          </div>
+          <div className="lg:col-span-7">
+            <SkeletonCard className="h-96" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header Banner */}
@@ -128,18 +148,27 @@ export const EightfoldTalentIntelligence: React.FC<EightfoldTalentIntelligencePr
 
       {/* Mode 1: Skills Graph & Learnability Hub */}
       {activeSubTab === 'skills_graph' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Left: Candidates Fit List */}
-          <div className="lg:col-span-5 space-y-3.5">
-            <div className="flex items-center justify-between px-1">
-              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <Network className="w-4 h-4 text-teal-600" />
-                <span>رتبه‌بندی تطابق شایستگی‌ها ({toPersianDigits(skillMatches.length)})</span>
-              </h3>
-              <span className="text-[11px] text-slate-500">شاخص شایستگی عمیق</span>
-            </div>
+        skillMatches.length === 0 ? (
+          <div className="bg-surface-1 rounded-3xl border border-border-default p-8">
+            <EmptyState
+              icon={<Network className="w-8 h-8 text-text-3" />}
+              title="داده‌های گراف مهارت یافت نشد"
+              description="ارزیابی مهارت‌های کارجویان برای این موقعیت شغلی هنوز تکمیل نشده است."
+            />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Left: Candidates Fit List */}
+            <div className="lg:col-span-5 space-y-3.5">
+              <div className="flex items-center justify-between px-1">
+                <h3 className="text-sm font-bold text-text-1 flex items-center gap-2">
+                  <Network className="w-4 h-4 text-teal-600" />
+                  <span>رتبه‌بندی تطابق شایستگی‌ها ({toPersianDigits(skillMatches.length)})</span>
+                </h3>
+                <span className="text-[11px] text-text-3">شاخص شایستگی عمیق</span>
+              </div>
 
-            <div className="space-y-3">
+              <div className="space-y-3">
               {skillMatches.map((match) => {
                 const isSelected = selectedMatch?.candidateId === match.candidateId;
                 return (
@@ -300,13 +329,14 @@ export const EightfoldTalentIntelligence: React.FC<EightfoldTalentIntelligencePr
                 </div>
               </div>
             ) : (
-              <div className="h-80 bg-white rounded-3xl border border-slate-200 flex flex-col items-center justify-center text-slate-400 gap-2">
-                <Network className="w-8 h-8 text-slate-300" />
+              <div className="h-80 bg-surface-1 rounded-3xl border border-border-default flex flex-col items-center justify-center text-text-3 gap-2">
+                <Network className="w-8 h-8 text-text-3" />
                 <span className="text-xs font-bold">برای مشاهده گراف مهارت‌ها، یک کارجو را انتخاب کنید</span>
               </div>
             )}
           </div>
         </div>
+        )
       )}
 
       {/* Mode 2: Internal Talent Mobility & Succession Planning */}
@@ -314,76 +344,86 @@ export const EightfoldTalentIntelligence: React.FC<EightfoldTalentIntelligencePr
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-bold text-slate-900">
+              <h3 className="text-sm font-bold text-text-1">
                 استعدادهای داخلی هلدینگ واجد شرایط ارتقا (Internal Career Progression)
               </h3>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-text-3 mt-0.5">
                 تطابق هوشمند همکاران شاغل در دافی، کامان، میس‌ویک و کاپوت با موقعیت‌های خالی سازمانی
               </p>
             </div>
-            <div className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl font-bold">
+            <div className="text-xs text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 px-3 py-1.5 rounded-xl font-bold">
               صرفه‌جویی تخمینی در هزینه جذب بیرونی: ۴۵,۰۰۰,۰۰۰ تومان
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {mobilityMatches.map((mob) => (
-              <div
-                key={mob.employeeId}
-                className="bg-white rounded-3xl border border-slate-200 p-5 shadow-xs hover:border-teal-400 transition-all space-y-4 flex flex-col justify-between"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <div className="text-base font-black text-slate-900">{mob.employeeName}</div>
-                      <div className="text-xs text-slate-500">{mob.currentTitle}</div>
-                    </div>
-                    <span className="px-2.5 py-1 rounded-xl bg-teal-50 text-teal-800 border border-teal-200 text-xs font-black">
-                      {toPersianDigits(mob.internalMatchPct)}٪ تطابق
-                    </span>
-                  </div>
-
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 space-y-2 text-xs">
-                    <div className="flex items-center justify-between text-slate-600">
-                      <span>برند جاری:</span>
-                      <span className="font-bold text-slate-900">{mob.currentBrand}</span>
-                    </div>
-                    <div className="flex items-center justify-between text-slate-600">
-                      <span>موقعیت هدف جدید:</span>
-                      <span className="font-bold text-teal-700">{mob.targetJobTitle}</span>
-                    </div>
-                    <div className="flex items-center justify-between text-slate-600">
-                      <span>سطح آمادگی ارتقا:</span>
-                      <span className="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-bold text-[10px]">
-                        {mob.readinessLevel === 'READY_NOW'
-                          ? 'آماده انتصاب فوری'
-                          : 'نیازمند دوره ۳ ماهه'}
+          {mobilityMatches.length === 0 ? (
+            <div className="bg-surface-1 rounded-3xl border border-border-default p-8">
+              <EmptyState
+                icon={<Compass className="w-8 h-8 text-text-3" />}
+                title="موردی برای ارتقای داخلی یافت نشد"
+                description="در حال حاضر هیچ کارمند واجد شرایطی برای انتقال یا ارتقا به این ردیف شغلی شناسایی نشده است."
+              />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {mobilityMatches.map((mob) => (
+                <div
+                  key={mob.employeeId}
+                  className="bg-surface-1 rounded-3xl border border-border-default p-5 shadow-xs hover:border-teal-400 transition-all space-y-4 flex flex-col justify-between"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <div className="text-base font-black text-text-1">{mob.employeeName}</div>
+                        <div className="text-xs text-text-3">{mob.currentTitle}</div>
+                      </div>
+                      <span className="px-2.5 py-1 rounded-xl bg-teal-50 dark:bg-teal-950/40 text-teal-800 dark:text-teal-300 border border-teal-200 dark:border-teal-800 text-xs font-black">
+                        {toPersianDigits(mob.internalMatchPct)}٪ تطابق
                       </span>
                     </div>
+
+                    <div className="p-3 rounded-2xl bg-surface-2 border border-border-default space-y-2 text-xs">
+                      <div className="flex items-center justify-between text-text-2">
+                        <span>برند جاری:</span>
+                        <span className="font-bold text-text-1">{mob.currentBrand}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-text-2">
+                        <span>موقعیت هدف جدید:</span>
+                        <span className="font-bold text-teal-700 dark:text-teal-400">{mob.targetJobTitle}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-text-2">
+                        <span>سطح آمادگی ارتقا:</span>
+                        <span className="px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 font-bold text-[10px]">
+                          {mob.readinessLevel === 'READY_NOW'
+                            ? 'آماده انتصاب فوری'
+                            : 'نیازمند دوره ۳ ماهه'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <p className="text-xs text-text-2 leading-relaxed italic bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20">
+                      «{mob.managerRecommendationNote}»
+                    </p>
                   </div>
 
-                  <p className="text-xs text-slate-600 leading-relaxed italic bg-amber-50/50 p-2.5 rounded-xl border border-amber-200/50">
-                    «{mob.managerRecommendationNote}»
-                  </p>
-                </div>
+                  <div className="pt-3 border-t border-border-default flex items-center justify-between gap-2">
+                    <span className="text-[10px] text-rose-600 dark:text-rose-400 font-bold flex items-center gap-1">
+                      <ShieldAlert className="w-3.5 h-3.5" />
+                      <span>ریسک خروج: {mob.retentionImpact === 'CRITICAL_HIGH' ? 'بالا (نیازمند نگهداشت)' : 'متوسط'}</span>
+                    </span>
 
-                <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-                  <span className="text-[10px] text-rose-600 font-bold flex items-center gap-1">
-                    <ShieldAlert className="w-3.5 h-3.5" />
-                    <span>ریسک خروج: {mob.retentionImpact === 'CRITICAL_HIGH' ? 'بالا (نیازمند نگهداشت)' : 'متوسط'}</span>
-                  </span>
-
-                  <button
-                    onClick={() => handlePromoteInternal(mob)}
-                    className="px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs"
-                  >
-                    <span>ارسال پیشنهاد ارتقا</span>
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </button>
+                    <button
+                      onClick={() => handlePromoteInternal(mob)}
+                      className="px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 active:scale-98 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer transition-all shadow-2xs"
+                    >
+                      <span>ارسال پیشنهاد ارتقا</span>
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

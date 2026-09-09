@@ -712,7 +712,17 @@ export default function App() {
               )}
 
               {/* Module 8: Analytics & KPIs */}
-              {activeModule === 'analytics' && <AnalyticsModule metrics={metrics} candidates={candidates} />}
+              {activeModule === 'analytics' && (
+                <AnalyticsModule
+                  metrics={metrics}
+                  candidates={candidates}
+                  employees={employees}
+                  leaveRequests={leaveRequests}
+                  departments={departments}
+                  currentRole={currentRole}
+                  isLoading={isLoading}
+                />
+              )}
             </>
           )}
         </main>

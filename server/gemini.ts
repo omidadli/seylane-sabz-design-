@@ -25,6 +25,102 @@ export function resolveGeminiModel(): string {
 const GEMINI_MODEL = resolveGeminiModel();
 const GEMINI_FALLBACK_MODEL = GEMINI_MODEL === 'gemini-2.5-flash' ? 'gemini-3.8-flash' : 'gemini-2.5-flash';
 
+/**
+ * Robust JSON sanitizer for LLM outputs that may contain raw unescaped newlines/tabs,
+ * ASCII control characters (< 0x20), markdown code fences, or trailing commas inside strings.
+ */
+export function sanitizeJsonControlCharacters(jsonStr: string): string {
+  let result = '';
+  let inString = false;
+  let isEscaped = false;
+
+  for (let i = 0; i < jsonStr.length; i++) {
+    const ch = jsonStr[i];
+    const code = ch.charCodeAt(0);
+
+    if (inString) {
+      if (isEscaped) {
+        result += ch;
+        isEscaped = false;
+      } else if (ch === '\\') {
+        result += ch;
+        isEscaped = true;
+      } else if (ch === '"') {
+        result += ch;
+        inString = false;
+      } else if (ch === '\n') {
+        result += '\\n';
+      } else if (ch === '\r') {
+        result += '\\r';
+      } else if (ch === '\t') {
+        result += '\\t';
+      } else if (code < 32) {
+        result += '\\u' + code.toString(16).padStart(4, '0');
+      } else {
+        result += ch;
+      }
+    } else {
+      if (ch === '"') {
+        inString = true;
+      }
+      result += ch;
+    }
+  }
+
+  return result;
+}
+
+export function safeJsonParse<T = any>(rawText: string, fallback?: T): T {
+  if (!rawText || typeof rawText !== 'string') {
+    if (fallback !== undefined) return fallback;
+    throw new Error('Empty text to parse as JSON');
+  }
+
+  let cleaned = rawText.trim();
+  // Strip markdown code fences (```json ... ``` or ``` ...)
+  if (cleaned.startsWith('```')) {
+    cleaned = cleaned.replace(/^```[a-zA-Z]*\s*/, '').replace(/\s*```$/, '').trim();
+  }
+
+  // 1. Direct standard parse attempt
+  try {
+    return JSON.parse(cleaned) as T;
+  } catch {
+    // Continue to sanitization
+  }
+
+  // 2. Sanitize unescaped control characters in string literals
+  try {
+    const sanitized = sanitizeJsonControlCharacters(cleaned);
+    return JSON.parse(sanitized) as T;
+  } catch {
+    // Continue to bounds extraction
+  }
+
+  // 3. Extract JSON object/array substring and sanitize
+  const firstBrace = cleaned.indexOf('{');
+  const lastBrace = cleaned.lastIndexOf('}');
+  if (firstBrace !== -1 && lastBrace > firstBrace) {
+    const sliced = cleaned.substring(firstBrace, lastBrace + 1);
+    try {
+      return JSON.parse(sanitizeJsonControlCharacters(sliced)) as T;
+    } catch {
+      // Try stripping trailing commas before closing braces/brackets
+      try {
+        const withoutTrailingCommas = sanitizeJsonControlCharacters(sliced).replace(/,(\s*[}\]])/g, '$1');
+        return JSON.parse(withoutTrailingCommas) as T;
+      } catch {
+        // continue
+      }
+    }
+  }
+
+  if (fallback !== undefined) {
+    return fallback;
+  }
+  throw new Error(`Failed to safely parse JSON: ${cleaned.slice(0, 120)}...`);
+}
+
 // Tool Declarations for Gemini Function Calling
 const analyzeJobPostingTool: FunctionDeclaration = {
   name: 'analyze_job_posting',
@@ -537,7 +633,7 @@ export async function generateJobAd(params: {
 مزایا و تسهیلات رفاهی: ${perks.join('، ') || 'بیمه تکمیلی، پکیج محصولات ماهانه هلدینگ، پاداش عملکرد'}
 لحن متن: ${params.tone}
 
-پاسخ شما باید در قالب یک آبجکت JSON معتبر با کلیدهای زیر باشد (فقط JSON معتبر بدون هیچ متن اضافی):
+پاسخ شما باید در قالب یک آبجکت JSON معتبر با کلیدهای زیر باشد (فقط JSON معتبر بدون هیچ متن اضافی، دقت فرمایید که تمام شکست‌های خط درون مقادیر رشته‌ای باید به صورت \\n انکود شوند):
 {
   "jobDescriptionMarkdown": "متن رسمی، تفصیلی و ساختاریافته شرح شغل سازمانی (شامل: معرفی نقش، ماموریت، وظایف و مسئولیت‌های کلیدی روزانه، شایستگی‌های تخصصی و نرم، شرایط احراز تحصیلی و سابقه کار)",
   "recruitmentAdSocial": "متن جذاب، گیرا و ترغیب‌کننده برای شبکه‌های اجتماعی (لینکدین، جابینجا، جاب‌ویژن، تلگرام) همراه با ایموجی‌های مناسب، تگ‌های برندهای سیلانه سبز و کال تو اکشن صریح",
@@ -546,39 +642,65 @@ export async function generateJobAd(params: {
   "perksList": ["لیست بولت‌پوینت مزایای رقابتی این شغل در سیلانه سبز"]
 }`;
 
+      const jobAdConfig = {
+        responseMimeType: 'application/json',
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            jobDescriptionMarkdown: { type: Type.STRING },
+            recruitmentAdSocial: { type: Type.STRING },
+            interviewQuestions: {
+              type: Type.ARRAY,
+              items: { type: Type.STRING },
+            },
+            salaryBenchmarkToman: { type: Type.STRING },
+            perksList: {
+              type: Type.ARRAY,
+              items: { type: Type.STRING },
+            },
+          },
+          required: ['jobDescriptionMarkdown', 'recruitmentAdSocial'],
+        },
+      };
+
       let response;
       try {
         response = await ai.models.generateContent({
           model: GEMINI_MODEL,
           contents: prompt,
-          config: {
-            responseMimeType: 'application/json',
-          },
+          config: jobAdConfig,
         });
       } catch (err: any) {
         console.warn(`Primary model ${GEMINI_MODEL} failed for generateJobAd, retrying with ${GEMINI_FALLBACK_MODEL}:`, err?.message || err);
         response = await ai.models.generateContent({
           model: GEMINI_FALLBACK_MODEL,
           contents: prompt,
-          config: {
-            responseMimeType: 'application/json',
-          },
+          config: jobAdConfig,
         });
       }
 
       if (response && response.text) {
-        const parsed = JSON.parse(response.text);
-        return {
-          jobTitle: params.jobTitle,
-          departmentName: params.departmentName,
-          brandFocus: brand,
-          jobDescriptionMarkdown: parsed.jobDescriptionMarkdown,
-          recruitmentAdSocial: parsed.recruitmentAdSocial,
-          interviewQuestions: parsed.interviewQuestions || [],
-          salaryBenchmarkToman: parsed.salaryBenchmarkToman || '۳۵ تا ۴۵ میلیون تومان',
-          perksList: parsed.perksList || perks,
-          aiAvailable: true,
-        };
+        const parsed = safeJsonParse<{
+          jobDescriptionMarkdown?: string;
+          recruitmentAdSocial?: string;
+          interviewQuestions?: string[];
+          salaryBenchmarkToman?: string;
+          perksList?: string[];
+        }>(response.text);
+
+        if (parsed && (parsed.jobDescriptionMarkdown || parsed.recruitmentAdSocial)) {
+          return {
+            jobTitle: params.jobTitle,
+            departmentName: params.departmentName,
+            brandFocus: brand,
+            jobDescriptionMarkdown: parsed.jobDescriptionMarkdown || '',
+            recruitmentAdSocial: parsed.recruitmentAdSocial || '',
+            interviewQuestions: Array.isArray(parsed.interviewQuestions) ? parsed.interviewQuestions : [],
+            salaryBenchmarkToman: parsed.salaryBenchmarkToman || '۳۵ تا ۴۵ میلیون تومان',
+            perksList: Array.isArray(parsed.perksList) ? parsed.perksList : perks,
+            aiAvailable: true,
+          };
+        }
       }
     } catch (err) {
       console.warn('Gemini generateJobAd failed or fallback needed:', err);
@@ -903,14 +1025,23 @@ ${params.resumeText}
       }
 
       if (response && response.text) {
-        const parsed = JSON.parse(response.text);
-        if (parsed.criteriaScores) criteriaScores = parsed.criteriaScores;
-        if (parsed.criteriaFeedback) criteriaFeedback = parsed.criteriaFeedback;
-        if (Array.isArray(parsed.strengths)) strengths = parsed.strengths;
-        if (Array.isArray(parsed.weaknesses)) weaknesses = parsed.weaknesses;
-        if (Array.isArray(parsed.resumeQuotes)) resumeQuotes = parsed.resumeQuotes;
-        if (parsed.executiveSummary) executiveSummary = parsed.executiveSummary;
-        aiAvailable = true;
+        const parsed = safeJsonParse<{
+          criteriaScores?: Record<string, number>;
+          criteriaFeedback?: Record<string, string>;
+          strengths?: string[];
+          weaknesses?: string[];
+          resumeQuotes?: string[];
+          executiveSummary?: string;
+        }>(response.text);
+        if (parsed) {
+          if (parsed.criteriaScores) criteriaScores = parsed.criteriaScores;
+          if (parsed.criteriaFeedback) criteriaFeedback = parsed.criteriaFeedback;
+          if (Array.isArray(parsed.strengths)) strengths = parsed.strengths;
+          if (Array.isArray(parsed.weaknesses)) weaknesses = parsed.weaknesses;
+          if (Array.isArray(parsed.resumeQuotes)) resumeQuotes = parsed.resumeQuotes;
+          if (parsed.executiveSummary) executiveSummary = parsed.executiveSummary;
+          aiAvailable = true;
+        }
       }
     } catch (err) {
       console.warn('Gemini dynamic evaluation failed or needed fallback:', err);

@@ -11,6 +11,8 @@ import {
 } from '../../types';
 import { toPersianDigits } from '../../utils/jalali';
 import { showToast } from '../common/Toast';
+import { Skeleton, SkeletonCard } from '../ui/Skeleton';
+import { EmptyState } from '../ui/EmptyState';
 import {
   Video,
   Mic,
@@ -139,6 +141,24 @@ export const HireVueVideoStudio: React.FC<HireVueVideoStudioProps> = ({
       setIsSimulating(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6 animate-fadeIn">
+        <Skeleton className="h-44 w-full rounded-3xl" />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-5 space-y-3">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <SkeletonCard key={i} className="h-28" />
+            ))}
+          </div>
+          <div className="lg:col-span-7">
+            <SkeletonCard className="h-96" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -320,187 +340,201 @@ export const HireVueVideoStudio: React.FC<HireVueVideoStudioProps> = ({
 
       {/* Main Studio View: Left Submissions List, Right In-depth Assessment Report */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Col: Video Submissions Feed */}
-        <div className="lg:col-span-5 space-y-3.5">
-          <div className="flex items-center justify-between px-1">
-            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <Video className="w-4 h-4 text-emerald-600" />
-              <span>مصاحبه‌های ویدیویی دریافت‌شده ({toPersianDigits(submissions.length)})</span>
-            </h3>
-            <span className="text-[11px] text-slate-500">پالایش هوشمند بر اساس امتیاز</span>
+        {submissions.length === 0 ? (
+          <div className="lg:col-span-12 bg-surface-1 rounded-3xl border border-border-default p-8">
+            <EmptyState
+              icon={<Video className="w-8 h-8 text-text-3" />}
+              title="مصاحبه ویدیویی ثبت نشده است"
+              description="هنوز هیچ کارجویی برای این موقعیت شغلی مصاحبه ویدیویی ارسال نکرده است. می‌توانید با شروع آزمون زنده در استودیو، عملکرد هوش مصنوعی را تست کنید."
+              actionLabel="آزمون زنده استودیوی ضبط"
+              onAction={handleStartSimulation}
+            />
           </div>
-
-          <div className="space-y-3">
-            {submissions.map((sub) => {
-              const isSelected = selectedSubmission?.id === sub.id;
-              return (
-                <div
-                  key={sub.id}
-                  onClick={() => setSelectedSubmission(sub)}
-                  className={`p-4 rounded-2xl border transition-all cursor-pointer ${
-                    isSelected
-                      ? 'bg-white border-emerald-500 shadow-md ring-2 ring-emerald-500/20'
-                      : 'bg-white hover:bg-slate-50 border-slate-200 shadow-2xs'
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-3 mb-2.5">
-                    <div>
-                      <div className="text-sm font-black text-slate-900">{sub.candidateName}</div>
-                      <div className="text-xs text-slate-500">{sub.jobTitle}</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-base font-black text-emerald-700">
-                        {toPersianDigits(sub.overallScore)}
-                        <span className="text-[10px] text-slate-400 font-normal"> / ۱۰۰</span>
-                      </div>
-                      <span className="text-[10px] text-slate-400 block">{sub.submittedAtJalali}</span>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold">
-                      {sub.brand}
-                    </span>
-                    <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px]">
-                      وضوح گفتار: {toPersianDigits(sub.clarityScore)}٪
-                    </span>
-                    <span className="px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 text-[10px] font-bold">
-                      اعتمادبه‌نفس: {toPersianDigits(sub.confidenceScore)}٪
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Right Col: Deep AI Assessment Report */}
-        <div className="lg:col-span-7">
-          {selectedSubmission ? (
-            <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-xs space-y-6">
-              {/* Header Profile */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-lg font-black text-slate-900">{selectedSubmission.candidateName}</h3>
-                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold">
-                      {selectedSubmission.brand}
-                    </span>
-                  </div>
-                  <div className="text-xs text-slate-500 font-medium">
-                    موقعیت: {selectedSubmission.jobTitle} • تاریخ ثبت: {selectedSubmission.submittedAtJalali}
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-center min-w-[90px]">
-                    <div className="text-[10px] text-emerald-700 font-bold">امتیاز شایستگی</div>
-                    <div className="text-xl font-black text-emerald-800">
-                      {toPersianDigits(selectedSubmission.overallScore)}٪
-                    </div>
-                  </div>
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-center min-w-[90px]">
-                    <div className="text-[10px] text-slate-600 font-bold">ممیزی عدالت</div>
-                    <div className="text-xl font-black text-slate-900">
-                      {toPersianDigits(selectedSubmission.fairnessAuditScore)}٪
-                    </div>
-                  </div>
-                </div>
+        ) : (
+          <>
+            {/* Left Col: Video Submissions Feed */}
+            <div className="lg:col-span-5 space-y-3.5">
+              <div className="flex items-center justify-between px-1">
+                <h3 className="text-sm font-bold text-text-1 flex items-center gap-2">
+                  <Video className="w-4 h-4 text-emerald-600" />
+                  <span>مصاحبه‌های ویدیویی دریافت‌شده ({toPersianDigits(submissions.length)})</span>
+                </h3>
+                <span className="text-[11px] text-text-3">پالایش هوشمند بر اساس امتیاز</span>
               </div>
 
-              {/* Recommendation Banner */}
-              <div className="p-4 rounded-2xl bg-emerald-950 text-white flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <Award className="w-6 h-6 text-amber-400 shrink-0" />
-                  <div>
-                    <div className="text-xs font-bold text-emerald-300">نتیجه هوش مصنوعی HireVue:</div>
-                    <div className="text-sm font-black text-white">
-                      {selectedSubmission.aiRecommendation === 'STRONG_RECOMMEND'
-                        ? 'توصیه اکید جهت دعوت به مصاحبه حضوری نهایی'
-                        : selectedSubmission.aiRecommendation === 'RECOMMEND'
-                        ? 'توصیه به مصاحبه با مدیر فنی'
-                        : 'نیازمند بازبینی تکمیلی'}
-                    </div>
-                  </div>
-                </div>
-                <button
-                  onClick={() => showToast('دعوت به مصاحبه حضوری برای کارجو ارسال شد', 'success')}
-                  className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shrink-0 cursor-pointer transition-colors"
-                >
-                  تأیید و دعوت فوری
-                </button>
-              </div>
-
-              {/* Summary Insight */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                <div className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                  <BrainCircuit className="w-4 h-4 text-emerald-600" />
-                  <span>تحلیل روان‌شناختی و شایستگی هوش مصنوعی (AI Qualitative Analysis)</span>
-                </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  {selectedSubmission.summaryInsight}
-                </p>
-              </div>
-
-              {/* Answers & Transcripts */}
-              <div className="space-y-4">
-                <div className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                  <MessageSquare className="w-4 h-4 text-emerald-600" />
-                  <span>پاسخ‌های ثبت‌شده و ارزیابی سوال به سوال</span>
-                </div>
-
-                <div className="space-y-3">
-                  {selectedSubmission.answers.map((ans, idx) => (
+              <div className="space-y-3">
+                {submissions.map((sub) => {
+                  const isSelected = selectedSubmission?.id === sub.id;
+                  return (
                     <div
-                      key={idx}
-                      className="p-4 rounded-2xl border border-slate-200 bg-white hover:border-slate-300 transition-colors space-y-3"
+                      key={sub.id}
+                      onClick={() => setSelectedSubmission(sub)}
+                      className={`p-4 rounded-2xl border transition-all cursor-pointer ${
+                        isSelected
+                          ? 'bg-surface-1 border-emerald-500 shadow-md ring-2 ring-emerald-500/20'
+                          : 'bg-surface-1 hover:bg-surface-2 border-border-default shadow-2xs'
+                      }`}
                     >
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="font-bold text-xs text-slate-900 leading-normal">
-                          سوال {toPersianDigits(idx + 1)}: {ans.questionText}
+                      <div className="flex items-start justify-between gap-3 mb-2.5">
+                        <div>
+                          <div className="text-sm font-black text-text-1">{sub.candidateName}</div>
+                          <div className="text-xs text-text-3">{sub.jobTitle}</div>
                         </div>
-                        <span className="text-xs font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 shrink-0">
-                          نمره: {toPersianDigits(ans.score)} / ۱۰
+                        <div className="text-right">
+                          <div className="text-base font-black text-emerald-700 dark:text-emerald-400">
+                            {toPersianDigits(sub.overallScore)}
+                            <span className="text-[10px] text-text-3 font-normal"> / ۱۰۰</span>
+                          </div>
+                          <span className="text-[10px] text-text-3 block">{sub.submittedAtJalali}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-[10px] font-bold">
+                          {sub.brand}
+                        </span>
+                        <span className="px-2 py-0.5 rounded-md bg-surface-2 text-text-2 text-[10px]">
+                          وضوح گفتار: {toPersianDigits(sub.clarityScore)}٪
+                        </span>
+                        <span className="px-2 py-0.5 rounded-md bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 text-[10px] font-bold">
+                          اعتمادبه‌نفس: {toPersianDigits(sub.confidenceScore)}٪
                         </span>
                       </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
 
-                      {/* Video Player Placeholder / Transcript Box */}
-                      <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 leading-relaxed font-sans relative">
-                        <div className="text-[10px] font-bold text-slate-400 mb-1 flex items-center gap-1">
-                          <FileText className="w-3 h-3 text-slate-500" />
-                          <span>متن استخراج‌شده از گفتار (Persian Speech-to-Text):</span>
-                        </div>
-                        «{ans.transcript}»
+            {/* Right Col: Deep AI Assessment Report */}
+            <div className="lg:col-span-7">
+              {selectedSubmission ? (
+                <div className="bg-surface-1 rounded-3xl border border-border-default p-5 sm:p-7 shadow-xs space-y-6">
+                  {/* Header Profile */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border-default pb-5">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-lg font-black text-text-1">{selectedSubmission.candidateName}</h3>
+                        <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 text-[11px] font-bold">
+                          {selectedSubmission.brand}
+                        </span>
                       </div>
+                      <div className="text-xs text-text-3 font-medium">
+                        موقعیت: {selectedSubmission.jobTitle} • تاریخ ثبت: {selectedSubmission.submittedAtJalali}
+                      </div>
+                    </div>
 
-                      {/* AI Feedback & Competency Badges */}
-                      <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-slate-100">
-                        <div className="text-[11px] text-emerald-700 font-medium">
-                          {ans.aiFeedback}
+                    <div className="flex items-center gap-3">
+                      <div className="p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-center min-w-[90px]">
+                        <div className="text-[10px] text-emerald-700 dark:text-emerald-300 font-bold">امتیاز شایستگی</div>
+                        <div className="text-xl font-black text-emerald-800 dark:text-emerald-200">
+                          {toPersianDigits(selectedSubmission.overallScore)}٪
                         </div>
-                        <div className="flex flex-wrap items-center gap-1.5">
-                          {ans.keyCompetencies.map((comp, cIdx) => (
-                            <span
-                              key={cIdx}
-                              className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[10px] font-bold"
-                            >
-                              ✓ {comp}
-                            </span>
-                          ))}
+                      </div>
+                      <div className="p-3 rounded-2xl bg-surface-2 border border-border-default text-center min-w-[90px]">
+                        <div className="text-[10px] text-text-3 font-bold">ممیزی عدالت</div>
+                        <div className="text-xl font-black text-text-1">
+                          {toPersianDigits(selectedSubmission.fairnessAuditScore)}٪
                         </div>
                       </div>
                     </div>
-                  ))}
+                  </div>
+
+                  {/* Recommendation Banner */}
+                  <div className="p-4 rounded-2xl bg-emerald-950 text-white flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <Award className="w-6 h-6 text-amber-400 shrink-0" />
+                      <div>
+                        <div className="text-xs font-bold text-emerald-300">نتیجه هوش مصنوعی HireVue:</div>
+                        <div className="text-sm font-black text-white">
+                          {selectedSubmission.aiRecommendation === 'STRONG_RECOMMEND'
+                            ? 'توصیه اکید جهت دعوت به مصاحبه حضوری نهایی'
+                            : selectedSubmission.aiRecommendation === 'RECOMMEND'
+                            ? 'توصیه به مصاحبه با مدیر فنی'
+                            : 'نیازمند بازبینی تکمیلی'}
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => showToast('دعوت به مصاحبه حضوری برای کارجو ارسال شد', 'success')}
+                      className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:scale-98 text-slate-950 font-black text-xs shrink-0 cursor-pointer transition-all"
+                    >
+                      تأیید و دعوت فوری
+                    </button>
+                  </div>
+
+                  {/* Summary Insight */}
+                  <div className="p-4 rounded-2xl bg-surface-2 border border-border-default space-y-2">
+                    <div className="text-xs font-bold text-text-1 flex items-center gap-1.5">
+                      <BrainCircuit className="w-4 h-4 text-emerald-600" />
+                      <span>تحلیل روان‌شناختی و شایستگی هوش مصنوعی (AI Qualitative Analysis)</span>
+                    </div>
+                    <p className="text-xs text-text-2 leading-relaxed">
+                      {selectedSubmission.summaryInsight}
+                    </p>
+                  </div>
+
+                  {/* Answers & Transcripts */}
+                  <div className="space-y-4">
+                    <div className="text-xs font-bold text-text-1 flex items-center gap-1.5">
+                      <MessageSquare className="w-4 h-4 text-emerald-600" />
+                      <span>پاسخ‌های ثبت‌شده و ارزیابی سوال به سوال</span>
+                    </div>
+
+                    <div className="space-y-3">
+                      {selectedSubmission.answers.map((ans, idx) => (
+                        <div
+                          key={idx}
+                          className="p-4 rounded-2xl border border-border-default bg-surface-1 hover:border-border-hover transition-colors space-y-3"
+                        >
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="font-bold text-xs text-text-1 leading-normal">
+                              سوال {toPersianDigits(idx + 1)}: {ans.questionText}
+                            </div>
+                            <span className="text-xs font-black text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-800 shrink-0">
+                              نمره: {toPersianDigits(ans.score)} / ۱۰
+                            </span>
+                          </div>
+
+                          {/* Video Player Placeholder / Transcript Box */}
+                          <div className="p-3 rounded-xl bg-surface-2 border border-border-default text-xs text-text-2 leading-relaxed font-sans relative">
+                            <div className="text-[10px] font-bold text-text-3 mb-1 flex items-center gap-1">
+                              <FileText className="w-3 h-3 text-text-3" />
+                              <span>متن استخراج‌شده از گفتار (Persian Speech-to-Text):</span>
+                            </div>
+                            «{ans.transcript}»
+                          </div>
+
+                          {/* AI Feedback & Competency Badges */}
+                          <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-border-default">
+                            <div className="text-[11px] text-emerald-700 dark:text-emerald-400 font-medium">
+                              {ans.aiFeedback}
+                            </div>
+                            <div className="flex flex-wrap items-center gap-1.5">
+                              {ans.keyCompetencies.map((comp, cIdx) => (
+                                <span
+                                  key={cIdx}
+                                  className="px-2 py-0.5 rounded-md bg-surface-2 text-text-2 text-[10px] font-bold"
+                                >
+                                  ✓ {comp}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="h-80 bg-surface-1 rounded-3xl border border-border-default flex flex-col items-center justify-center text-text-3 gap-2">
+                  <Video className="w-8 h-8 text-text-3" />
+                  <span className="text-xs font-bold">برای مشاهده جزئیات یک مصاحبه ویدیویی را انتخاب کنید</span>
+                </div>
+              )}
             </div>
-          ) : (
-            <div className="h-80 bg-white rounded-3xl border border-slate-200 flex flex-col items-center justify-center text-slate-400 gap-2">
-              <Video className="w-8 h-8 text-slate-300" />
-              <span className="text-xs font-bold">برای مشاهده جزئیات یک مصاحبه ویدیویی را انتخاب کنید</span>
-            </div>
-          )}
-        </div>
+          </>
+        )}
       </div>
     </div>
   );

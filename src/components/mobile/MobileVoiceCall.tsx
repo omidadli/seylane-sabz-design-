@@ -10,11 +10,14 @@ import {
   User,
   ArrowRight,
   CheckCircle2,
+  XCircle,
   Send,
   Square,
-  Play,
-  HelpCircle,
-  AudioWaveform as WaveIcon,
+  AlertTriangle,
+  RotateCcw,
+  Check,
+  X,
+  ShieldAlert,
 } from 'lucide-react';
 import { VoiceCallMessage } from '../../types';
 
@@ -23,6 +26,14 @@ interface MobileVoiceCallProps {
   onNavigateToJobAd?: (params?: any) => void;
   onNavigateToDepartments?: (deptId?: string) => void;
   onRunAutomation?: (category: string) => void;
+}
+
+interface PendingAction {
+  id: string;
+  actionType: string;
+  title: string;
+  description: string;
+  actionResult?: any;
 }
 
 export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
@@ -35,20 +46,22 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
   const [callDuration, setCallDuration] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [isSpeakerOn, setIsSpeakerOn] = useState(true);
-  const [transcript, setTranscript] = useState<VoiceCallMessage[]>([
-    {
-      id: 'msg-init',
-      sender: 'assistant',
-      text: 'سلام و احترام مهندس عزیز! دستیار صوتی هوشمند منابع انسانی هلدینگ سیلانه سبز (دافی، کامان، میس‌ویک) در خدمت شماست. بفرمایید در خصوص کدام دپارتمان یا فرایند نیاز به اقدام دارید؟',
-      timestamp: 'هم‌اکنون',
-    },
-  ]);
   const [currentInput, setCurrentInput] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(true);
   const [audioTesting, setAudioTesting] = useState(false);
   const [typedMessage, setTypedMessage] = useState('');
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
+
+  const [transcript, setTranscript] = useState<VoiceCallMessage[]>([
+    {
+      id: 'msg-init',
+      sender: 'assistant',
+      text: 'سلام و وقت‌بخیر مهندس عزیز! دستیار صوتی منابع انسانی هلدینگ سیلانه سبز (دافی، کامان، میس‌ویک) آماده دریافت دستورات شماست. بفرمایید چه کمکی از من ساخته است؟',
+      timestamp: 'هم‌اکنون',
+    },
+  ]);
 
   const recognitionRef = useRef<any>(null);
   const transcriptEndRef = useRef<HTMLDivElement>(null);
@@ -56,7 +69,18 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
   const accumulatedTextRef = useRef<string>('');
   const audioContextRef = useRef<AudioContext | null>(null);
 
-  // Play a pleasant corporate assistant harmonic chime using Web Audio API
+  // Haptic feedback trigger for mobile touch interactions
+  const triggerHaptic = (ms = 20) => {
+    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+      try {
+        navigator.vibrate(ms);
+      } catch {
+        // ignore if not permitted
+      }
+    }
+  };
+
+  // Play pleasant harmonic assistant chime
   const playAssistantChime = () => {
     try {
       const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
@@ -117,9 +141,9 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
   // Scroll transcript to bottom
   useEffect(() => {
     transcriptEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [transcript, currentInput]);
+  }, [transcript, currentInput, pendingAction]);
 
-  // Handle Speech Recognition once on component mount
+  // Handle Speech Recognition
   useEffect(() => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (SpeechRecognition) {
@@ -131,6 +155,7 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
       recognition.onstart = () => {
         setIsListening(true);
         setCallStatus('LISTENING');
+        triggerHaptic(25);
       };
 
       recognition.onresult = (event: any) => {
@@ -148,12 +173,11 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
         if (totalSpoken) {
           setCurrentInput(totalSpoken);
 
-          // Reset silence timer: user is still speaking!
           if (silenceTimeoutRef.current) {
             clearTimeout(silenceTimeoutRef.current);
           }
 
-          // Generous 2.8-second silence pause before auto-submitting
+          // Silence timeout before auto-submitting
           silenceTimeoutRef.current = setTimeout(() => {
             if (accumulatedTextRef.current.trim() || totalSpoken.trim()) {
               const textToSend = accumulatedTextRef.current.trim() || totalSpoken.trim();
@@ -172,7 +196,6 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
       };
 
       recognition.onend = () => {
-        // If still flagged as listening (e.g. Chrome 60s timeout), restart smoothly
         setIsListening(false);
         if (callStatus === 'LISTENING') {
           setCallStatus('CONNECTED');
@@ -194,9 +217,10 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
         }
       }
     };
-  }, []);
+  }, [callStatus]);
 
   const startListening = () => {
+    triggerHaptic(30);
     if (isMuted) {
       setIsMuted(false);
     }
@@ -216,8 +240,8 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
         }
       }
     } else {
-      // Fallback if browser doesn't support Web Speech API
-      const sample = 'وضعیت پرسنل و شیفت‌های کارخانه اشتهارد چطوره؟';
+      // Fallback sample
+      const sample = 'یک آگهی شغلی برای مدیر برند دافی تنظیم کن';
       setCurrentInput(sample);
       setTimeout(() => {
         handleSendCommand(sample);
@@ -226,6 +250,7 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
   };
 
   const stopListeningAndSend = (textToSend?: string) => {
+    triggerHaptic(25);
     if (silenceTimeoutRef.current) clearTimeout(silenceTimeoutRef.current);
     if (recognitionRef.current) {
       try {
@@ -247,6 +272,7 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
   };
 
   const cancelListening = () => {
+    triggerHaptic(15);
     if (silenceTimeoutRef.current) clearTimeout(silenceTimeoutRef.current);
     if (recognitionRef.current) {
       try {
@@ -261,18 +287,16 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
     setCallStatus('CONNECTED');
   };
 
-  // Speak text with guaranteed browser audio output and fallback
+  // Speak text with speech synthesis
   const speakText = (text: string) => {
     if (!isSpeakerOn || typeof window === 'undefined' || !window.speechSynthesis) return;
 
-    // First, play audible confirmation chime so sound is 100% audible immediately
     playAssistantChime();
 
     try {
       window.speechSynthesis.cancel();
       window.speechSynthesis.resume();
 
-      // Clean text of non-spoken characters and markdown
       const cleanText = text
         .replace(/[*_#`[\]()]/g, '')
         .replace(/[🌿💼💰🏖️🏭⚡✍️📋✨]/gu, '')
@@ -280,7 +304,6 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
 
       const utterance = new SpeechSynthesisUtterance(cleanText);
 
-      // Find best voice match: Persian -> Arabic -> Multilingual -> Default
       const voices = availableVoices.length > 0 ? availableVoices : window.speechSynthesis.getVoices();
       let bestVoice = voices.find((v) => v.lang && v.lang.toLowerCase().startsWith('fa'));
       if (!bestVoice) {
@@ -300,7 +323,7 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
         utterance.lang = 'fa-IR';
       }
 
-      utterance.rate = 0.92; // Slightly slower for clear, distinguished Persian diction
+      utterance.rate = 0.92;
       utterance.pitch = 1.0;
 
       utterance.onstart = () => {
@@ -309,12 +332,10 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
       utterance.onend = () => {
         setCallStatus('CONNECTED');
       };
-      utterance.onerror = (e) => {
-        console.warn('Speech synthesis utterance warning:', e);
+      utterance.onerror = () => {
         setCallStatus('CONNECTED');
       };
 
-      // Slight timeout ensures previous utterance cancels cleanly on Chrome
       setTimeout(() => {
         window.speechSynthesis.speak(utterance);
       }, 60);
@@ -322,12 +343,6 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
       console.warn('Speech synthesis error:', e);
       setCallStatus('CONNECTED');
     }
-  };
-
-  const testAudioSpeaker = () => {
-    setAudioTesting(true);
-    speakText('تست صدای بلندگو. ارتباط صوتی با دستیار هوشمند هلدینگ سیلانه سبز برقرار است.');
-    setTimeout(() => setAudioTesting(false), 3000);
   };
 
   const handleSendCommand = async (commandText: string) => {
@@ -356,57 +371,115 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
         const errBody = await res.json().catch(() => null);
         throw new Error(errBody?.error || 'دستور صوتی پردازش نشد');
       }
+
       const data = await res.json();
       const reply = data.replyText || 'دستور شما دریافت شد.';
-      // Audit fix AIA-01: a voice command never executes a data-mutating
-      // automation on its own. Read-only/navigation intents run immediately;
-      // mutating intents are labelled as awaiting explicit confirmation.
       const needsConfirm = !!data.requiresConfirmation;
 
-      const botMsg: VoiceCallMessage = {
-        id: `bot-${Date.now()}`,
-        sender: 'assistant',
-        text: reply,
-        timestamp: 'هم‌اکنون',
-        actionTaken: needsConfirm ? undefined : data.actionType,
-        actionPayload: data.actionResult,
-      };
+      // Handle mutative actions with explicit confirmation card BEFORE execution
+      if (needsConfirm || data.actionType === 'RUN_AUTOMATION_PAYROLL' || data.actionType === 'RUN_AUTOMATION_SCREENING') {
+        const actionTitle =
+          data.actionType === 'RUN_AUTOMATION_PAYROLL'
+            ? 'صدور قطعی و بستن فیش‌های حقوقی ماه'
+            : data.actionType === 'RUN_AUTOMATION_SCREENING'
+            ? 'غربالگری هوشمند و رتبه‌بندی رزومه‌ها'
+            : 'اجرای اتوماسیون سازمانی';
 
-      setTranscript((prev) => [...prev, botMsg]);
-      speakText(reply);
+        const actionDesc =
+          data.actionType === 'RUN_AUTOMATION_PAYROLL'
+            ? 'این عملیات محاسبات مالی و بیمه ۷٪ تامین اجتماعی را قطعی کرده و نیازمند تایید صریح شماست.'
+            : data.actionType === 'RUN_AUTOMATION_SCREENING'
+            ? 'رزومه‌های جدید متقاضیان دپارتمان بر اساس شاخص‌های شایستگی بازبینی و ثبت خواهند شد.'
+            : 'این عملیات داده‌های واقعی هلدینگ را بروزرسانی می‌کند.';
 
-      // Trigger navigation intents only (no side effects on the data).
-      if (data.actionType === 'OPEN_JOB_GENERATOR' && onNavigateToJobAd) {
-        setTimeout(() => onNavigateToJobAd(), 2200);
-      } else if (data.actionType === 'SHOW_DEPARTMENT' && onNavigateToDepartments) {
-        setTimeout(() => onNavigateToDepartments('dept-mfg'), 2200);
-      } else if (data.actionType === 'RUN_AUTOMATION_PAYROLL' && onRunAutomation) {
-        onRunAutomation('auto-payroll');
-      } else if (data.actionType === 'RUN_AUTOMATION_SCREENING' && onRunAutomation) {
-        onRunAutomation('auto-screening');
-      }
+        setPendingAction({
+          id: `act-${Date.now()}`,
+          actionType: data.actionType,
+          title: actionTitle,
+          description: actionDesc,
+          actionResult: data.actionResult,
+        });
 
-      if (needsConfirm) {
-        const confirmMsg: VoiceCallMessage = {
-          id: `bot-confirm-${Date.now()}`,
+        const botMsg: VoiceCallMessage = {
+          id: `bot-${Date.now()}`,
           sender: 'assistant',
-          text: 'این دستور روی داده‌های سامانه اثر می‌گذارد. پیش از اجرا، پنجره تایید برای شما نمایش داده می‌شود و بدون تایید صریح هیچ عملیاتی انجام نمی‌شود.',
+          text: reply,
           timestamp: 'هم‌اکنون',
         };
-        setTranscript((prev) => [...prev, confirmMsg]);
+        setTranscript((prev) => [...prev, botMsg]);
+        speakText(reply);
+      } else {
+        // Read-only or navigation actions
+        const botMsg: VoiceCallMessage = {
+          id: `bot-${Date.now()}`,
+          sender: 'assistant',
+          text: reply,
+          timestamp: 'هم‌اکنون',
+          actionTaken: data.actionType,
+          actionPayload: data.actionResult,
+        };
+        setTranscript((prev) => [...prev, botMsg]);
+        speakText(reply);
+
+        if (data.actionType === 'OPEN_JOB_GENERATOR' && onNavigateToJobAd) {
+          setTimeout(() => onNavigateToJobAd(), 2200);
+        } else if (data.actionType === 'SHOW_DEPARTMENT' && onNavigateToDepartments) {
+          setTimeout(() => onNavigateToDepartments('dept-mfg'), 2200);
+        }
       }
     } catch (err) {
       console.error(err);
       const fallbackMsg: VoiceCallMessage = {
         id: `bot-${Date.now()}`,
         sender: 'assistant',
-        text: `پردازش دستور صوتی ناموفق بود: ${(err as Error)?.message || 'خطای ارتباط با سرور'}. هیچ عملیاتی روی داده‌ها انجام نشد.`,
+        text: `پردازش دستور ناموفق بود: ${(err as Error)?.message || 'خطای سرور'}. داده‌ها دست‌نخورده باقی ماندند.`,
         timestamp: 'هم‌اکنون',
       };
       setTranscript((prev) => [...prev, fallbackMsg]);
       speakText(fallbackMsg.text);
       setCallStatus('CONNECTED');
     }
+  };
+
+  // Explicit confirmation approval
+  const handleApproveAction = () => {
+    triggerHaptic(35);
+    if (!pendingAction) return;
+
+    if (pendingAction.actionType === 'RUN_AUTOMATION_PAYROLL' && onRunAutomation) {
+      onRunAutomation('auto-payroll');
+    } else if (pendingAction.actionType === 'RUN_AUTOMATION_SCREENING' && onRunAutomation) {
+      onRunAutomation('auto-screening');
+    }
+
+    const confirmResultMsg: VoiceCallMessage = {
+      id: `bot-approved-${Date.now()}`,
+      sender: 'assistant',
+      text: `عملیات «${pendingAction.title}» با تایید صریح شما با موفقیت به اجرا درآمد.`,
+      timestamp: 'هم‌اکنون',
+      actionTaken: pendingAction.actionType,
+    };
+
+    setTranscript((prev) => [...prev, confirmResultMsg]);
+    speakText(`عملیات با تایید شما اجرا شد.`);
+    setPendingAction(null);
+  };
+
+  // Explicit confirmation rejection
+  const handleRejectAction = () => {
+    triggerHaptic(20);
+    if (!pendingAction) return;
+
+    const cancelMsg: VoiceCallMessage = {
+      id: `bot-rejected-${Date.now()}`,
+      sender: 'assistant',
+      text: `اجرای عملیات «${pendingAction.title}» به دستور شما متوقف و لغو گردید. هیچ تغییری روی داده‌ها اعمال نشد.`,
+      timestamp: 'هم‌اکنون',
+    };
+
+    setTranscript((prev) => [...prev, cancelMsg]);
+    speakText(`دستور شما لغو شد.`);
+    setPendingAction(null);
   };
 
   const formatDuration = (sec: number) => {
@@ -416,147 +489,263 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
   };
 
   const quickVoiceChips = [
-    { label: '✍️ تنظیم آگهی مدیر برند دافی', command: 'برای دپارتمان مارکتینگ یک آگهی شغلی برای مدیر برند دافی تنظیم کن' },
+    { label: '✍️ آگهی مدیر برند دافی', command: 'برای دپارتمان مارکتینگ یک آگهی شغلی برای مدیر برند دافی تنظیم کن' },
     { label: '🏭 وضعیت کارخانه اشتهارد', command: 'وضعیت پرسنل و شیفت‌های تولید کارخانه اشتهارد چطوره؟' },
-    { label: '💰 صدور خودکار فیش حقوقی', command: 'فیش‌های حقوقی این ماه پرسنل سیلانه سبز را صادر کن' },
-    { label: '⚡ غربالگری رزومه‌ها با هوش مصنوعی', command: 'رزومه‌های ورودی هفته اخیر را غربالگری و اولویت‌بندی کن' },
-    { label: '🏖️ بررسی مرخصی‌های معوقه', command: 'درخواست‌های مرخصی معوقه را بررسی و تایید کن' },
-    { label: '🏢 لیست دپارتمان‌های هلدینگ', command: 'دپارتمان‌های هلدینگ سیلانه سبز را معرفی کن' },
+    { label: '⚡ غربالگری رزومه‌ها', command: 'رزومه‌های ورودی هفته اخیر را غربالگری و اولویت‌بندی کن' },
+    { label: '💰 صدور فیش‌های حقوقی', command: 'فیش‌های حقوقی این ماه پرسنل سیلانه سبز را صادر کن' },
+    { label: '🏢 دپارتمان‌های هلدینگ', command: 'دپارتمان‌های هلدینگ سیلانه سبز را معرفی کن' },
   ];
 
   return (
-    <div className="relative min-h-[620px] h-full flex flex-col bg-gradient-to-b from-emerald-950 via-slate-950 to-black text-white rounded-3xl overflow-hidden shadow-2xl p-4 sm:p-5 border border-emerald-800/40">
-      {/* Top Call Navigation & Status Bar */}
-      <div className="flex items-center justify-between pb-3 border-b border-white/10 z-10">
+    <div
+      dir="rtl"
+      className="relative min-h-[580px] h-full flex flex-col bg-surface-1 dark:bg-surface-1 text-text-1 rounded-[24px] overflow-hidden shadow-2xl border border-border-default transition-colors p-3.5 sm:p-4"
+    >
+      {/* 1. Top Call Navigation & Status Bar */}
+      <div className="flex items-center justify-between pb-3 border-b border-border-default z-10 shrink-0">
         <div className="flex items-center gap-2">
           {onBack && (
             <button
-              onClick={onBack}
-              className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center cursor-pointer transition-colors"
-              title="بازگشت"
+              type="button"
+              id="btn-voice-back"
+              onClick={() => {
+                triggerHaptic(15);
+                if (typeof window !== 'undefined' && window.speechSynthesis) {
+                  window.speechSynthesis.cancel();
+                }
+                onBack();
+              }}
+              className="min-h-[44px] min-w-[44px] rounded-[10px] bg-surface-2 hover:bg-surface-3 text-text-1 flex items-center justify-center cursor-pointer transition-all active:scale-95 border border-border-default"
+              title="بازگشت به پیشخوان"
             >
-              <ArrowRight className="w-4 h-4 text-white" />
+              <ArrowRight className="w-4 h-4 text-text-1" />
             </button>
           )}
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-            <span className="text-xs font-bold text-emerald-300">دستیار صوتی هلدینگ سیلانه سبز</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-brand animate-ping" />
+            <div>
+              <span className="text-xs font-black text-text-1 block">دستیار هوشمند صوتی سیلانه سبز</span>
+              <span className="text-[10px] text-text-3 block">مجهز به مدل هوش مصنوعی Gemini</span>
+            </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          {/* Test Speaker Button */}
+        <div className="flex items-center gap-1.5">
+          {/* Audio Test Button */}
           <button
-            onClick={testAudioSpeaker}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-800/60 hover:bg-emerald-700 text-[10px] text-emerald-200 border border-emerald-500/30 cursor-pointer transition-colors"
-            title="تست صدای اسپیکر"
+            type="button"
+            onClick={() => {
+              triggerHaptic(15);
+              setAudioTesting(true);
+              speakText('ارتباط صوتی با سامانه منابع انسانی سیلانه سبز برقرار است.');
+              setTimeout(() => setAudioTesting(false), 2500);
+            }}
+            className="min-h-[44px] px-2.5 rounded-[10px] bg-surface-2 hover:bg-surface-3 text-[11px] text-text-2 font-bold border border-border-default flex items-center gap-1 cursor-pointer transition-all active:scale-95"
+            title="تست صدای دستیار"
           >
-            <Volume2 className="w-3 h-3 text-emerald-300" />
-            <span>تست صدا</span>
+            <Volume2 className="w-3.5 h-3.5 text-brand" />
+            <span className="hidden xs:inline">تست صدا</span>
           </button>
 
-          <div className="px-2.5 py-1 rounded-full bg-emerald-900/60 border border-emerald-500/30 text-emerald-200 text-xs font-mono font-semibold">
+          {/* Call Duration Counter */}
+          <div className="min-h-[44px] px-2.5 rounded-[10px] bg-surface-2 border border-border-default text-text-1 text-xs font-mono font-bold flex items-center justify-center">
             {formatDuration(callDuration)}
           </div>
         </div>
       </div>
 
-      {/* Main Visualizer Area */}
-      <div className="flex-1 flex flex-col items-center justify-center my-2 relative z-10">
-        {/* Animated Sound Wave Rings */}
-        <div className="relative flex items-center justify-center my-2">
-          <div className="absolute w-44 h-44 rounded-full bg-emerald-500/10 animate-ping pointer-events-none" />
+      {/* 2. Visualizer Area with Animated Pulsing Orb */}
+      <div className="flex-1 flex flex-col items-center justify-center my-2 relative z-10 min-h-[220px]">
+        {/* Glowing Orb Animation */}
+        <div className="relative flex items-center justify-center my-3">
+          {/* Pulsing Ripple Rings */}
           <div
-            className={`absolute w-36 h-36 rounded-full border transition-all duration-500 ${
+            className={`absolute rounded-full transition-all duration-700 pointer-events-none ${
               callStatus === 'LISTENING'
-                ? 'border-amber-400/50 scale-110 animate-pulse'
+                ? 'w-48 h-48 bg-warning/15 animate-ping'
                 : callStatus === 'SPEAKING'
-                ? 'border-emerald-400/70 scale-120 animate-pulse'
-                : 'border-emerald-500/20'
+                ? 'w-52 h-52 bg-brand/20 animate-ping'
+                : 'w-40 h-40 bg-brand/10'
             }`}
           />
-          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-tr from-emerald-800 via-emerald-600 to-teal-400 p-1 shadow-2xl shadow-emerald-500/40 flex items-center justify-center relative">
-            <div className="w-full h-full rounded-full bg-slate-950 flex flex-col items-center justify-center gap-0.5">
-              <Bot className="w-9 h-9 text-emerald-400" />
-              <span className="text-[9px] font-bold text-emerald-300 tracking-wider">SEILANEH SABZ</span>
+
+          <div
+            className={`absolute rounded-full border-2 transition-all duration-500 pointer-events-none ${
+              callStatus === 'LISTENING'
+                ? 'w-36 h-36 border-warning/60 scale-110 animate-pulse'
+                : callStatus === 'SPEAKING'
+                ? 'w-36 h-36 border-brand scale-115 animate-pulse'
+                : callStatus === 'THINKING'
+                ? 'w-36 h-36 border-info scale-105 animate-spin'
+                : 'w-32 h-32 border-border-default'
+            }`}
+          />
+
+          {/* Central Orb Button/Avatar */}
+          <div
+            onClick={isListening ? () => stopListeningAndSend() : startListening}
+            className={`w-24 h-24 sm:w-28 sm:h-28 rounded-full p-1 shadow-2xl flex items-center justify-center relative cursor-pointer transition-all active:scale-90 ${
+              callStatus === 'LISTENING'
+                ? 'bg-gradient-to-tr from-amber-500 to-warning shadow-warning/40 ring-4 ring-warning/30 animate-pulse'
+                : callStatus === 'SPEAKING'
+                ? 'bg-gradient-to-tr from-brand to-teal-400 shadow-brand/40 ring-4 ring-brand/30'
+                : callStatus === 'THINKING'
+                ? 'bg-gradient-to-tr from-info to-cyan-400 shadow-info/40'
+                : 'bg-gradient-to-tr from-brand to-emerald-600 shadow-brand/30 hover:scale-105'
+            }`}
+          >
+            <div className="w-full h-full rounded-full bg-surface-1 flex flex-col items-center justify-center gap-0.5 select-none">
+              <Bot
+                className={`w-9 h-9 transition-colors ${
+                  callStatus === 'LISTENING'
+                    ? 'text-warning'
+                    : callStatus === 'SPEAKING'
+                    ? 'text-brand'
+                    : callStatus === 'THINKING'
+                    ? 'text-info'
+                    : 'text-brand'
+                }`}
+              />
+              <span className="text-[9px] font-black text-text-3 tracking-wider">
+                {callStatus === 'LISTENING'
+                  ? 'شنیدن...'
+                  : callStatus === 'SPEAKING'
+                  ? 'پاسخ...'
+                  : callStatus === 'THINKING'
+                  ? 'پردازش...'
+                  : 'سیلانه سبز'}
+              </span>
             </div>
           </div>
         </div>
 
-        {/* Live Audio Visualizer Bars */}
-        <div className="flex items-center gap-1.5 h-7 my-1.5">
-          {[30, 65, 45, 90, 50, 100, 65, 80, 40, 95, 55, 75].map((h, i) => (
+        {/* Live Audio Frequency Bars */}
+        <div className="flex items-center gap-1.5 h-6 my-1">
+          {[25, 60, 40, 85, 50, 100, 65, 90, 45, 80, 55, 70].map((h, i) => (
             <div
               key={i}
               className={`w-1 rounded-full transition-all duration-300 ${
                 callStatus === 'SPEAKING'
-                  ? 'bg-emerald-400 animate-pulse'
+                  ? 'bg-brand animate-pulse'
                   : callStatus === 'LISTENING'
-                  ? 'bg-amber-400 animate-pulse'
-                  : 'bg-emerald-800/40'
+                  ? 'bg-warning animate-pulse'
+                  : 'bg-border-default'
               }`}
               style={{
                 height:
                   callStatus === 'SPEAKING' || callStatus === 'LISTENING'
-                    ? `${Math.max(20, h * (0.6 + Math.sin(i + callDuration * 2) * 0.4))}%`
-                    : '20%',
+                    ? `${Math.max(20, h * (0.5 + Math.sin(i + callDuration * 2) * 0.5))}%`
+                    : '25%',
               }}
             />
           ))}
         </div>
 
-        {/* Status Text Indicator */}
-        <div className="text-center">
-          <h2 className="text-sm sm:text-base font-bold text-white flex items-center justify-center gap-1.5">
-            دستیار هوشمند منابع انسانی سیلانه سبز
-            <Sparkles className="w-4 h-4 text-emerald-400" />
-          </h2>
-          <p className="text-xs text-emerald-300/90 mt-0.5 font-medium">
+        {/* Live Status Text */}
+        <div className="text-center px-4">
+          <p className="text-xs font-bold text-text-2 mt-0.5">
             {callStatus === 'LISTENING'
-              ? '🎤 در حال گوش دادن به شما... (صحبت کنید، وقتی تمام شد کلید ارسال را بزنید)'
+              ? '🎤 در حال گوش دادن به کلام شما... (پس از اتمام صحبت، دکمه ارسال را بزنید)'
               : callStatus === 'THINKING'
-              ? '⚡ در حال پردازش دستور با هوش مصنوعی...'
+              ? '⚡ در حال پردازش با هوش مصنوعی و واکاوی پایگاه داده...'
               : callStatus === 'SPEAKING'
-              ? '🔊 در حال صحبت و قرائت پاسخ با صدای دستیار...'
-              : '🟢 دکمه میکروفون را لمس کنید و صحبت کنید'}
+              ? '🔊 در حال قرائت پاسخ با صدای صوتی...'
+              : '🟢 برای شروع صحبت، دکمه میکروفون زیر را لمس کنید'}
           </p>
         </div>
 
-        {/* Active Speech Recognition Live Box (Shown while listening or when text accumulated) */}
+        {/* 3. Live Speech Recognition Bubble (While Speaking) */}
         {isListening && (
-          <div className="w-full max-w-md mt-2 bg-amber-500/10 border-2 border-amber-400/50 rounded-2xl p-3 animate-fade-in shadow-lg">
-            <div className="flex items-center justify-between text-xs text-amber-300 mb-1.5 font-bold">
+          <div className="w-full max-w-md mt-2 bg-warning-soft border-2 border-warning/50 rounded-[16px] p-3 shadow-md animate-fadeIn">
+            <div className="flex items-center justify-between text-xs text-warning mb-1 font-black">
               <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+                <span className="w-2 h-2 rounded-full bg-warning animate-ping" />
                 کلمات شما در حال دریافت است:
               </span>
-              <span className="text-[10px] text-amber-200/80">تشخیص زنده فارسی</span>
+              <span className="text-[10px] text-text-2 font-medium">تشخیص زنده فارسی</span>
             </div>
 
-            <p className="text-sm text-white font-medium min-h-[38px] leading-relaxed bg-slate-900/60 p-2 rounded-xl">
-              {currentInput || 'در حال شنیدن... لطفاً با صدای رسا صحبت فرمایید.'}
+            <p className="text-xs text-text-1 font-medium min-h-[36px] leading-relaxed bg-surface-1 p-2.5 rounded-[10px] border border-border-default">
+              {currentInput || 'در حال شنیدن صدای شما...'}
             </p>
 
-            <div className="flex items-center justify-between gap-2 mt-2 pt-2 border-t border-amber-400/20">
+            <div className="flex items-center justify-between gap-2 mt-2 pt-1 border-t border-warning/20">
               <button
+                type="button"
                 onClick={cancelListening}
-                className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 cursor-pointer"
+                className="min-h-[44px] px-3 rounded-[10px] bg-surface-2 hover:bg-surface-3 text-xs text-text-2 font-bold cursor-pointer transition-all active:scale-95"
               >
                 لغو صحبت
               </button>
               <button
+                type="button"
                 onClick={() => stopListeningAndSend()}
-                className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md cursor-pointer transition-all"
+                className="min-h-[44px] flex items-center gap-1.5 px-4 rounded-[10px] bg-brand hover:bg-brand-hover text-white font-black text-xs shadow-sm cursor-pointer transition-all active:scale-95"
               >
                 <Send className="w-3.5 h-3.5" />
-                <span>پایان صحبت و ارسال فوری</span>
+                <span>پایان صحبت و ارسال</span>
               </button>
             </div>
           </div>
         )}
 
-        {/* Live Conversation Transcript Box */}
-        <div className="w-full max-w-md bg-slate-900/85 backdrop-blur-md rounded-2xl p-3 border border-white/10 mt-2.5 max-h-44 overflow-y-auto space-y-2.5 text-xs">
+        {/* 4. Explicit Action Confirmation Card (BEFORE any action is executed) */}
+        {pendingAction && (
+          <div
+            id="explicit-confirmation-card"
+            className="w-full max-w-md my-2 p-3.5 rounded-[18px] bg-surface-1 border-2 border-brand shadow-xl animate-fadeIn space-y-3"
+          >
+            <div className="flex items-start gap-2.5">
+              <div className="w-9 h-9 rounded-[10px] bg-warning-soft text-warning flex items-center justify-center shrink-0">
+                <ShieldAlert className="w-5 h-5" />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xs font-black text-text-1">
+                    درخواست تایید اجرای عملیات در سامانه
+                  </h3>
+                  <span className="text-[9px] font-black px-1.5 py-0.5 rounded-[6px] bg-warning-soft text-warning">
+                    نیازمند تایید صریح
+                  </span>
+                </div>
+                <div className="text-xs font-bold text-brand mt-0.5">
+                  {pendingAction.title}
+                </div>
+                <p className="text-[11px] text-text-3 leading-relaxed mt-1">
+                  {pendingAction.description}
+                </p>
+              </div>
+            </div>
+
+            {/* Approve and Reject Buttons (Thumb-Zone Friendly with Haptic Feel) */}
+            <div className="grid grid-cols-2 gap-2 pt-1 border-t border-border-default">
+              {/* Reject Button */}
+              <button
+                type="button"
+                id="btn-voice-reject-action"
+                onClick={handleRejectAction}
+                className="min-h-[44px] flex items-center justify-center gap-1.5 px-3 py-2 rounded-[10px] bg-surface-2 hover:bg-surface-3 text-danger font-black text-xs border border-border-default cursor-pointer transition-all active:scale-95 shadow-2xs"
+              >
+                <X className="w-4 h-4" />
+                <span>انصراف و لغو</span>
+              </button>
+
+              {/* Approve Button */}
+              <button
+                type="button"
+                id="btn-voice-approve-action"
+                onClick={handleApproveAction}
+                className="min-h-[44px] flex items-center justify-center gap-1.5 px-3 py-2 rounded-[10px] bg-brand hover:bg-brand-hover text-white font-black text-xs cursor-pointer transition-all active:scale-95 shadow-xs"
+              >
+                <Check className="w-4 h-4" />
+                <span>تایید و اجرای قطعی</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* 5. Live Conversation Transcript Box */}
+        <div className="w-full max-w-md bg-surface-2/70 rounded-[16px] p-3 border border-border-default mt-2 max-h-40 overflow-y-auto space-y-2 text-xs">
           {transcript.map((msg) => (
             <div
               key={msg.id}
@@ -565,43 +754,46 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
               }`}
             >
               <div
-                className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] ${
+                className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[10px] ${
                   msg.sender === 'user'
-                    ? 'bg-emerald-600 text-white shadow-md'
-                    : 'bg-teal-700 text-white shadow-md'
+                    ? 'bg-brand text-white shadow-xs'
+                    : 'bg-surface-1 text-brand border border-border-default shadow-xs'
                 }`}
               >
                 {msg.sender === 'user' ? <User className="w-3.5 h-3.5" /> : <Bot className="w-3.5 h-3.5" />}
               </div>
 
               <div
-                className={`p-2.5 rounded-2xl max-w-[85%] leading-relaxed ${
+                className={`p-2.5 rounded-[14px] max-w-[85%] leading-relaxed ${
                   msg.sender === 'user'
-                    ? 'bg-emerald-600/35 text-emerald-100 border border-emerald-500/30 rounded-tr-none text-right'
-                    : 'bg-white/10 text-slate-100 border border-white/10 rounded-tl-none text-right'
+                    ? 'bg-brand-soft text-brand font-medium border border-brand/20 rounded-tr-none text-right'
+                    : 'bg-surface-1 text-text-1 border border-border-default rounded-tl-none text-right'
                 }`}
               >
-                <p className="whitespace-pre-line">{msg.text}</p>
+                <p className="whitespace-pre-line text-xs">{msg.text}</p>
 
-                {/* Re-play audio button for assistant responses */}
+                {/* Assistant audio replay */}
                 {msg.sender === 'assistant' && (
-                  <div className="mt-2 pt-1.5 border-t border-white/10 flex items-center justify-between">
+                  <div className="mt-1.5 pt-1 border-t border-border-default flex items-center justify-between">
                     <button
-                      onClick={() => speakText(msg.text)}
-                      className="flex items-center gap-1 text-[11px] text-emerald-300 hover:text-emerald-200 font-semibold cursor-pointer transition-colors"
-                      title="پخش مجدد این پیام با صدای دستیار"
+                      type="button"
+                      onClick={() => {
+                        triggerHaptic(15);
+                        speakText(msg.text);
+                      }}
+                      className="flex items-center gap-1 text-[10px] text-brand hover:underline font-bold cursor-pointer"
                     >
-                      <Volume2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>پخش صوتی مجدد</span>
+                      <Volume2 className="w-3 h-3 text-brand" />
+                      <span>پخش صوتی</span>
                     </button>
-                    <span className="text-[10px] text-slate-400">{msg.timestamp}</span>
+                    <span className="text-[10px] text-text-3 font-mono">{msg.timestamp}</span>
                   </div>
                 )}
 
                 {msg.actionTaken && (
-                  <div className="mt-1.5 pt-1 border-t border-white/10 flex items-center gap-1 text-[11px] text-emerald-300 font-bold">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>اقدام انجام‌شده: {msg.actionTaken}</span>
+                  <div className="mt-1 pt-1 border-t border-border-default flex items-center gap-1 text-[10px] text-brand font-bold">
+                    <CheckCircle2 className="w-3 h-3 text-brand" />
+                    <span>اقدام ثبت‌شده: {msg.actionTaken}</span>
                   </div>
                 )}
               </div>
@@ -611,18 +803,18 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
         </div>
       </div>
 
-      {/* Quick Voice Command Chips */}
-      <div className="z-10 my-1.5">
-        <div className="text-[11px] text-slate-400 mb-1 font-medium flex items-center justify-between">
-          <span>فرمان‌های صوتی سریع (لمس برای تست فوری):</span>
-          <span className="text-[10px] text-emerald-400">فارسی روان</span>
-        </div>
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+      {/* 6. Quick Voice Command Chips (Thumb-Zone Reaching) */}
+      <div className="z-10 my-1 shrink-0">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
           {quickVoiceChips.map((chip, idx) => (
             <button
               key={idx}
-              onClick={() => handleSendCommand(chip.command)}
-              className="flex-shrink-0 px-2.5 py-1.5 rounded-full bg-white/10 hover:bg-emerald-600/40 text-emerald-200 hover:text-white border border-white/10 hover:border-emerald-500/40 text-[11px] transition-all cursor-pointer whitespace-nowrap"
+              type="button"
+              onClick={() => {
+                triggerHaptic(20);
+                handleSendCommand(chip.command);
+              }}
+              className="min-h-[44px] shrink-0 px-3 py-2 rounded-[12px] bg-surface-2 hover:bg-surface-3 text-text-2 hover:text-text-1 border border-border-default text-xs font-bold transition-all active:scale-95 cursor-pointer whitespace-nowrap select-none"
             >
               {chip.label}
             </button>
@@ -630,53 +822,63 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
         </div>
       </div>
 
-      {/* Fallback Text Input Bar */}
+      {/* 7. Fallback Text Input Bar */}
       <form
         onSubmit={(e) => {
           e.preventDefault();
           if (typedMessage.trim()) {
+            triggerHaptic(20);
             handleSendCommand(typedMessage);
           }
         }}
-        className="flex items-center gap-1.5 my-1 bg-white/5 p-1 rounded-xl border border-white/10 z-10"
+        className="flex items-center gap-1.5 my-1 bg-surface-2 p-1 rounded-[12px] border border-border-default z-10 shrink-0"
       >
         <input
           type="text"
           value={typedMessage}
           onChange={(e) => setTypedMessage(e.target.value)}
-          placeholder="یا دستور خود را اینجا تایپ کنید تا دستیار پاسخ داده و بخواند..."
-          className="flex-1 bg-transparent px-2.5 py-1 text-xs text-white placeholder-slate-400 focus:outline-none"
+          placeholder="یا دستور خود را اینجا بنویسید..."
+          className="flex-1 bg-transparent px-2.5 py-1 text-xs text-text-1 placeholder-text-3 focus:outline-none"
         />
         <button
           type="submit"
           disabled={!typedMessage.trim()}
-          className="p-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-white cursor-pointer transition-colors"
+          className="min-h-[44px] min-w-[44px] rounded-[10px] bg-brand hover:bg-brand-hover disabled:opacity-40 text-white cursor-pointer transition-all flex items-center justify-center active:scale-95"
+          title="ارسال دستور"
         >
-          <Send className="w-3.5 h-3.5" />
+          <Send className="w-4 h-4" />
         </button>
       </form>
 
-      {/* Bottom Phone Call Action Controls */}
-      <div className="flex items-center justify-around pt-2.5 border-t border-white/10 z-10">
+      {/* 8. Bottom Phone Controls with Haptic Feel (Primary Actions in Bottom 40%) */}
+      <div
+        id="voice-call-bottom-controls"
+        className="flex items-center justify-around pt-2 border-t border-border-default z-10 shrink-0"
+      >
         {/* Mute Button */}
         <button
-          onClick={() => setIsMuted(!isMuted)}
-          className={`flex flex-col items-center gap-1 p-2 rounded-full cursor-pointer transition-colors ${
-            isMuted ? 'text-amber-400 bg-amber-500/20' : 'text-slate-300 hover:bg-white/10'
+          type="button"
+          id="btn-voice-mute"
+          onClick={() => {
+            triggerHaptic(15);
+            setIsMuted(!isMuted);
+          }}
+          className={`min-h-[50px] min-w-[50px] flex flex-col items-center justify-center gap-0.5 rounded-[14px] cursor-pointer transition-all active:scale-90 select-none ${
+            isMuted ? 'text-warning bg-warning-soft' : 'text-text-2 hover:bg-surface-2'
           }`}
-          title={isMuted ? 'میکروفون غیرفعال' : 'میکروفون فعال'}
+          title={isMuted ? 'میکروفون بی‌صداست' : 'میکروفون فعال'}
         >
-          <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-            {isMuted ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
-          </div>
-          <span className="text-[10px]">{isMuted ? 'بی‌صدا' : 'میکروفون'}</span>
+          {isMuted ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+          <span className="text-[10px] font-bold">{isMuted ? 'بی‌صدا' : 'میکروفون'}</span>
         </button>
 
         {/* Big Start / Stop Speaking Button */}
         {isListening ? (
           <button
+            type="button"
+            id="btn-voice-stop-send"
             onClick={() => stopListeningAndSend()}
-            className="w-16 h-16 rounded-full shadow-2xl flex flex-col items-center justify-center cursor-pointer transition-all transform active:scale-95 bg-amber-500 text-slate-950 shadow-amber-500/50 animate-pulse border-2 border-white"
+            className="w-16 h-16 rounded-full shadow-lg flex flex-col items-center justify-center cursor-pointer transition-all transform active:scale-90 bg-warning text-slate-950 font-black animate-pulse border-2 border-surface-1 select-none"
             title="پایان صحبت و ارسال"
           >
             <Square className="w-6 h-6 fill-current" />
@@ -684,51 +886,57 @@ export const MobileVoiceCall: React.FC<MobileVoiceCallProps> = ({
           </button>
         ) : (
           <button
+            type="button"
+            id="btn-voice-start-speaking"
             onClick={startListening}
-            className="w-16 h-16 rounded-full shadow-2xl flex flex-col items-center justify-center cursor-pointer transition-all transform active:scale-95 bg-emerald-500 text-white shadow-emerald-500/50 hover:bg-emerald-400 border-2 border-emerald-300/40"
-            title="لمس برای شروع صحبت"
+            className="w-16 h-16 rounded-full shadow-lg flex flex-col items-center justify-center cursor-pointer transition-all transform active:scale-90 bg-brand text-white shadow-brand/40 hover:bg-brand-hover border-2 border-surface-1 select-none"
+            title="لمس برای شروع مکالمه صوتی"
           >
             <Mic className="w-7 h-7" />
-            <span className="text-[9px] font-bold mt-0.5">صحبت</span>
+            <span className="text-[9px] font-black mt-0.5">صحبت</span>
           </button>
         )}
 
-        {/* Speaker Volume Toggle Button */}
+        {/* Speaker Volume Toggle */}
         <button
+          type="button"
+          id="btn-voice-speaker-toggle"
           onClick={() => {
+            triggerHaptic(15);
             const next = !isSpeakerOn;
             setIsSpeakerOn(next);
             if (!next && typeof window !== 'undefined' && window.speechSynthesis) {
               window.speechSynthesis.cancel();
             }
           }}
-          className={`flex flex-col items-center gap-1 p-2 rounded-full cursor-pointer transition-colors ${
-            !isSpeakerOn ? 'text-rose-400 bg-rose-500/20' : 'text-slate-300 hover:bg-white/10'
+          className={`min-h-[50px] min-w-[50px] flex flex-col items-center justify-center gap-0.5 rounded-[14px] cursor-pointer transition-all active:scale-90 select-none ${
+            !isSpeakerOn ? 'text-danger bg-danger-soft' : 'text-text-2 hover:bg-surface-2'
           }`}
-          title={isSpeakerOn ? 'بلندگو روشن' : 'بلندگو خاموش'}
+          title={isSpeakerOn ? 'اسپیکر روشن' : 'اسپیکر خاموش'}
         >
-          <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-            {isSpeakerOn ? <Volume2 className="w-5 h-5 text-emerald-400" /> : <VolumeX className="w-5 h-5" />}
-          </div>
-          <span className="text-[10px]">{isSpeakerOn ? 'بلندگو روشن' : 'بلندگو خاموش'}</span>
+          {isSpeakerOn ? <Volume2 className="w-5 h-5 text-brand" /> : <VolumeX className="w-5 h-5" />}
+          <span className="text-[10px] font-bold">{isSpeakerOn ? 'بلندگو' : 'خاموش'}</span>
         </button>
 
         {/* End Call Button */}
         {onBack && (
           <button
+            type="button"
+            id="btn-voice-end-call"
             onClick={() => {
+              triggerHaptic(25);
               if (typeof window !== 'undefined' && window.speechSynthesis) {
                 window.speechSynthesis.cancel();
               }
               onBack();
             }}
-            className="flex flex-col items-center gap-1 p-2 text-rose-400 hover:bg-white/10 rounded-full cursor-pointer"
-            title="پایان تماس"
+            className="min-h-[50px] min-w-[50px] flex flex-col items-center justify-center gap-0.5 rounded-[14px] text-danger hover:bg-danger-soft cursor-pointer transition-all active:scale-90 select-none"
+            title="خروج از دستیار صوتی"
           >
-            <div className="w-10 h-10 rounded-full bg-rose-600 text-white flex items-center justify-center shadow-lg shadow-rose-600/30">
-              <PhoneOff className="w-5 h-5" />
+            <div className="w-8 h-8 rounded-full bg-danger text-white flex items-center justify-center shadow-xs">
+              <PhoneOff className="w-4 h-4" />
             </div>
-            <span className="text-[10px] text-rose-300">خروج</span>
+            <span className="text-[10px] font-black text-danger">خروج</span>
           </button>
         )}
       </div>

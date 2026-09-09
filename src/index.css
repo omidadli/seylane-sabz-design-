@@ -85,6 +85,9 @@
 @utility text-info {
   color: var(--info);
 }
+@utility bg-surface-3 {
+  background-color: var(--surface-3);
+}
 
 @layer base {
   :root {
@@ -246,6 +249,26 @@
 
 .animate-fadeIn {
   animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Staggered list fade-in (max 5 items, 150-240ms) */
+.stagger-1 { animation: fadeIn 180ms cubic-bezier(0.16, 1, 0.3, 1) 0ms both; }
+.stagger-2 { animation: fadeIn 180ms cubic-bezier(0.16, 1, 0.3, 1) 35ms both; }
+.stagger-3 { animation: fadeIn 180ms cubic-bezier(0.16, 1, 0.3, 1) 70ms both; }
+.stagger-4 { animation: fadeIn 180ms cubic-bezier(0.16, 1, 0.3, 1) 105ms both; }
+.stagger-5 { animation: fadeIn 180ms cubic-bezier(0.16, 1, 0.3, 1) 140ms both; }
+
+/* Micro-interactions: Card subtle hover lift with shadow */
+.card-hover-lift {
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-hover-lift:hover {
+  transform: translateY(-2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-hover-lift:hover {
+    transform: none !important;
+  }
 }
 
 /* Respect prefers-reduced-motion */

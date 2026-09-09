@@ -23,6 +23,8 @@ import {
 } from 'lucide-react';
 import { JobPosting, JobCriteria, ScoringMethod, AIRigor, CandidateCategory, Candidate } from '../../types';
 import { toPersianDigits } from '../../utils/jalali';
+import { Skeleton, SkeletonCard } from '../ui/Skeleton';
+import { EmptyState } from '../ui/EmptyState';
 
 interface EvaluationCriteriaManagerProps {
   jobs: JobPosting[];
@@ -815,8 +817,19 @@ export const EvaluationCriteriaManager: React.FC<EvaluationCriteriaManagerProps>
         </div>
 
         {/* List of Criteria Boxes */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {criteriaList.map((crit, index) => (
+        {criteriaList.length === 0 ? (
+          <div className="bg-surface-1 rounded-2xl border border-border-default p-6">
+            <EmptyState
+              icon={<SlidersHorizontal className="w-8 h-8 text-text-3" />}
+              title="هیچ شاخصه ارزیابی تعریف نشده است"
+              description="برای سنجش هوشمند کارجویان، حداقل یک شاخصه ارزیابی با وزن درصدی اضافه نمایید."
+              actionLabel="افزودن شاخصه جدید"
+              onAction={() => handleAddCriterion()}
+            />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {criteriaList.map((crit, index) => (
             <div
               key={crit.id || index}
               className={`p-4 rounded-2xl border transition-all space-y-3 relative ${
@@ -929,6 +942,7 @@ export const EvaluationCriteriaManager: React.FC<EvaluationCriteriaManagerProps>
             </div>
           ))}
         </div>
+        )}
 
         {/* Add Criterion & Quick Suggested Chips */}
         <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -1092,8 +1106,26 @@ export const EvaluationCriteriaManager: React.FC<EvaluationCriteriaManagerProps>
           </div>
         )}
 
+        {/* Loading State when evaluating */}
+        {isEvaluating && (
+          <div className="p-6 rounded-2xl bg-surface-2 border border-border-default space-y-4 animate-fadeIn">
+            <div className="flex items-center gap-3">
+              <Skeleton className="w-12 h-12 rounded-xl" />
+              <div className="space-y-2 flex-1">
+                <Skeleton className="h-4 w-48 rounded" />
+                <Skeleton className="h-3 w-72 rounded" />
+              </div>
+            </div>
+            <div className="space-y-3 pt-2">
+              <Skeleton className="h-16 w-full rounded-xl" />
+              <Skeleton className="h-16 w-full rounded-xl" />
+              <Skeleton className="h-24 w-full rounded-xl" />
+            </div>
+          </div>
+        )}
+
         {/* Evaluation Results Card */}
-        {evaluationResult && (
+        {!isEvaluating && evaluationResult && (
           <div className="p-5 rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100/70 border border-slate-200 space-y-4">
             {/* Result Top Summary Banner */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 bg-white rounded-xl border border-slate-200 shadow-2xs">

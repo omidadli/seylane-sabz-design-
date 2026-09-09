@@ -43,6 +43,8 @@ import {
   Candidate,
   JobPosting,
 } from '../../types';
+import { Skeleton, SkeletonCard, SkeletonText } from '../ui/Skeleton';
+import { EmptyState } from '../ui/EmptyState';
 import { toPersianDigits } from '../../utils/jalali';
 
 interface AIBotGovernanceModuleProps {
@@ -271,24 +273,50 @@ export const AIBotGovernanceModule: React.FC<AIBotGovernanceModuleProps> = ({
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[500px] text-slate-600 gap-4" dir="rtl">
-        <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
-        <p className="font-medium text-slate-700">در حال بارگذاری مرکز حاکمیت و رفتار هوش مصنوعی...</p>
+      <div className="space-y-6 pb-12 animate-fadeIn" dir="rtl">
+        {/* Header Skeleton */}
+        <div className="bg-surface-1 rounded-2xl p-6 sm:p-8 border border-border-default space-y-4">
+          <Skeleton className="h-6 w-48 rounded-full" />
+          <Skeleton className="h-8 w-80 rounded-xl" />
+          <SkeletonText lines={2} />
+          <div className="flex gap-3 pt-2">
+            <Skeleton className="h-10 w-32 rounded-xl" />
+            <Skeleton className="h-10 w-28 rounded-xl" />
+          </div>
+        </div>
+
+        {/* Tab Pills Skeleton */}
+        <div className="flex gap-2 overflow-x-auto pb-2">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton key={i} className="h-9 w-32 shrink-0 rounded-xl" />
+          ))}
+        </div>
+
+        {/* Cards Grid Skeleton */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-4">
+            <SkeletonCard className="h-72" />
+            <SkeletonCard className="h-64" />
+          </div>
+          <div className="space-y-4">
+            <SkeletonCard className="h-48" />
+            <SkeletonCard className="h-80" />
+          </div>
+        </div>
       </div>
     );
   }
 
   if (!config) {
     return (
-      <div className="p-8 text-center bg-rose-50 border border-rose-200 rounded-xl" dir="rtl">
-        <AlertTriangle className="w-10 h-10 text-rose-600 mx-auto mb-3" />
-        <p className="text-rose-900 font-semibold">پیکربندی هوش مصنوعی یافت نشد.</p>
-        <button
-          onClick={fetchConfig}
-          className="mt-4 px-4 py-2 bg-rose-600 text-white rounded-lg text-sm hover:bg-rose-700"
-        >
-          تلاش مجدد
-        </button>
+      <div className="p-8 text-center bg-surface-1 border border-danger/30 rounded-2xl shadow-xs" dir="rtl">
+        <EmptyState
+          icon={<AlertTriangle className="w-8 h-8 text-danger" />}
+          title="پیکربندی هوش مصنوعی یافت نشد"
+          description="ارتباط با پایگاه پیکربندی حاکمیت هوش مصنوعی هلدینگ برقرار نشد یا هنوز تنظیماتی ثبت نشده است."
+          actionLabel="تلاش مجدد جهت بارگذاری"
+          onAction={fetchConfig}
+        />
       </div>
     );
   }

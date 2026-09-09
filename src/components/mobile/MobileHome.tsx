@@ -1,24 +1,25 @@
 import React from 'react';
 import {
   Sparkles,
-  Mic,
   FileText,
   Building2,
   Zap,
   Users,
   Briefcase,
   Clock,
-  CheckCircle2,
-  ArrowLeft,
-  ChevronLeft,
   TrendingUp,
   Award,
-  Layers,
+  ChevronLeft,
   PhoneCall,
   Calendar,
   AlertCircle,
+  Package,
+  Layers,
+  ArrowRight,
+  ShieldCheck,
 } from 'lucide-react';
 import { HoldingDepartment, HRAutomationTask, HRDashboardMetrics } from '../../types';
+import { toPersianDigits, formatToman } from '../../utils/jalali';
 
 interface MobileHomeProps {
   metrics?: HRDashboardMetrics;
@@ -56,178 +57,362 @@ export const MobileHome: React.FC<MobileHomeProps> = ({
   const handleGoAutomations = onNavigateToAutomations || (() => onNavigate?.('automations'));
   const handleGoPortal = onNavigateToPortal || (() => onNavigate?.('portal'));
   const handleRun = onQuickRunAutomation || onRunTask || (async () => {});
-  return (
-    <div className="space-y-4 pb-14">
-      {/* Welcome & Brand Header Card */}
-      <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 text-white shadow-xl relative overflow-hidden border border-emerald-700/50">
-        <div className="absolute top-0 left-0 w-48 h-48 bg-white/5 rounded-full -translate-x-12 -translate-y-12 blur-2xl pointer-events-none" />
 
-        <div className="relative z-10 space-y-3">
-          {/* Top Row: Holding Badge & Date */}
+  // Brands of Seilaneh Sabz Holding
+  const holdingBrands = [
+    { name: 'دافی (Dafi)', focus: 'مراقبت از پوست و دستمال‌های بهداشتی', badge: 'برند لیدر', icon: '🌿' },
+    { name: 'کامان (Comeon)', focus: 'فرمولاسیون سوئیس، بهداشت تخصصی پوست و مو', badge: 'نوآور', icon: '✨' },
+    { name: 'میس‌ویک (Misswake)', focus: 'سلامت دهان، دندان و خمیردندان‌های روزانه', badge: 'تخصصی', icon: '🦷' },
+    { name: 'کاپوت (Kapoot)', focus: 'سلامت خانواده و بهداشت فردی', badge: 'صادراتی', icon: '🛡️' },
+    { name: 'آمبرلا (Umbrella)', focus: 'مرطوب‌کننده، آبرسان عمیق و لوسیون بدن', badge: 'پرمصرف', icon: '💧' },
+    { name: 'زنون (Zenon)', focus: 'لاین اختصاصی محصولات بهداشتی آقایان', badge: 'مردانه', icon: '⚡' },
+  ];
+
+  return (
+    <div className="space-y-4 px-3.5 sm:px-4 pt-2 pb-6">
+      {/* 1. App-like Greeting Header Card */}
+      <div
+        id="mobile-greeting-card"
+        className="p-4 sm:p-5 rounded-[20px] bg-gradient-to-br from-brand via-emerald-800 to-teal-900 text-white shadow-xl relative overflow-hidden border border-brand/40"
+      >
+        <div className="absolute top-0 left-0 w-44 h-44 bg-white/10 rounded-full -translate-x-12 -translate-y-12 blur-2xl pointer-events-none" />
+
+        <div className="relative z-10 space-y-3.5">
+          {/* Top Row: Holding Badge & Jalali Date */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-emerald-400/20 border border-emerald-400/40 flex items-center justify-center">
-                <Sparkles className="w-4 h-4 text-emerald-300" />
+              <div className="w-8 h-8 rounded-[10px] bg-white/15 backdrop-blur-md border border-white/25 flex items-center justify-center font-black text-xs text-white">
+                🌿
               </div>
               <div>
                 <span className="text-xs font-black tracking-wide text-white block">
                   هلدینگ سیلانه سبز
                 </span>
-                <span className="text-[10px] text-emerald-300/90 font-mono">SEILANEH SABZ HOLDING</span>
+                <span className="text-[10px] text-emerald-200/90 font-mono tracking-wider">
+                  SEILANEH SABZ HOLDING
+                </span>
               </div>
             </div>
 
-            <div className="px-2.5 py-1 rounded-full bg-white/10 text-emerald-200 text-[11px] font-medium border border-white/10 flex items-center gap-1">
-              <Calendar className="w-3 h-3 text-emerald-300" />
-              <span>امروز: ۲۵ شهریور ۱۴۰۳</span>
+            <div className="px-2.5 py-1 rounded-full bg-white/15 backdrop-blur-md text-emerald-100 text-[11px] font-bold border border-white/20 flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5 text-emerald-200" />
+              <span>امروز: {toPersianDigits('۱۴۰۴/۰۶/۱۸')}</span>
             </div>
           </div>
 
-          {/* Greeting */}
-          <div className="pt-1">
-            <h1 className="text-base sm:text-lg font-black text-white">
-              روز بخیر، مهندس سهرابی عزیز! 👋
+          {/* Personalized Greeting */}
+          <div className="pt-0.5">
+            <h1 className="text-base sm:text-lg font-black text-white flex items-center gap-2">
+              <span>روز بخیر، مهندس سهرابی عزیز!</span>
+              <span className="text-base select-none">👋</span>
             </h1>
-            <p className="text-xs text-emerald-100/80 leading-relaxed mt-0.5">
-              سامانه هوشمند منابع انسانی فعال است؛ پایش لحظه‌ای ۱۳۵۰ پرسنل و ۱۰ دپارتمان تخصصی هلدینگ.
+            <p className="text-xs text-emerald-100/85 leading-relaxed mt-1">
+              سامانه هوشمند منابع انسانی فعال است؛ پایش لحظه‌ای ۱۳۵۰ پرسنل ستاد و کارخانجات اشتهارد.
             </p>
           </div>
 
-          {/* Big Voice Assistant Trigger Banner */}
-          <div
+          {/* Voice Assistant Trigger Banner (App-like micro-interaction) */}
+          <button
+            type="button"
+            id="mobile-voice-trigger-banner"
             onClick={handleGoVoice}
-            className="p-3 rounded-2xl bg-gradient-to-r from-emerald-700/80 to-teal-700/80 hover:from-emerald-600 hover:to-teal-600 border border-emerald-400/40 shadow-lg flex items-center justify-between cursor-pointer transition-all active:scale-[0.98]"
+            className="w-full p-3 rounded-[14px] bg-white/15 hover:bg-white/25 active:scale-[0.98] border border-white/25 shadow-md flex items-center justify-between cursor-pointer transition-all text-right group"
           >
             <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-xl bg-white text-emerald-800 flex items-center justify-center shadow-md animate-pulse">
-                <PhoneCall className="w-5 h-5 text-emerald-700" />
+              <div className="w-10 h-10 rounded-full bg-white text-brand flex items-center justify-center shadow-md shrink-0 group-hover:scale-105 transition-transform">
+                <PhoneCall className="w-5 h-5 text-brand" />
               </div>
-              <div>
-                <span className="text-xs font-black text-white flex items-center gap-1">
-                  تماس صوتی مستقیم با دستیار AI
-                  <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-emerald-400 text-emerald-950 font-bold">
-                    جدید
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-black text-white">
+                    تماس صوتی مستقیم با دستیار AI
                   </span>
-                </span>
-                <span className="text-[10px] text-emerald-200 block mt-0.5">
+                  <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-400 text-slate-950 font-black">
+                    هوشمند
+                  </span>
+                </div>
+                <span className="text-[10px] text-emerald-200 block truncate mt-0.5">
                   لمس کنید و بگویید: «یک آگهی برای مدیر برند دافی بنویس»
                 </span>
               </div>
             </div>
-            <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
-              <ChevronLeft className="w-4 h-4 text-white" />
+            <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+              <ChevronLeft className="w-4 h-4 text-white group-hover:-translate-x-0.5 transition-transform" />
+            </div>
+          </button>
+        </div>
+      </div>
+
+      {/* 2. Quick-Action Grid: 2×2 Tiles with Icons (Thumb-Zone Friendly) */}
+      <section aria-labelledby="quick-actions-heading">
+        <h2 id="quick-actions-heading" className="sr-only">
+          دسترسی‌های سریع
+        </h2>
+        <div className="grid grid-cols-2 gap-2.5">
+          {/* Tile 1: AI Job Ad Generator */}
+          <button
+            type="button"
+            id="mobile-tile-jobad"
+            onClick={handleGoJobAd}
+            className="min-h-[96px] p-3.5 rounded-[16px] bg-surface-1 border border-border-default hover:border-brand shadow-xs hover:shadow-sm text-right cursor-pointer transition-all active:scale-[0.97] flex flex-col justify-between group"
+          >
+            <div className="flex items-center justify-between w-full">
+              <div className="w-10 h-10 rounded-[12px] bg-brand-soft text-brand flex items-center justify-center group-hover:bg-brand group-hover:text-white transition-colors shrink-0">
+                <FileText className="w-5 h-5" />
+              </div>
+              <span className="text-[9px] font-black px-1.5 py-0.5 rounded-[6px] bg-brand-soft text-brand border border-brand/20">
+                Gemini
+              </span>
+            </div>
+            <div className="mt-2">
+              <span className="text-xs font-black text-text-1 block group-hover:text-brand transition-colors">
+                تولید آگهی و JD
+              </span>
+              <span className="text-[10px] text-text-3 block mt-0.5 font-medium">
+                تنظیم هوشمند با AI
+              </span>
+            </div>
+          </button>
+
+          {/* Tile 2: 10 Holding Departments */}
+          <button
+            type="button"
+            id="mobile-tile-departments"
+            onClick={handleGoDepartments}
+            className="min-h-[96px] p-3.5 rounded-[16px] bg-surface-1 border border-border-default hover:border-brand shadow-xs hover:shadow-sm text-right cursor-pointer transition-all active:scale-[0.97] flex flex-col justify-between group"
+          >
+            <div className="flex items-center justify-between w-full">
+              <div className="w-10 h-10 rounded-[12px] bg-surface-2 text-text-1 flex items-center justify-center group-hover:bg-brand group-hover:text-white transition-colors shrink-0">
+                <Building2 className="w-5 h-5" />
+              </div>
+              <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-[6px] bg-surface-2 text-text-2 border border-border-default">
+                ۱۰ واحد
+              </span>
+            </div>
+            <div className="mt-2">
+              <span className="text-xs font-black text-text-1 block group-hover:text-brand transition-colors">
+                دپارتمان‌های هلدینگ
+              </span>
+              <span className="text-[10px] text-text-3 block mt-0.5 font-medium">
+                کارخانجات اشتهارد و ستاد
+              </span>
+            </div>
+          </button>
+
+          {/* Tile 3: Fast HR Automations */}
+          <button
+            type="button"
+            id="mobile-tile-automations"
+            onClick={handleGoAutomations}
+            className="min-h-[96px] p-3.5 rounded-[16px] bg-surface-1 border border-border-default hover:border-brand shadow-xs hover:shadow-sm text-right cursor-pointer transition-all active:scale-[0.97] flex flex-col justify-between group"
+          >
+            <div className="flex items-center justify-between w-full">
+              <div className="w-10 h-10 rounded-[12px] bg-warning-soft text-warning flex items-center justify-center group-hover:bg-warning group-hover:text-white transition-colors shrink-0">
+                <Zap className="w-5 h-5" />
+              </div>
+              <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-[6px] bg-warning-soft text-warning">
+                تک‌لمسی
+              </span>
+            </div>
+            <div className="mt-2">
+              <span className="text-xs font-black text-text-1 block group-hover:text-brand transition-colors">
+                اتوماسیون‌های HR
+              </span>
+              <span className="text-[10px] text-text-3 block mt-0.5 font-medium">
+                ۱۲۸ ساعت صرفه‌جویی
+              </span>
+            </div>
+          </button>
+
+          {/* Tile 4: Administrative & Personnel Portal */}
+          <button
+            type="button"
+            id="mobile-tile-portal"
+            onClick={handleGoPortal}
+            className="min-h-[96px] p-3.5 rounded-[16px] bg-surface-1 border border-border-default hover:border-brand shadow-xs hover:shadow-sm text-right cursor-pointer transition-all active:scale-[0.97] flex flex-col justify-between group"
+          >
+            <div className="flex items-center justify-between w-full">
+              <div className="w-10 h-10 rounded-[12px] bg-info-soft text-info flex items-center justify-center group-hover:bg-info group-hover:text-white transition-colors shrink-0">
+                <Users className="w-5 h-5" />
+              </div>
+              <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-[6px] bg-info-soft text-info">
+                کارتابل
+              </span>
+            </div>
+            <div className="mt-2">
+              <span className="text-xs font-black text-text-1 block group-hover:text-brand transition-colors">
+                کارتابل اداری
+              </span>
+              <span className="text-[10px] text-text-3 block mt-0.5 font-medium">
+                فیش حقوق، تردد و مرخصی
+              </span>
+            </div>
+          </button>
+        </div>
+      </section>
+
+      {/* 3. Horizontal Snap-Scrolling Cards: Executive Holding KPIs */}
+      <section className="space-y-2" aria-labelledby="kpi-snap-heading">
+        <div className="flex items-center justify-between px-0.5">
+          <div className="flex items-center gap-1.5">
+            <TrendingUp className="w-4 h-4 text-brand" />
+            <h2 id="kpi-snap-heading" className="text-xs font-black text-text-1">
+              شاخص‌های کلیدی هلدینگ سیلانه سبز
+            </h2>
+          </div>
+          <span className="text-[10px] font-bold text-text-3">
+            ورق بزنید ‹›
+          </span>
+        </div>
+
+        {/* Snap-scroll container */}
+        <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-none gap-2.5 pb-1">
+          {/* Snap Card 1: Active Headcount */}
+          <div className="snap-start min-w-[155px] sm:min-w-[170px] shrink-0 p-3.5 rounded-[16px] bg-surface-1 border border-border-default shadow-2xs flex flex-col justify-between">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold text-text-3">کل پرسنل فعال</span>
+              <span className="w-6 h-6 rounded-full bg-brand-soft text-brand flex items-center justify-center text-[10px]">
+                👥
+              </span>
+            </div>
+            <div>
+              <div className="text-base sm:text-lg font-black text-text-1 font-mono">
+                {metrics?.activeHeadcount != null ? `${toPersianDigits(metrics.activeHeadcount)} نفر` : '—'}
+              </div>
+              <span className="text-[10px] text-brand font-bold mt-0.5 block">
+                +۱۲ رشد ماه جاری
+              </span>
+            </div>
+          </div>
+
+          {/* Snap Card 2: Open Positions */}
+          <div className="snap-start min-w-[155px] sm:min-w-[170px] shrink-0 p-3.5 rounded-[16px] bg-surface-1 border border-border-default shadow-2xs flex flex-col justify-between">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold text-text-3">فرصت‌های باز</span>
+              <span className="w-6 h-6 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-600 flex items-center justify-center text-[10px]">
+                💼
+              </span>
+            </div>
+            <div>
+              <div className="text-base sm:text-lg font-black text-amber-600 font-mono">
+                {metrics?.openPositionsCount != null ? `${toPersianDigits(metrics.openPositionsCount)} ردیف` : '—'}
+              </div>
+              <span className="text-[10px] text-text-3 font-medium mt-0.5 block">
+                کارخانجات و ستاد
+              </span>
+            </div>
+          </div>
+
+          {/* Snap Card 3: Pending Leaves */}
+          <div className="snap-start min-w-[155px] sm:min-w-[170px] shrink-0 p-3.5 rounded-[16px] bg-surface-1 border border-border-default shadow-2xs flex flex-col justify-between">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold text-text-3">مرخصی معوقه</span>
+              <span className="w-6 h-6 rounded-full bg-teal-50 dark:bg-teal-950/40 text-teal-600 flex items-center justify-center text-[10px]">
+                🏖️
+              </span>
+            </div>
+            <div>
+              <div className="text-base sm:text-lg font-black text-teal-700 dark:text-teal-400 font-mono">
+                {metrics?.pendingLeavesCount != null ? `${toPersianDigits(metrics.pendingLeavesCount)} درخواست` : '—'}
+              </div>
+              <span className="text-[10px] text-text-3 font-medium mt-0.5 block">
+                در انتظار تأیید مدیران
+              </span>
+            </div>
+          </div>
+
+          {/* Snap Card 4: Turnover Rate */}
+          <div className="snap-start min-w-[155px] sm:min-w-[170px] shrink-0 p-3.5 rounded-[16px] bg-surface-1 border border-border-default shadow-2xs flex flex-col justify-between">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold text-text-3">نرخ خروج (Turnover)</span>
+              <span className="w-6 h-6 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 flex items-center justify-center text-[10px]">
+                📉
+              </span>
+            </div>
+            <div>
+              <div className="text-base sm:text-lg font-black text-brand font-mono">
+                {metrics?.turnoverRatePct != null ? `${toPersianDigits(metrics.turnoverRatePct)}٪` : '—'}
+              </div>
+              <span className="text-[10px] text-brand font-bold mt-0.5 block">
+                زیر میانگین صنعت FMCG
+              </span>
+            </div>
+          </div>
+
+          {/* Snap Card 5: Average Time to Hire */}
+          <div className="snap-start min-w-[155px] sm:min-w-[170px] shrink-0 p-3.5 rounded-[16px] bg-surface-1 border border-border-default shadow-2xs flex flex-col justify-between">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold text-text-3">زمان استخدام</span>
+              <span className="w-6 h-6 rounded-full bg-blue-50 dark:bg-blue-950/40 text-blue-600 flex items-center justify-center text-[10px]">
+                ⏱️
+              </span>
+            </div>
+            <div>
+              <div className="text-base sm:text-lg font-black text-text-1 font-mono">
+                {metrics?.averageTimeToHireDays != null ? `${toPersianDigits(metrics.averageTimeToHireDays)} روز` : '—'}
+              </div>
+              <span className="text-[10px] text-text-3 font-medium mt-0.5 block">
+                از انتشار تا جذب قطعی
+              </span>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* 4 Primary Navigation Action Tiles */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-        {/* Tile 1: AI Job Ad Generator */}
-        <button
-          onClick={handleGoJobAd}
-          className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-emerald-400 text-right cursor-pointer transition-all active:scale-95 space-y-2 group"
-        >
-          <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-            <FileText className="w-5 h-5" />
+      {/* 4. Horizontal Snap-Scrolling Cards: Holding Brands Showcase */}
+      <section className="space-y-2" aria-labelledby="brands-snap-heading">
+        <div className="flex items-center justify-between px-0.5">
+          <div className="flex items-center gap-1.5">
+            <Package className="w-4 h-4 text-brand" />
+            <h2 id="brands-snap-heading" className="text-xs font-black text-text-1">
+              سبد برندهای ملی هلدینگ سیلانه سبز
+            </h2>
           </div>
-          <div>
-            <span className="text-xs font-black text-slate-800 block">تولید آگهی و JD</span>
-            <span className="text-[10px] text-slate-400">با هوش مصنوعی Gemini</span>
-          </div>
-        </button>
-
-        {/* Tile 2: Holding Departments */}
-        <button
-          onClick={handleGoDepartments}
-          className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-emerald-400 text-right cursor-pointer transition-all active:scale-95 space-y-2 group"
-        >
-          <div className="w-9 h-9 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center group-hover:bg-teal-600 group-hover:text-white transition-colors">
-            <Building2 className="w-5 h-5" />
-          </div>
-          <div>
-            <span className="text-xs font-black text-slate-800 block">۱۰ دپارتمان</span>
-            <span className="text-[10px] text-slate-400">کارخانجات و ستاد</span>
-          </div>
-        </button>
-
-        {/* Tile 3: Fast Automations */}
-        <button
-          onClick={handleGoAutomations}
-          className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-emerald-400 text-right cursor-pointer transition-all active:scale-95 space-y-2 group"
-        >
-          <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:bg-amber-600 group-hover:text-white transition-colors">
-            <Zap className="w-5 h-5" />
-          </div>
-          <div>
-            <span className="text-xs font-black text-slate-800 block">اتوماسیون HR</span>
-            <span className="text-[10px] text-slate-400">۱۲۸ ساعت صرفه‌جویی</span>
-          </div>
-        </button>
-
-        {/* Tile 4: Personnel & Administrative Portal */}
-        <button
-          onClick={handleGoPortal}
-          className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-emerald-400 text-right cursor-pointer transition-all active:scale-95 space-y-2 group"
-        >
-          <div className="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-            <Users className="w-5 h-5" />
-          </div>
-          <div>
-            <span className="text-xs font-black text-slate-800 block">کارتابل اداری</span>
-            <span className="text-[10px] text-slate-400">فیش، تردد و مرخصی</span>
-          </div>
-        </button>
-      </div>
-
-      {/* Holding Key Metrics Row */}
-      <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm space-y-3">
-        <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-          <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-            <TrendingUp className="w-4 h-4 text-emerald-600" />
-            شاخص‌های کلیدی هلدینگ سیلانه سبز:
+          <span className="text-[10px] text-text-3 font-medium">
+            ۶ برند تخصصی
           </span>
-          <span className="text-[10px] text-slate-400">به‌روزرسانی زنده</span>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-          <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-            <span className="text-[10px] text-slate-500 block">کل پرسنل فعال:</span>
-            <span className="text-sm font-black text-slate-800 font-mono">
-              {(metrics?.activeHeadcount ?? 1420).toLocaleString('fa-IR')} نفر
-            </span>
-          </div>
-          <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-            <span className="text-[10px] text-slate-500 block">فرصت‌های باز:</span>
-            <span className="text-sm font-black text-amber-600 font-mono">
-              {metrics?.openPositionsCount ?? 14} ردیف
-            </span>
-          </div>
-          <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-            <span className="text-[10px] text-slate-500 block">مرخصی معوقه:</span>
-            <span className="text-sm font-black text-teal-700 font-mono">
-              {metrics?.pendingLeavesCount ?? 9} درخواست
-            </span>
-          </div>
-          <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-            <span className="text-[10px] text-slate-500 block">نرخ خروج (Turnover):</span>
-            <span className="text-sm font-black text-emerald-600 font-mono">
-              {metrics?.turnoverRatePct ?? 2.1}٪ (عالی)
-            </span>
-          </div>
+        <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-none gap-2.5 pb-1">
+          {holdingBrands.map((brand, idx) => (
+            <div
+              key={idx}
+              className="snap-start min-w-[190px] shrink-0 p-3.5 rounded-[16px] bg-surface-1 border border-border-default shadow-2xs flex flex-col justify-between space-y-2"
+            >
+              <div className="flex items-center justify-between">
+                <div className="w-8 h-8 rounded-[10px] bg-brand-soft text-brand flex items-center justify-center text-sm shadow-2xs">
+                  {brand.icon}
+                </div>
+                <span className="text-[9px] font-black px-2 py-0.5 rounded-full bg-surface-2 text-text-2 border border-border-default">
+                  {brand.badge}
+                </span>
+              </div>
+              <div>
+                <span className="text-xs font-black text-text-1 block">
+                  {brand.name}
+                </span>
+                <p className="text-[10px] text-text-3 leading-relaxed mt-0.5">
+                  {brand.focus}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
+      </section>
 
-      {/* 1-Click Fast Automations Widget */}
-      <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm space-y-3">
+      {/* 5. 1-Click Fast Automations List */}
+      <section className="bg-surface-1 rounded-[18px] p-4 border border-border-default shadow-xs space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            <Zap className="w-4 h-4 text-amber-500" />
-            <span className="text-xs font-black text-slate-900">اتوماسیون‌های سریع (یک لمس)</span>
+            <Zap className="w-4 h-4 text-warning" />
+            <h2 className="text-xs font-black text-text-1">
+              اتوماسیون‌های سریع (یک لمس)
+            </h2>
           </div>
           <button
+            type="button"
             onClick={handleGoAutomations}
-            className="text-[11px] text-emerald-600 font-bold hover:underline flex items-center gap-0.5 cursor-pointer"
+            className="min-h-[44px] px-2 text-[11px] text-brand font-bold hover:underline flex items-center gap-0.5 cursor-pointer select-none"
           >
             <span>مشاهده همه</span>
             <ChevronLeft className="w-3.5 h-3.5" />
@@ -238,20 +423,21 @@ export const MobileHome: React.FC<MobileHomeProps> = ({
           {taskList.slice(0, 3).map((task) => (
             <div
               key={task.id}
-              className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between gap-2 hover:bg-emerald-50/50 hover:border-emerald-200 transition-colors"
+              className="p-3 rounded-[12px] bg-surface-2/70 border border-border-default flex items-center justify-between gap-2 hover:border-brand/40 transition-colors"
             >
               <div className="space-y-0.5 min-w-0 flex-1">
-                <span className="text-xs font-bold text-slate-800 block truncate">
+                <span className="text-xs font-bold text-text-1 block truncate">
                   {task.title}
                 </span>
-                <span className="text-[10px] text-slate-500 block">
-                  صرفه‌جویی: {task.estimatedTimeSaved}
+                <span className="text-[10px] text-text-3 block">
+                  صرفه‌جویی تخمینی: {task.estimatedTimeSaved}
                 </span>
               </div>
 
               <button
+                type="button"
                 onClick={() => handleRun(task.id)}
-                className="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-sm flex-shrink-0"
+                className="min-h-[44px] px-3.5 py-1.5 rounded-[10px] bg-brand hover:bg-brand-hover text-white text-[11px] font-black flex items-center gap-1.5 cursor-pointer transition-all shadow-xs shrink-0 select-none active:scale-95"
               >
                 <Zap className="w-3 h-3 fill-white" />
                 <span>اجرا</span>
@@ -259,34 +445,7 @@ export const MobileHome: React.FC<MobileHomeProps> = ({
             </div>
           ))}
         </div>
-      </div>
-
-      {/* Iconic Brands of Seilaneh Sabz Holding Showcase */}
-      <div className="bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 rounded-2xl p-4 border border-emerald-200 text-xs space-y-2">
-        <span className="font-bold text-emerald-950 block">
-          🌿 سبد برندهای ملی و بین‌المللی هلدینگ سیلانه سبز:
-        </span>
-        <div className="flex flex-wrap gap-1.5 text-[11px]">
-          <span className="px-2.5 py-1 rounded-lg bg-white text-emerald-900 font-bold border border-emerald-200 shadow-xs">
-            ✨ دافی (Dafi)
-          </span>
-          <span className="px-2.5 py-1 rounded-lg bg-white text-emerald-900 font-bold border border-emerald-200 shadow-xs">
-            ✨ کامان (Comeon)
-          </span>
-          <span className="px-2.5 py-1 rounded-lg bg-white text-emerald-900 font-bold border border-emerald-200 shadow-xs">
-            ✨ میس‌ویک (Misswake)
-          </span>
-          <span className="px-2.5 py-1 rounded-lg bg-white text-emerald-900 font-bold border border-emerald-200 shadow-xs">
-            ✨ زنون (Zenon)
-          </span>
-          <span className="px-2.5 py-1 rounded-lg bg-white text-emerald-900 font-bold border border-emerald-200 shadow-xs">
-            ✨ کاپوت (Kapoot)
-          </span>
-          <span className="px-2.5 py-1 rounded-lg bg-white text-emerald-900 font-bold border border-emerald-200 shadow-xs">
-            ✨ آمبرلا (Umbrella)
-          </span>
-        </div>
-      </div>
+      </section>
     </div>
   );
 };

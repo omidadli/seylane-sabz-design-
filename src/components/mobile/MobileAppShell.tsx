@@ -7,8 +7,8 @@ import {
   Users,
   Bell,
   PhoneCall,
-  Sparkles,
   Laptop,
+  Sparkles,
 } from 'lucide-react';
 import { MobileHome } from './MobileHome';
 import { MobileDepartments } from './MobileDepartments';
@@ -16,6 +16,7 @@ import { MobileVoiceCall } from './MobileVoiceCall';
 import { MobileJobAdGenerator } from './MobileJobAdGenerator';
 import { MobilePersonnelPortal } from './MobilePersonnelPortal';
 import { MobileAutomations } from './MobileAutomations';
+import { ThemeToggle } from '../common/ThemeToggle';
 import {
   Employee,
   HoldingDepartment,
@@ -51,63 +52,81 @@ export const MobileAppShell: React.FC<MobileAppShellProps> = ({
   onExitToDesktop,
 }) => {
   const [activeTab, setActiveTab] = useState<MobileTab>('home');
-  const [notificationCount, setNotificationCount] = useState(3);
+  const [notificationCount] = useState(3);
   const [jobAdDeptId, setJobAdDeptId] = useState<string | null>(null);
 
   return (
-    <div className="w-full min-h-screen bg-slate-100 flex flex-col justify-between text-slate-800 antialiased selection:bg-emerald-200">
-      <div className="w-full max-w-xl mx-auto min-h-screen flex flex-col bg-slate-50 relative shadow-xl overflow-x-hidden">
-        {/* Mobile App Bar */}
-        <header className="sticky top-0 bg-emerald-900 text-white px-4 py-3 flex items-center justify-between border-b border-emerald-800/80 shadow-md z-30">
+    <div
+      dir="rtl"
+      className="w-full min-h-screen bg-surface-0 text-text-1 flex flex-col justify-between font-sans antialiased selection:bg-brand/20 selection:text-brand transition-colors"
+    >
+      <div className="w-full max-w-md mx-auto min-h-screen flex flex-col bg-surface-1 relative shadow-2xl border-x border-border-default overflow-x-hidden">
+        {/* Mobile App Bar with Safe Area Top Padding */}
+        <header
+          id="mobile-header"
+          className="sticky top-0 z-40 bg-surface-1/95 backdrop-blur-md border-b border-border-default pt-[max(env(safe-area-inset-top,0px),10px)] pb-3 px-3.5 flex items-center justify-between transition-colors shadow-2xs"
+        >
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 p-0.5 shadow-md flex items-center justify-center">
-              <div className="w-full h-full rounded-[10px] bg-slate-950 flex items-center justify-center">
-                <span className="text-sm">🌿</span>
-              </div>
+            <div className="w-9 h-9 rounded-[12px] bg-brand text-white flex items-center justify-center font-black text-xs shadow-xs shrink-0 select-none">
+              کارا
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-sm font-black tracking-tight text-white">سیلانه سبز</span>
-                <span className="text-[10px] bg-emerald-500/30 text-emerald-300 px-1.5 py-0.5 rounded-full font-bold">
+                <span className="text-sm font-black tracking-tight text-text-1">
+                  سیلانه سبز
+                </span>
+                <span className="text-[10px] bg-brand-soft text-brand border border-brand/20 px-1.5 py-0.2 rounded-full font-bold">
                   HRMS
                 </span>
               </div>
-              <span className="text-[10px] text-emerald-300/80 block">دافی • کامان • میس‌ویک • کاپوت</span>
+              <span className="text-[10px] text-text-3 block leading-tight font-medium">
+                دافی • کامان • میس‌ویک • اشتهارد
+              </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
+            {/* Theme Toggle */}
+            <ThemeToggle />
+
+            {/* Exit to Desktop Mode */}
             {onExitToDesktop && (
               <button
+                type="button"
+                id="btn-exit-to-desktop"
                 onClick={onExitToDesktop}
-                className="px-2.5 py-1.5 rounded-xl bg-emerald-800 hover:bg-emerald-700 text-emerald-100 text-[11px] font-bold flex items-center gap-1 border border-emerald-700 transition-colors"
-                title="مشاهده نسخه جامع سازمانی هلدینگ"
+                className="min-h-[44px] px-2.5 rounded-[10px] bg-surface-2 hover:bg-surface-3 text-text-2 hover:text-text-1 text-[11px] font-bold flex items-center gap-1 border border-border-default transition-all cursor-pointer select-none"
+                title="مشاهده نسخه جامع دسکتاپ هلدینگ"
               >
-                <Laptop className="w-3.5 h-3.5 text-emerald-300" />
-                <span>نسخه جامع</span>
+                <Laptop className="w-3.5 h-3.5 text-text-3" />
+                <span className="hidden xs:inline">نسخه دسکتاپ</span>
               </button>
             )}
 
-            {/* Direct Voice Call Icon */}
+            {/* Direct Voice Call Quick Trigger */}
             <button
+              type="button"
+              id="btn-header-voice-call"
               onClick={() => setActiveTab('voice')}
-              className="w-9 h-9 rounded-full bg-emerald-800 hover:bg-emerald-700 text-emerald-200 flex items-center justify-center cursor-pointer transition-colors relative shadow-inner"
-              title="تماس صوتی فوری با هوش مصنوعی"
+              className="min-h-[44px] min-w-[44px] rounded-[10px] bg-brand-soft hover:bg-brand/20 text-brand flex items-center justify-center cursor-pointer transition-all relative border border-brand/25"
+              title="دستیار هوشمند صوتی"
             >
-              <PhoneCall className="w-4 h-4 text-emerald-300" />
-              <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+              <PhoneCall className="w-4 h-4 text-brand" />
+              <span className="absolute top-2 left-2 w-2 h-2 rounded-full bg-brand animate-ping" />
             </button>
 
-            {/* Notifications */}
+            {/* Automations Notification Badge */}
             <button
+              type="button"
+              id="btn-header-automations-bell"
               onClick={() => setActiveTab('automations')}
-              className="w-9 h-9 rounded-full bg-emerald-800 hover:bg-emerald-700 text-emerald-200 flex items-center justify-center cursor-pointer transition-colors relative"
-              title="اتوماسیون‌ها و اعلان‌ها"
+              className="min-h-[44px] min-w-[44px] rounded-[10px] bg-surface-2 hover:bg-surface-3 text-text-2 flex items-center justify-center cursor-pointer transition-all relative border border-border-default"
+              title="اتوماسیون‌ها و هشدارها"
             >
               <Bell className="w-4 h-4" />
               {notificationCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-rose-500 text-white font-bold text-[10px] flex items-center justify-center font-mono">
-                  {notificationCount}
+                <span className="absolute top-1.5 left-1.5 w-4 h-4 rounded-full bg-danger text-white font-bold text-[10px] flex items-center justify-center">
+                  ۳
                 </span>
               )}
             </button>
@@ -115,7 +134,7 @@ export const MobileAppShell: React.FC<MobileAppShellProps> = ({
         </header>
 
         {/* Dynamic Mobile Tab Body */}
-        <main className="flex-1 pb-20 overflow-y-auto">
+        <main className="flex-1 pb-24 overflow-y-auto">
           {activeTab === 'home' && (
             <MobileHome
               metrics={metrics}
@@ -134,18 +153,20 @@ export const MobileAppShell: React.FC<MobileAppShellProps> = ({
           )}
 
           {activeTab === 'departments' && (
-            <MobileDepartments
-              departments={departments}
-              onBack={() => setActiveTab('home')}
-              onSelectDepartmentForJob={(dept) => {
-                setJobAdDeptId(dept.id);
-                setActiveTab('jobAd');
-              }}
-            />
+            <div className="p-3.5 sm:p-4">
+              <MobileDepartments
+                departments={departments}
+                onBack={() => setActiveTab('home')}
+                onSelectDepartmentForJob={(dept) => {
+                  setJobAdDeptId(dept.id);
+                  setActiveTab('jobAd');
+                }}
+              />
+            </div>
           )}
 
           {activeTab === 'voice' && (
-            <div className="p-3 sm:p-4">
+            <div className="p-2 sm:p-3 h-full">
               <MobileVoiceCall
                 onBack={() => setActiveTab('home')}
                 onNavigateToJobAd={() => setActiveTab('jobAd')}
@@ -156,7 +177,7 @@ export const MobileAppShell: React.FC<MobileAppShellProps> = ({
           )}
 
           {activeTab === 'jobAd' && (
-            <div className="p-3 sm:p-4">
+            <div className="p-3.5 sm:p-4">
               <MobileJobAdGenerator
                 departments={departments}
                 initialDeptId={jobAdDeptId}
@@ -170,90 +191,116 @@ export const MobileAppShell: React.FC<MobileAppShellProps> = ({
           )}
 
           {activeTab === 'portal' && (
-            <MobilePersonnelPortal
-              employees={employees}
-              leaves={leaves}
-              payrollSlips={payrollSlips}
-              onBack={() => setActiveTab('home')}
-            />
+            <div className="p-3.5 sm:p-4">
+              <MobilePersonnelPortal
+                employees={employees}
+                leaves={leaves}
+                payrollSlips={payrollSlips}
+                onBack={() => setActiveTab('home')}
+              />
+            </div>
           )}
 
           {activeTab === 'automations' && (
-            <MobileAutomations
-              tasks={automationTasks}
-              onRunTask={onRunAutomation}
-              onBack={() => setActiveTab('home')}
-            />
+            <div className="p-3.5 sm:p-4">
+              <MobileAutomations
+                tasks={automationTasks}
+                onRunTask={onRunAutomation}
+                onBack={() => setActiveTab('home')}
+              />
+            </div>
           )}
         </main>
 
-        {/* Bottom Mobile Tab Bar */}
-        <nav className="fixed bottom-0 inset-x-0 max-w-xl mx-auto bg-white/95 backdrop-blur-md border-t border-slate-200 py-1.5 px-3 flex items-center justify-around z-40 shadow-[0_-5px_20px_rgba(0,0,0,0.08)]">
+        {/* Bottom Mobile Tab Bar with Safe-Area Padding & Brand-Tinted Active State */}
+        <nav
+          id="mobile-bottom-nav"
+          className="fixed bottom-0 inset-x-0 max-w-md mx-auto bg-surface-1/95 backdrop-blur-md border-t border-border-default pt-1.5 pb-[max(env(safe-area-inset-bottom,0px),10px)] px-3 flex items-center justify-around z-50 shadow-[0_-4px_24px_rgba(0,0,0,0.08)] transition-colors"
+        >
           {/* Tab 1: Home */}
           <button
+            type="button"
+            id="mobile-tab-home"
             onClick={() => setActiveTab('home')}
-            className={`flex flex-col items-center gap-0.5 py-1 px-2 rounded-xl transition-all cursor-pointer ${
-              activeTab === 'home' ? 'text-emerald-700 font-bold' : 'text-slate-500 hover:text-slate-800'
+            className={`min-h-[48px] min-w-[54px] flex flex-col items-center justify-center gap-1 py-1 px-2.5 rounded-[12px] transition-all cursor-pointer select-none active:scale-95 ${
+              activeTab === 'home'
+                ? 'bg-brand-soft text-brand font-black'
+                : 'text-text-3 hover:text-text-1 font-medium'
             }`}
           >
-            <Home className={`w-5 h-5 ${activeTab === 'home' ? 'stroke-[2.5]' : ''}`} />
-            <span className="text-[10px]">خانه</span>
+            <Home className={`w-5 h-5 ${activeTab === 'home' ? 'stroke-[2.4]' : ''}`} />
+            <span className="text-[10px] leading-none">خانه</span>
           </button>
 
           {/* Tab 2: Departments */}
           <button
+            type="button"
+            id="mobile-tab-departments"
             onClick={() => setActiveTab('departments')}
-            className={`flex flex-col items-center gap-0.5 py-1 px-2 rounded-xl transition-all cursor-pointer ${
-              activeTab === 'departments' ? 'text-emerald-700 font-bold' : 'text-slate-500 hover:text-slate-800'
+            className={`min-h-[48px] min-w-[54px] flex flex-col items-center justify-center gap-1 py-1 px-2.5 rounded-[12px] transition-all cursor-pointer select-none active:scale-95 ${
+              activeTab === 'departments'
+                ? 'bg-brand-soft text-brand font-black'
+                : 'text-text-3 hover:text-text-1 font-medium'
             }`}
           >
-            <Building2 className={`w-5 h-5 ${activeTab === 'departments' ? 'stroke-[2.5]' : ''}`} />
-            <span className="text-[10px]">دپارتمان‌ها</span>
+            <Building2 className={`w-5 h-5 ${activeTab === 'departments' ? 'stroke-[2.4]' : ''}`} />
+            <span className="text-[10px] leading-none">دپارتمان‌ها</span>
           </button>
 
-          {/* Tab 3: Center Highlighted Voice Call Button */}
+          {/* Tab 3: Raised Center Highlighted Voice Assistant Button */}
           <button
+            type="button"
+            id="mobile-tab-voice"
             onClick={() => setActiveTab('voice')}
-            className="flex flex-col items-center gap-0.5 -mt-5 cursor-pointer group"
+            className="flex flex-col items-center gap-0.5 -mt-6 cursor-pointer group focus:outline-none select-none"
+            title="دستیار صوتی هوشمند"
           >
             <div
-              className={`w-13 h-13 rounded-full flex items-center justify-center shadow-lg transition-all transform group-active:scale-95 border-2 border-white ${
+              className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all transform active:scale-90 border-4 border-surface-1 ${
                 activeTab === 'voice'
-                  ? 'bg-gradient-to-tr from-emerald-600 to-teal-400 text-white shadow-emerald-500/50 scale-105'
-                  : 'bg-emerald-600 text-white shadow-emerald-600/40 hover:bg-emerald-500'
+                  ? 'bg-brand text-white shadow-brand/50 scale-105 ring-2 ring-brand/30'
+                  : 'bg-brand text-white shadow-brand/30 hover:bg-brand-hover'
               }`}
             >
               <Mic className="w-6 h-6 animate-pulse" />
             </div>
             <span
-              className={`text-[10px] font-bold ${
-                activeTab === 'voice' ? 'text-emerald-700' : 'text-slate-600'
+              className={`text-[10px] font-black ${
+                activeTab === 'voice' ? 'text-brand' : 'text-text-3'
               }`}
             >
-              تماس صوتی
+              دستیار صوتی
             </span>
           </button>
 
           {/* Tab 4: AI Job Ad */}
           <button
+            type="button"
+            id="mobile-tab-jobad"
             onClick={() => setActiveTab('jobAd')}
-            className={`flex flex-col items-center gap-0.5 py-1 px-2 rounded-xl transition-all cursor-pointer ${
-              activeTab === 'jobAd' ? 'text-emerald-700 font-bold' : 'text-slate-500 hover:text-slate-800'
+            className={`min-h-[48px] min-w-[54px] flex flex-col items-center justify-center gap-1 py-1 px-2.5 rounded-[12px] transition-all cursor-pointer select-none active:scale-95 ${
+              activeTab === 'jobAd'
+                ? 'bg-brand-soft text-brand font-black'
+                : 'text-text-3 hover:text-text-1 font-medium'
             }`}
           >
-            <FileText className={`w-5 h-5 ${activeTab === 'jobAd' ? 'stroke-[2.5]' : ''}`} />
-            <span className="text-[10px]">آگهی‌ساز</span>
+            <FileText className={`w-5 h-5 ${activeTab === 'jobAd' ? 'stroke-[2.4]' : ''}`} />
+            <span className="text-[10px] leading-none">آگهی‌ساز</span>
           </button>
 
           {/* Tab 5: Administrative Portal */}
           <button
+            type="button"
+            id="mobile-tab-portal"
             onClick={() => setActiveTab('portal')}
-            className={`flex flex-col items-center gap-0.5 py-1 px-2 rounded-xl transition-all cursor-pointer ${
-              activeTab === 'portal' ? 'text-emerald-700 font-bold' : 'text-slate-500 hover:text-slate-800'
+            className={`min-h-[48px] min-w-[54px] flex flex-col items-center justify-center gap-1 py-1 px-2.5 rounded-[12px] transition-all cursor-pointer select-none active:scale-95 ${
+              activeTab === 'portal'
+                ? 'bg-brand-soft text-brand font-black'
+                : 'text-text-3 hover:text-text-1 font-medium'
             }`}
           >
-            <Users className={`w-5 h-5 ${activeTab === 'portal' ? 'stroke-[2.5]' : ''}`} />
-            <span className="text-[10px]">کارتابل</span>
+            <Users className={`w-5 h-5 ${activeTab === 'portal' ? 'stroke-[2.4]' : ''}`} />
+            <span className="text-[10px] leading-none">کارتابل</span>
           </button>
         </nav>
       </div>
