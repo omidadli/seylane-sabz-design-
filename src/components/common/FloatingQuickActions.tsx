@@ -39,6 +39,8 @@ export const FloatingQuickActions: React.FC<FloatingQuickActionsProps> = ({
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            role="menu"
+            aria-label="امکانات دسترسی سریع"
             initial={{ opacity: 0, y: 15, scale: 0.92 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 15, scale: 0.92 }}
@@ -48,52 +50,56 @@ export const FloatingQuickActions: React.FC<FloatingQuickActionsProps> = ({
             {/* Action 1: Voice AI */}
             <button
               type="button"
+              role="menuitem"
               onClick={() => {
                 setIsOpen(false);
                 onOpenVoiceAssistant();
               }}
               className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-[10px] bg-brand text-white shadow-lg text-xs font-bold transition-all transform active:scale-95 cursor-pointer hover:bg-brand-hover"
             >
-              <Mic className="w-4 h-4 text-white" />
+              <Mic className="w-4 h-4 text-white" aria-hidden="true" />
               <span>دستیار صوتی هوش مصنوعی (Gemini)</span>
             </button>
 
             {/* Action 2: Job Ad Generator */}
             <button
               type="button"
+              role="menuitem"
               onClick={() => {
                 setIsOpen(false);
                 onOpenJobGenerator();
               }}
               className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-[10px] bg-surface-1 text-text-1 shadow-lg text-xs font-bold transition-all transform active:scale-95 cursor-pointer border border-border-default hover:bg-surface-2"
             >
-              <Sparkles className="w-4 h-4 text-brand" />
+              <Sparkles className="w-4 h-4 text-brand" aria-hidden="true" />
               <span>تولید هوشمند شرح شغل با هوش مصنوعی</span>
             </button>
 
             {/* Action 3: Spotlight Search (⌘K / Ctrl+K) */}
             <button
               type="button"
+              role="menuitem"
               onClick={() => {
                 setIsOpen(false);
                 onOpenCommandPalette();
               }}
               className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-[10px] bg-surface-1 text-text-2 shadow-lg text-xs font-bold transition-all transform active:scale-95 cursor-pointer border border-border-default hover:bg-surface-2 hover:text-text-1"
             >
-              <Command className="w-4 h-4 text-text-3" />
+              <Command className="w-4 h-4 text-text-3" aria-hidden="true" />
               <span>جستجوی سریع در سامانه (⌘K)</span>
             </button>
 
             {/* Action 4: Scroll Top */}
             <button
               type="button"
+              role="menuitem"
               onClick={() => {
                 setIsOpen(false);
                 scrollToTop();
               }}
               className="flex items-center gap-2 px-3 py-1.5 rounded-[8px] bg-surface-2 hover:bg-surface-3 text-text-3 hover:text-text-1 text-[11px] font-bold transition-all cursor-pointer border border-border-default shadow-2xs"
             >
-              <ArrowUp className="w-3.5 h-3.5" />
+              <ArrowUp className="w-3.5 h-3.5" aria-hidden="true" />
               <span>بازگشت به بالای صفحه</span>
             </button>
           </motion.div>
@@ -104,15 +110,17 @@ export const FloatingQuickActions: React.FC<FloatingQuickActionsProps> = ({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
+        aria-haspopup="menu"
+        aria-expanded={isOpen}
+        aria-label={isOpen ? 'بستن منوی دسترسی سریع هوشمند' : 'باز کردن منوی دسترسی سریع هوشمند'}
         className={`w-12 h-12 rounded-[14px] flex items-center justify-center shadow-xl transition-all transform active:scale-95 cursor-pointer select-none ${
           isOpen
             ? 'bg-surface-1 text-text-1 border border-border-default rotate-45 shadow-md'
             : 'bg-brand text-white shadow-brand/30 hover:bg-brand-hover'
         }`}
-        title="دسترسی سریع به امکانات هوشمند"
-        aria-label="دسترسی سریع هوشمند"
+        title={isOpen ? 'بستن منوی دسترسی سریع' : 'دسترسی سریع به امکانات هوشمند'}
       >
-        {isOpen ? <Plus className="w-5 h-5" /> : <Bot className="w-5 h-5" />}
+        {isOpen ? <Plus className="w-5 h-5" aria-hidden="true" /> : <Bot className="w-5 h-5" aria-hidden="true" />}
       </button>
     </div>
   );

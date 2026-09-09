@@ -690,6 +690,7 @@ async function startServer() {
         needsReviewCount: newCandidatesBatch.filter(c => c.category === CandidateCategory.NEEDS_REVIEW).length,
         initialRejectionCount: newCandidatesBatch.filter(c => c.category === CandidateCategory.INITIAL_REJECTION).length,
         sampleCandidates: newCandidatesBatch.slice(0, 5),
+        candidates: newCandidatesBatch,
         message: usedLocalEngine
           ? `${toPersianDigits(newCandidatesBatch.length)} رزومه با موتور ارزیابی محلی (بدون Gemini) امتیازدهی و ثبت شد — نتایج با برچسب «موتور محلی» نمایش داده می‌شود. دسته‌بندی‌ها پیشنهادی است و مرحله هیچ کارجویی خودکار تغییر نکرد.`
           : `${toPersianDigits(newCandidatesBatch.length)} رزومه ارزیابی و ثبت شد. دسته‌بندی‌ها پیشنهادی است و مرحله هیچ کارجویی خودکار تغییر نکرد.`,

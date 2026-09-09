@@ -244,9 +244,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               type="button"
               onClick={onCloseMobile}
               className="p-1.5 rounded-[10px] text-text-3 hover:text-text-1 hover:bg-surface-2 cursor-pointer transition-colors"
-              aria-label="بستن منو"
+              aria-label="بستن منوی کناری"
             >
-              <X className="w-5 h-5" />
+              <X className="w-5 h-5" aria-hidden="true" />
             </button>
           </div>
 
@@ -260,16 +260,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <button
               type="button"
               onClick={toggleCollapse}
+              aria-expanded={!isCollapsed}
               className={`p-1.5 rounded-[10px] text-text-3 hover:text-text-1 hover:bg-surface-2 transition-colors cursor-pointer ${
                 isCollapsed ? 'mx-auto' : ''
               }`}
               title={isCollapsed ? 'باز کردن منو (۲۶۴ پیکسل)' : 'جمع کردن منو (۷۲ پیکسل)'}
-              aria-label={isCollapsed ? 'باز کردن منو' : 'جمع کردن منو'}
+              aria-label={isCollapsed ? 'باز کردن نوار کناری' : 'جمع کردن نوار کناری'}
             >
               {isCollapsed ? (
-                <ChevronLeft className="w-4 h-4" />
+                <ChevronLeft className="w-4 h-4" aria-hidden="true" />
               ) : (
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-4 h-4" aria-hidden="true" />
               )}
             </button>
           </div>
@@ -298,6 +299,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                           <button
                             type="button"
                             disabled={!allowed}
+                            aria-label={`${item.label}${!allowed ? ' (غیرفعال، دسترسی محدود بر اساس نقش)' : ''}`}
                             onClick={() => {
                               if (!allowed) return;
                               onSelectModule(item.key);
@@ -332,6 +334,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                   ? 'bg-brand text-white shadow-2xs'
                                   : 'bg-surface-2 text-text-2 group-hover/item:bg-surface-3 group-hover/item:text-text-1'
                               }`}
+                              aria-hidden="true"
                             >
                               <Icon className="w-4 h-4" />
                             </div>

@@ -138,13 +138,14 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={onOpenCommandPalette}
+              aria-label="جستجوی سریع در سامانه با کلید میانبر کنترل K"
               className="w-full flex items-center justify-between px-3.5 py-1.5 rounded-[10px] bg-surface-2 hover:bg-surface-3 border border-border-default text-text-3 hover:text-text-2 text-xs font-medium transition-all group cursor-pointer shadow-2xs"
             >
               <div className="flex items-center gap-2 truncate">
-                <Search className="w-3.5 h-3.5 text-text-3 group-hover:text-brand transition-colors shrink-0" />
+                <Search className="w-3.5 h-3.5 text-text-3 group-hover:text-brand transition-colors shrink-0" aria-hidden="true" />
                 <span className="truncate">جستجو در پرسنل، احکام، فیش‌ها...</span>
               </div>
-              <div className="flex items-center gap-1 shrink-0 mr-2">
+              <div className="flex items-center gap-1 shrink-0 mr-2" aria-hidden="true">
                 <kbd className="px-1.5 py-0.5 text-[10px] font-bold text-text-2 bg-surface-1 rounded-[6px] border border-border-default shadow-2xs">
                   ⌘K
                 </kbd>
@@ -159,8 +160,9 @@ export const Header: React.FC<HeaderProps> = ({
           <div
             className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-[10px] bg-surface-2 border border-border-default text-[11px] text-text-2 font-bold select-none"
             title="تقویم هجری خورشیدی رسمی ایران"
+            aria-label={`تاریخ امروز: ${jalaliDateStr}`}
           >
-            <Calendar className="w-3.5 h-3.5 text-brand shrink-0" />
+            <Calendar className="w-3.5 h-3.5 text-brand shrink-0" aria-hidden="true" />
             <span className="whitespace-nowrap">{jalaliDateStr}</span>
           </div>
 
@@ -169,10 +171,11 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={onOpenVoiceAssistant}
+              aria-label="دستیار هوشمند صوتی منابع انسانی (مدل هوش مصنوعی Gemini)"
               className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-[10px] bg-brand-soft hover:opacity-90 text-brand border border-brand/20 text-xs font-bold transition-all cursor-pointer"
               title="دستیار هوشمند صوتی منابع انسانی (Gemini)"
             >
-              <Bot className="w-3.5 h-3.5 text-brand" />
+              <Bot className="w-3.5 h-3.5 text-brand" aria-hidden="true" />
               <span className="hidden 2xl:inline">دستیار صوتی</span>
             </button>
           )}
@@ -182,10 +185,11 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={onOpenJobGenerator}
+              aria-label="تولید هوشمند شرح شغل با هوش مصنوعی"
               className="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-[10px] bg-surface-2 hover:bg-surface-3 text-text-1 border border-border-default text-xs font-bold transition-all cursor-pointer"
               title="تولید هوشمند شرح شغل با AI"
             >
-              <FilePlus2 className="w-3.5 h-3.5 text-text-3" />
+              <FilePlus2 className="w-3.5 h-3.5 text-text-3" aria-hidden="true" />
               <span>آگهی شغل</span>
             </button>
           )}
@@ -195,13 +199,15 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={() => setIsNotifOpen(!isNotifOpen)}
+              aria-haspopup="dialog"
+              aria-expanded={isNotifOpen}
               className="relative p-2 rounded-[10px] text-text-2 hover:text-text-1 hover:bg-surface-2 transition-colors cursor-pointer border border-transparent hover:border-border-default"
               title="اعلان‌های سیستمی و کارخانه"
-              aria-label="اعلان‌های سیستمی"
+              aria-label="اعلان‌های سیستمی (۳ اعلان خوانده نشده)"
             >
-              <Bell className="w-4 h-4" />
+              <Bell className="w-4 h-4" aria-hidden="true" />
               {/* Notification Indicator Dot */}
-              <span className="absolute top-1.5 left-1.5 w-2 h-2 rounded-full bg-brand ring-2 ring-surface-1" />
+              <span className="absolute top-1.5 left-1.5 w-2 h-2 rounded-full bg-brand ring-2 ring-surface-1" aria-hidden="true" />
             </button>
 
             {isNotifOpen && (
@@ -267,13 +273,16 @@ export const Header: React.FC<HeaderProps> = ({
             aria-label="تغییر نقش کاربری"
           >
             {/* Desktop Full Segmented Control */}
-            <div className="hidden md:flex items-center gap-0.5">
+            <div className="hidden md:flex items-center gap-0.5" role="radiogroup" aria-label="انتخاب نقش دسترسی">
               {roleOptions.map((opt) => {
                 const isSelected = currentRole === opt.key;
                 return (
                   <button
                     key={opt.key}
                     type="button"
+                    role="radio"
+                    aria-checked={isSelected}
+                    aria-label={`نقش: ${opt.fullLabel}`}
                     onClick={() => onRoleChange?.(opt.key)}
                     className={`px-2.5 py-1 rounded-[8px] text-[11px] font-black transition-all cursor-pointer select-none whitespace-nowrap ${
                       isSelected
@@ -292,6 +301,7 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="flex md:hidden items-center">
               <button
                 type="button"
+                aria-label={`تغییر نقش کاربری، نقش فعلی: ${roleOptions.find((r) => r.key === currentRole)?.fullLabel || 'مدیر ارشد'}`}
                 onClick={() => {
                   const currentIndex = roleOptions.findIndex((r) => r.key === currentRole);
                   const nextIndex = (currentIndex + 1) % roleOptions.length;
@@ -300,7 +310,7 @@ export const Header: React.FC<HeaderProps> = ({
                 className="flex items-center gap-1.5 px-2 py-1 rounded-[8px] bg-surface-1 text-brand text-xs font-black shadow-xs cursor-pointer border border-border-default"
                 title="تغییر نقش با کلیک"
               >
-                <Shield className="w-3 h-3 text-brand" />
+                <Shield className="w-3 h-3 text-brand" aria-hidden="true" />
                 <span className="text-[11px] whitespace-nowrap">
                   {roleOptions.find((r) => r.key === currentRole)?.shortLabel || 'مدیر ارشد'}
                 </span>

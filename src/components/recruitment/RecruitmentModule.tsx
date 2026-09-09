@@ -12,6 +12,7 @@ import { EvaluationCriteriaManager } from './EvaluationCriteriaManager';
 import { HireVueVideoStudio } from './HireVueVideoStudio';
 import { EightfoldTalentIntelligence } from './EightfoldTalentIntelligence';
 import { ZipRecruiterSmartSourcing } from './ZipRecruiterSmartSourcing';
+import { BulkScreeningStudio } from './BulkScreeningStudio';
 import {
   LayoutDashboard,
   Bot,
@@ -52,6 +53,7 @@ interface RecruitmentModuleProps {
 
 export type RecruitmentTab =
   | 'kanban'
+  | 'screening_studio'
   | 'hirevue_video'
   | 'eightfold_skills'
   | 'ziprecruiter_sourcing'
@@ -247,6 +249,22 @@ export const RecruitmentModule: React.FC<RecruitmentModuleProps> = ({
           >
             <LayoutDashboard className="w-4 h-4" />
             <span>پایپ‌لاین استخدامی (کانبان)</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('screening_studio')}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-[10px] text-xs font-bold transition-all cursor-pointer ${
+              activeTab === 'screening_studio'
+                ? 'bg-brand text-white shadow-2xs'
+                : 'text-text-2 hover:bg-surface-2'
+            }`}
+          >
+            <Sparkles className="w-4 h-4 text-amber-400" />
+            <span>استودیوی غربالگری (Screening Studio)</span>
+            <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-400 text-slate-900 font-black">
+              ارزیابی هوشمند
+            </span>
           </button>
 
           <button
@@ -611,6 +629,19 @@ export const RecruitmentModule: React.FC<RecruitmentModuleProps> = ({
 
       {/* Main Tab Content */}
       <div>
+        {/* Bulk Screening Studio */}
+        {activeTab === 'screening_studio' && (
+          <BulkScreeningStudio
+            job={jobs.find((j) => j.id === activeJobId) || jobs[0]}
+            candidates={candidates}
+            onUpdateCandidateStage={onUpdateCandidateStage}
+            onToggleTalentPool={onToggleTalentPool}
+            onDraftEmail={onDraftEmail}
+            onUploadMore={() => setIsBulkModalOpen(true)}
+            onClose={() => setActiveTab('kanban')}
+          />
+        )}
+
         {activeTab === 'kanban' && (
           <KanbanBoard
             candidates={filteredCandidates}
@@ -718,6 +749,11 @@ export const RecruitmentModule: React.FC<RecruitmentModuleProps> = ({
         }}
         onJobCreated={(newJob) => {
           onCreateJob(newJob);
+        }}
+        onOpenStudio={(jobId) => {
+          setActiveJobId(jobId);
+          setActiveTab('screening_studio');
+          setIsBulkModalOpen(false);
         }}
       />
 
