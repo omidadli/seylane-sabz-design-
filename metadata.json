@@ -1,0 +1,7 @@
+{
+  "name": "سامانه منابع انسانی سیلانه سبز",
+  "description": "اپلیکیشن هوشمند منابع انسانی هلدینگ سیلانه سبز (دافی، کامان، میس‌ویک) مجهز به دستیار صوتی، تولید خودکار آگهی شغلی، اتوماسیون فرایندها و مدیریت دپارتمان‌ها",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
